@@ -1,25 +1,19 @@
-import logo from './logo.svg';
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
+import { HashRouter , Route , Routes } from "react-router-dom";
+import HomeOwner from "./components/owner/js/HomeOwner";
+import CreateHouse from "./components/owner/js/CreateHouse";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <HashRouter>
+            <Routes>
+                <Route path="/" element={<HomeOwner/>}/>
+                <Route path="/create" element={<CreateHouse/>}/>
+            </Routes>
+        </HashRouter>
+    );
 }
 
 export default App;
