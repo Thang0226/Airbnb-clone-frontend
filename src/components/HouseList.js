@@ -102,14 +102,14 @@ const HouseList = () => {
   return (
     <CContainer className="py-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="h4 mb-0 fw-bold">Bất động sản dành cho bạn</h2>
+        <h2 className="h4 mb-0 fw-bold">Houses for you</h2>
         <div className="d-flex gap-3">
           <a href="#" className="text-decoration-none text-primary">
-            Tin nhà đất bán mới nhất
+            Top 5 Most Rented Rooms
           </a>
           <span className="text-muted">|</span>
           <a href="#" className="text-decoration-none text-primary">
-            Tin nhà đất cho thuê mới nhất
+            View Full List.
           </a>
         </div>
       </div>
@@ -168,7 +168,8 @@ const HouseList = () => {
 
                 <div className="d-flex justify-content-between align-items-center mt-auto">
                   <small className="text-muted">
-                    Post by: {house.status === "RENTED" ? "hôm nay" : "2 ngày trước"}
+                    Post by:
+                    {/*{house.status === "RENTED" ? "hôm nay" : "2 ngày trước"}*/}
                   </small>
                   <CButton color="light" variant="ghost" className="border-0 p-0">
                     {/* <Heart className="text-muted" size={18} /> */}
