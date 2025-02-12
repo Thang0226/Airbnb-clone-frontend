@@ -1,0 +1,70 @@
+/* Animation chung cho card */
+.hover-shadow {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hover-shadow:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Animation cho badge VIP */
+.badge-bounce {
+    animation: bounce 1.5s infinite;
+}
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Animation cho ảnh */
+.object-fit-cover {
+    transition: transform 0.5s ease;
+}
+.object-fit-cover:hover {
+    transform: scale(1.1) rotate(2deg);
+    filter: brightness(1.2);
+}
+
+/* Animation cho tiêu đề */
+.text-truncate-2 {
+    position: relative;
+    overflow: hidden;
+}
+.text-truncate-2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 30%;
+    height: 1em;
+    background: linear-gradient(to left, #fff, transparent);
+}
+
+/* Animation cho nút yêu thích */
+.heart-bounce {
+    transition: transform 0.3s ease;
+}
+.heart-bounce:hover {
+    transform: scale(1.2) rotate(-15deg);
+    color: #e74c3c;
+}
+
+/* Animation vào khung hình */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.card-animated {
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+}
