@@ -1,7 +1,8 @@
 import {Link, HashRouter, Routes, Route} from 'react-router-dom';
 import './scss/custom.scss'
+import "./App.css"
 
-import Register from "./components/Register";
+import Register from "./components/Register/Register";
 
 function App() {
     return (
