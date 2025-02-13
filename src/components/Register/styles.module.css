@@ -6,3 +6,8 @@
 .formBox {
     margin: 35px 250px;
 }
+
+.error {
+    color: #C13515;
+    margin-bottom: 5px;
+}

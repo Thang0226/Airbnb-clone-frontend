@@ -17,22 +17,17 @@ import {
     CNavLink,
     CCol,
     CRow,
-    CFormCheck,
     CFormLabel,
-    CInputGroup,
-    CInputGroupText,
 } from "@coreui/react";
-import {TbBrandAirbnb} from "react-icons/tb";
-import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import styles from "./styles.module.css";
 import {useRef} from "react";
 import {Formik} from "formik";
 import * as Yup from "yup";
+import MenuBar from "../MenuBar";
 
 export default function Register() {
     const navigate = useNavigate();
-    const [visible, setVisible] = useState(false);
     const REGEX = {
         username: /^[a-zA-Z0-9_]{4,30}$/,
         password: /^[a-zA-Z0-9!@#$%^&*)(+=._-]{6,32}$/,
@@ -75,44 +70,7 @@ export default function Register() {
 
     return (
         <>
-            <CNavbar expand="lg" className="bg-body-tertiary">
-                <CContainer fluid>
-                    <CNavbarBrand href="#"><TbBrandAirbnb color={"#FF385C"} size={40}/></CNavbarBrand>
-                    <CNavbarToggler onClick={() => setVisible(!visible)}/>
-                    <CCollapse className="navbar-collapse" visible={visible}>
-                        <CNavbarNav className="me-auto">
-                            <CNavItem>
-                                <CNavLink href="#" active>
-                                    Home
-                                </CNavLink>
-                            </CNavItem>
-                            <CNavItem>
-                                <CNavLink href="#">Airbnb Your Home</CNavLink>
-                            </CNavItem>
-                            <CNavItem>
-                                <CNavLink href="#" disabled>
-                                    Disabled
-                                </CNavLink>
-                            </CNavItem>
-                        </CNavbarNav>
-                        <CForm className="d-inline-flex">
-                            <CFormInput type="search" className="me-2" placeholder="Search"/>
-                            <CButton type="submit" color="primary" variant="outline" className="me-5">
-                                Search
-                            </CButton>
-                        </CForm>
-                        <CDropdown variant="dropdown" popper={true}>
-                            <CDropdownToggle color="secondary">User</CDropdownToggle>
-                            <CDropdownMenu>
-                                <CDropdownItem href="/#/register">Register</CDropdownItem>
-                                <CDropdownItem href="#">Login</CDropdownItem>
-                                <CDropdownDivider/>
-                                <CDropdownItem href="#">Something else here</CDropdownItem>
-                            </CDropdownMenu>
-                        </CDropdown>
-                    </CCollapse>
-                </CContainer>
-            </CNavbar>
+            <MenuBar/>
             <h2 className={styles.title}>Register New Account</h2>
             <Formik initialValues={initialValues}
                     validationSchema={validationSchema}
@@ -127,7 +85,8 @@ export default function Register() {
                             <CCol sm={8}>
                                 <CFormInput type="text" placeholder="user_name123" id="username" name="username"
                                             onChange={handleChange} required/>
-                                {touched.username && errors.username && <p className="error">{errors.username}</p>}
+                                {touched.username && errors.username &&
+                                    <p className={styles.error}>{errors.username}</p>}
                             </CCol>
                         </CRow>
                         <CRow className="mb-3">
@@ -138,7 +97,7 @@ export default function Register() {
                                 <CFormInput type="text" placeholder="0123456789" id="phone" name="phone"
                                             onChange={handleChange}
                                             required/>
-                                {touched.phone && errors.phone && <p className="error">{errors.phone}</p>}
+                                {touched.phone && errors.phone && <p className={styles.error}>{errors.phone}</p>}
                             </CCol>
                         </CRow>
                         <CRow className="mb-3">
@@ -148,7 +107,8 @@ export default function Register() {
                             <CCol sm={8}>
                                 <CFormInput type="password" id="password" name="password" onChange={handleChange}
                                             required/>
-                                {touched.password && errors.password && <p className="error">{errors.password}</p>}
+                                {touched.password && errors.password &&
+                                    <p className={styles.error}>{errors.password}</p>}
                             </CCol>
                         </CRow>
                         <CRow className="mb-4">
@@ -159,7 +119,7 @@ export default function Register() {
                                 <CFormInput type="password" id="confirm_password" name="confirm_password"
                                             onChange={handleChange} required/>
                                 {touched.confirm_password && errors.confirm_password &&
-                                    <p className="error">{errors.confirm_password}</p>}
+                                    <p className={styles.error}>{errors.confirm_password}</p>}
                             </CCol>
                         </CRow>
                         <CButton color="primary" type="submit">
