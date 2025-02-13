@@ -1,3 +1,4 @@
+// Template: https://www.airbnb.com/hosting
 import {
     CButton ,
     CContainer ,
