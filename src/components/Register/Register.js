@@ -52,7 +52,7 @@ export default function Register() {
             .test("Duplicate phone number", "Phone number already exists", async function (value) {
                 try {
                     await axios.post(`${BASE_URL_USER}/validate-phone`, {
-                        username: value,
+                        phone: value,
                     });
                     return true;
                 } catch (error) {
@@ -74,8 +74,17 @@ export default function Register() {
             ),
     });
 
-    const handleSubmit = () => {
-        console.log(formikRef.current.values);
+    const handleSubmit = async () => {
+        const formValues = formikRef.current.values;
+        try {
+            await axios.post(`${BASE_URL_USER}`, {
+                username: formValues.username,
+                password: formValues.password,
+                phone: formValues.phone,
+            });
+        } catch (error) {
+            console.log(error);
+        }
         alert("Register successfully!");
         navigate("/login");
     }
