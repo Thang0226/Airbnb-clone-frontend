@@ -2,7 +2,7 @@
 
 import NavbarOwner from "./NavbarOwner";
 import { useNavigate } from "react-router-dom";
-import React , { useState } from 'react'
+import React , { useRef , useState , useEffect } from 'react'
 import styles from '../css/CreateHouse.module.css'
 import {
     CContainer ,
@@ -15,23 +15,69 @@ import {
 
 export default function CreateHouse() {
     const [validated , setValidated] = useState ( false );
-    const navigate = useNavigate();
+    const navigate = useNavigate ();
+    const textareaRef = useRef ( null );
+    // const defaultImage = "../../../assets/cottage.jpg"
+
+    // Expandable Description CFormTextarea
+    useEffect ( () => {
+        const textarea = textareaRef.current;
+        if (textarea) {
+            const adjustHeight = () => {
+                textarea.style.height = 'auto';
+                textarea.style.height = `${textarea.scrollHeight}px`;
+            };
+            adjustHeight ();
+            textarea.addEventListener ( 'input' , adjustHeight );
+            return () => textarea.removeEventListener ( 'input' , adjustHeight );
+        }
+    } , [] );
 
     const handleSubmit = (event) => {
         event.preventDefault ()
         const form = event.currentTarget
 
-        if (form.checkValidity () === false) {
-            event.stopPropagation ()
+        if (!form.checkValidity ()) {
+            event.stopPropagation ();
+            return;  // Stop execution if invalid
         }
         setValidated ( true )
 
-        // Collect form data
-        const formData = new FormData(form);
-        const formObject = Object.fromEntries(formData.entries());
-        // navigate("/")
-        console.log(formObject);
+        // Old code: Simply log form data
+        // const formData = new FormData(form);
+        // const formObject = Object.fromEntries(formData.entries());
+        // console.log(formObject);
 
+        // New code by ChatGPT: https://chatgpt.com/share/67adaab7-889c-800b-a9f0-204a7b2ffc2f
+        const formData = new FormData ( form );
+
+        //  FormData object:
+        const houseData = new FormData ();
+        houseData.append ( "house" , new Blob ( [JSON.stringify ( {
+            houseName: formData.get ( "houseName" ) ,
+            address: formData.get ( "address" ) ,
+            bedrooms: Number ( formData.get ( "bedrooms" ) ) ,
+            bathrooms: Number ( formData.get ( "bathrooms" ) ) ,
+            description: formData.get ( "description" ) ,
+            price: Number ( formData.get ( "price" ) )
+        } )] , {type: "application/json"} ) ); // append other info using Blob
+
+        const houseImage = formData.get ( "houseImages" );
+        if (houseImage && houseImage.size > 0) {
+            houseData.append ( "houseImages" , houseImage );
+        } // append image
+
+        // Send request
+        fetch ( "http://localhost:8080/api/houses/create" , {
+            method: "POST" ,
+            body: houseData
+        } )
+            .then ( response => response.json () )
+            .then ( savedHouse => {
+                console.log ( "House saved:" , savedHouse );
+                // navigate("/");
+            } )
+            .catch ( error => console.error ( "Error:" , error ) );
     };
 
     return (
@@ -113,11 +159,12 @@ export default function CreateHouse() {
                     <CCol xs={12}>
                         <CFormFloating>
                             <CFormTextarea
-                                type="text"
                                 placeholder="Description"
                                 id="description"
                                 name="description"
                                 rows={3}
+                                ref={textareaRef}
+                                style={{overflow: 'hidden' , resize: 'none'}}
                                 feedbackValid="Introduce your house, amenities, and other information"
                                 //required
                             />
@@ -144,7 +191,7 @@ export default function CreateHouse() {
                     {/*/!* Image *!/*/}
                     <CCol xs={12}>
                         <CFormLabel htmlFor="houseImages"
-                               className="my-3">Upload House Images (PNG, JPEG)</CFormLabel>
+                                    className="my-3">Upload House Images (PNG, JPEG)</CFormLabel>
                         <CFormInput
                             type="file"
                             id="houseImages"
