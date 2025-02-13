@@ -1,4 +1,4 @@
-import {Link, HashRouter, Routes, Route} from 'react-router-dom';
+import {HashRouter, Routes, Route} from 'react-router-dom';
 import './scss/custom.scss'
 import "./App.css"
 

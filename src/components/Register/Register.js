@@ -1,20 +1,7 @@
 import {
     CButton,
-    CCollapse,
-    CContainer,
-    CDropdown,
-    CDropdownDivider,
-    CDropdownItem,
-    CDropdownMenu,
-    CDropdownToggle,
     CForm,
     CFormInput,
-    CNavbar,
-    CNavbarBrand,
-    CNavbarNav,
-    CNavbarToggler,
-    CNavItem,
-    CNavLink,
     CCol,
     CRow,
     CFormLabel,
@@ -24,7 +11,9 @@ import styles from "./styles.module.css";
 import {useRef} from "react";
 import {Formik} from "formik";
 import * as Yup from "yup";
+import axios from "axios";
 import MenuBar from "../MenuBar";
+import {BASE_URL_USER} from "../../constants/api";
 
 export default function Register() {
     const navigate = useNavigate();
@@ -46,8 +35,31 @@ export default function Register() {
         username: Yup.string()
             .min(4, "At least 4 characters long")
             .max(30, "At most 30 characters long")
-            .matches(REGEX.username, "Not contain special characters"),
-        phone: Yup.string().matches(REGEX.phone, "Invalid phone number"),
+            .matches(REGEX.username, "Not contain special characters")
+            .test("Duplicate username", "Username already exists", async function (value) {
+                try {
+                    await axios.post(`${BASE_URL_USER}/validate-username`, {
+                        username: value,
+                    });
+                    return true;
+                } catch (error) {
+                    console.log(error);
+                    return false;
+                }
+            }),
+        phone: Yup.string()
+            .matches(REGEX.phone, "Invalid phone number")
+            .test("Duplicate phone number", "Phone number already exists", async function (value) {
+                try {
+                    await axios.post(`${BASE_URL_USER}/validate-phone`, {
+                        username: value,
+                    });
+                    return true;
+                } catch (error) {
+                    console.log(error);
+                    return false;
+                }
+            }),
         password: Yup.string()
             .min(6, "At least 6 characters long")
             .max(32, "At most 32 characters long")
