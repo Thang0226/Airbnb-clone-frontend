@@ -13,3 +13,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.house-dates {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.7);  /* Nền bán trong suốt */
+  color: #fff;
+  padding: 0.3rem 0.6rem;
+  border-top-right-radius: 5px;
+  font-size: 0.8rem;
+}

@@ -7,12 +7,14 @@ import SearchBarForHouseAvailable from "./components/SearchBarForHouseAvailable"
 function App() {
   return (
       <div>
-          <SearchBarForHouseAvailable>
 
-          </SearchBarForHouseAvailable>
         <Nabav>
 
         </Nabav>
+
+        <SearchBarForHouseAvailable>
+
+        </SearchBarForHouseAvailable>
         <ToastContainer />
         <header>
           <h1></h1>

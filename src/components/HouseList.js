@@ -24,7 +24,7 @@ const HouseCarousel = ({ images, height = "200px" }) => {
     if (images && images.length > 0) {
       const timer = setInterval(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-      }, 3000); // thay đổi hình mỗi 3 giây
+      }, 7000); // thay đổi hình mỗi 3 giây
       return () => clearInterval(timer);
     }
   }, [images]);
@@ -129,12 +129,23 @@ const HouseList = () => {
                 >
                   VIP
                 </CBadge>
+                <CBadge
+                  color="danger" // Bạn có thể thay đổi màu theo status nếu cần.
+                  className="position-absolute top-0 end-0 m-2"
+                  style={{ fontSize: "0.8rem" }}
+                >
+                  {house.status}
+                </CBadge>
                 <div
                   className="position-absolute bottom-0 end-0 m-2 bg-dark bg-opacity-75 rounded px-2 py-1 text-white d-flex align-items-center"
                   style={{ fontSize: "0.8rem" }}
                 >
                   <i className="fas fa-images me-1"></i>
                   <span>{house.image ? house.image.length : 0}</span>
+                </div>
+                {/* Hiển thị startDate và endDate */}
+                <div className="house-dates">
+                  {new Date(house.startDate).toLocaleDateString()} - {new Date(house.endDate).toLocaleDateString()}
                 </div>
               </div>
 
