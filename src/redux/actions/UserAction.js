@@ -26,11 +26,19 @@ export const fetchUserProfile = (username) => {
     };
 };
 
-export const updateUserProfile = (userForm) => {
+export const updateUserProfile = (formData) => {
     return async (dispatch) => {
         dispatch({ type: UPDATE_USER_PROFILE });
         try {
-            const response = await axios.put(`${BASE_URL}/api/users/profile/update`, userForm);
+            const response = await axios.put(
+                `${BASE_URL}/api/users/profile/update`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
             dispatch({
                 type: UPDATE_USER_PROFILE_SUCCESS,
                 payload: response.data,

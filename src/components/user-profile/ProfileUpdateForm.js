@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import {
-    CForm,
     CFormLabel,
     CFormInput,
     CButton,
@@ -16,20 +15,21 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchUserProfile} from "../../redux/actions/UserAction";
+import {fetchUserProfile, updateUserProfile} from "../../redux/actions/UserAction";
 
 const validationSchema = Yup.object({
     fullName: Yup.string().required("Full Name is required"),
-    phoneNumber: Yup.string()
+    phone: Yup.string()
         .matches(/^0[0-9]{9}$/, "Must be only digits and start with 0")
         .min(10, "Must be at least 10 digits")
         .required("Phone number is required")
 });
 
 const getInitialValues = (userProfile) => ({
+    username: userProfile.username || "",
     fullName: userProfile.fullName || "",
     address: userProfile.address || "",
-    phoneNumber: userProfile.phone || "",
+    phone: userProfile.phone || "",
     avatar: userProfile.avatar || "default.jpg"
 });
 
@@ -67,10 +67,18 @@ const ProfileUpdateForm = () => {
     );
 
     const handleSubmit = (values, { setSubmitting }) => {
-        console.log("Updated Data:", values);
-        // Thực hiện cập nhật profile (dispatch action hoặc gọi API)
+        const formData = new FormData();
+        Object.keys(values).forEach((key) => {
+            if (key === "avatar" && values[key]) {
+                formData.append(key, values[key]);
+            } else {
+                formData.append(key, values[key]);
+            }
+        });
+        console.log("Updated Data:", Object.fromEntries(formData.entries()));
+        dispatch(updateUserProfile(formData));
         setSubmitting(false);
-        navigate(-1); // Quay lại trang trước hoặc chuyển hướng đến trang profile
+        navigate("/profile");
     };
 
     const handleAvatarChange = (e, setFieldValue) => {
@@ -100,16 +108,18 @@ const ProfileUpdateForm = () => {
                                 onSubmit={handleSubmit}
                             >
                                 {({ isSubmitting, setFieldValue }) => (
-                                    <CForm as={Form}>
+                                    <Form>
                                         <CRow className="mb-3">
                                             <CCol md={12}>
                                                 <CFormFloating>
-                                                    <CFormInput
+                                                    <Field
+                                                        name="username"
+                                                        as={CFormInput}
                                                         type="text"
                                                         id="username"
-                                                        name="username"
-                                                        value={userProfile.username}
-                                                        disabled
+                                                        className="form-control"
+                                                        readOnly
+                                                        style={{ cursor: "not-allowed" }}
                                                     />
                                                     <CFormLabel htmlFor="username">Username</CFormLabel>
                                                 </CFormFloating>
@@ -129,12 +139,13 @@ const ProfileUpdateForm = () => {
                                                     />
                                                 ) : (
                                                     <img
-                                                        src={"/images/" + userProfile.avatar}
+                                                        src={`/images/${userProfile.avatar}`}
                                                         alt="Current Avatar"
                                                         className="rounded-circle border border-white border-3"
                                                         width="100"
                                                         height="100"
                                                         style={{objectFit: "cover"}}
+                                                        onError={(e) => { e.target.onerror = null; e.target.src = "/images/default.jpg"; }}
                                                     />
                                                 )}
                                             </CCol>
@@ -142,7 +153,6 @@ const ProfileUpdateForm = () => {
                                                 <CFormInput
                                                     type="file"
                                                     accept="image/*"
-
                                                     onChange={(e) => handleAvatarChange(e, setFieldValue)}
                                                 />
                                             </CCol>
@@ -187,16 +197,16 @@ const ProfileUpdateForm = () => {
                                             <CCol md={12}>
                                                 <CFormFloating>
                                                     <Field
-                                                        name="phoneNumber"
+                                                        name="phone"
                                                         as={CFormInput}
                                                         type="text"
-                                                        id="phoneNumber"
+                                                        id="phone"
                                                         className="form-control"
                                                     />
-                                                    <CFormLabel htmlFor="phoneNumber">Phone Number <span style={{ color: 'red' }}>*</span></CFormLabel>
+                                                    <CFormLabel htmlFor="phone">Phone Number <span style={{ color: 'red' }}>*</span></CFormLabel>
                                                 </CFormFloating>
                                                 <ErrorMessage
-                                                    name="phoneNumber"
+                                                    name="phone"
                                                     component={CFormFeedback}
                                                     className="d-block text-danger mt-1"
                                                 />
@@ -216,7 +226,7 @@ const ProfileUpdateForm = () => {
                                                 Cancel
                                             </CButton>
                                         </div>
-                                    </CForm>
+                                    </Form>
                                 )}
                             </Formik>
                         </CCardBody>

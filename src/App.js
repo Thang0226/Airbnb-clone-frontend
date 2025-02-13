@@ -1,7 +1,7 @@
 import './App.css';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import UserProfile from "./components/user-profile/UserProfile";
-import "../node_modules/bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap/dist/css/bootstrap.min.css"
 import ProfileUpdateForm from "./components/user-profile/ProfileUpdateForm";
 
 function App() {

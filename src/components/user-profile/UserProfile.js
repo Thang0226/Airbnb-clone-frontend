@@ -2,11 +2,14 @@ import React, {useEffect} from 'react';
 import {fetchUserProfile} from "../../redux/actions/UserAction";
 import {CButton, CCard, CCardBody, CCardHeader, CCol, CRow} from "@coreui/react";
 import {useDispatch, useSelector} from "react-redux";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const UserProfile = ({username}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    // const location = useLocation();
+    // const { username } = location.state || {};
 
     useEffect(() => {
         dispatch(fetchUserProfile(username));
@@ -47,8 +50,8 @@ const UserProfile = ({username}) => {
                                 src={"/images/" + userProfile.avatar}
                                 alt={userProfile.username}
                                 className="rounded-circle border border-blue border-4"
-                                width="200"
-                                height="200"
+                                width="150"
+                                height="150"
                                 style={{objectFit: "cover"}}
                             />
                             <h3 className="mt-3">{userProfile.username}</h3>
