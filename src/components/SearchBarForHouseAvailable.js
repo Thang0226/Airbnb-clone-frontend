@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import "./css/HouseList.css";
 import {
   CContainer,
@@ -37,18 +38,23 @@ const ChangeView = ({ center, zoom }) => {
   return null;
 };
 
-const SearchBar = () => {
+
+const SearchBar = ({ onSearch }) => {
   const [location, setLocation] = useState('');
-  const [checkIn, setCheckIn] = useState('');
-  const [checkOut, setCheckOut] = useState('');
+  const [checkIn, setCheckIn] = useState('2024-02-20'); // có thể gán mặc định từ dữ liệu mẫu
+  const [checkOut, setCheckOut] = useState('2024-03-10'); // có thể gán mặc định từ dữ liệu mẫu
   const [guests, setGuests] = useState(1);
+  const [sortOrder, setSortOrder] = useState('asc'); // 'asc' hoặc 'desc'
+  const [minBedrooms, setMinBedrooms] = useState('');
+  const [minBathrooms, setMinBathrooms] = useState('');
   const [showMap, setShowMap] = useState(false);
   const [selectedCity, setSelectedCity] = useState(null);
   const [houses, setHouses] = useState([]);
   const [mapCenter, setMapCenter] = useState([16.047079, 108.206230]); // Vị trí mặc định (Đà Nẵng)
   const [zoom, setZoom] = useState(5);
 
-  // Dữ liệu mẫu các căn nhà
+
+  // Dữ liệu mẫu các căn nhà <
   const sampleHouses = [
     {
       id: 1,
@@ -90,6 +96,33 @@ const SearchBar = () => {
     );
     setHouses(filteredHouses);
   };
+
+  // Khi nhấn nút "Tìm kiếm", gọi callback onSearch và truyền các tham số tìm kiếm
+  // Khi nhấn nút "Tìm kiếm", gọi callback onSearch và truyền các tham số tìm kiếm
+  const handleSearchButtonClick = () => {
+    const searchData = {
+
+    }; location,
+      checkIn,
+      checkOut,
+      guests,
+      sortOrder,
+      minBedrooms,
+      minBathrooms,
+
+    console.log("Đang gửi dữ liệu tìm kiếm đến backend với các tham số:", searchData);
+
+    // Gửi POST request đến API backend (thay URL bên dưới bằng URL API của bạn)
+    axios.post('https://your-backend-api.com/search', searchData)
+      .then(response => {
+        console.log("Phản hồi từ backend:", response.data);
+      })
+      .catch(error => {
+        console.error("Lỗi khi gửi dữ liệu đến backend:", error);
+      });
+  };
+
+
 
   return (
     <>
@@ -184,6 +217,7 @@ const SearchBar = () => {
           <CCol xs={12} md="auto">
             <CButton
               color="danger"
+              onClick={handleSearchButtonClick}
               className="w-100 d-flex align-items-center justify-content-center gap-2 rounded-3"
             >
               <Search size={20} />
@@ -191,6 +225,78 @@ const SearchBar = () => {
             </CButton>
           </CCol>
         </CRow>
+
+        {/* Thêm dòng bộ lọc bổ sung */}
+        <CRow className="g-2 align-items-center mt-3">
+          {/* Sắp xếp theo giá */}
+          <CCol xs={12} md={4}>
+            <CDropdown>
+              <CDropdownToggle className="w-100 bg-transparent border-0 text-start ps-3">
+                Sắp xếp theo giá: {sortOrder === 'asc' ? 'Thấp đến cao' : 'Cao đến thấp'}
+              </CDropdownToggle>
+              <CDropdownMenu>
+                <CDropdownItem onClick={() => setSortOrder('asc')}>
+                  Giá thấp đến cao
+                </CDropdownItem>
+                <CDropdownItem onClick={() => setSortOrder('desc')}>
+                  Giá cao đến thấp
+                </CDropdownItem>
+              </CDropdownMenu>
+            </CDropdown>
+          </CCol>
+
+          {/* Số phòng ngủ tối thiểu */}
+          <CCol xs={12} md={4}>
+            <div className="position-relative">
+              <CInputGroup className="border-0">
+                <CInputGroupText className="bg-transparent border-0">
+                  <Users className="text-primary" size={20} />
+                </CInputGroupText>
+                <div className="d-flex flex-column flex-grow-1">
+                  <label className="small text-muted mb-0 ms-2">
+                    Phòng ngủ tối thiểu
+                  </label>
+                  <CFormInput
+                    type="number"
+                    min="0"
+                    placeholder="Số phòng ngủ"
+                    value={minBedrooms}
+                    onChange={(e) => setMinBedrooms(e.target.value)}
+                    className="border-0 ps-2 pt-0"
+                  />
+                </div>
+              </CInputGroup>
+            </div>
+          </CCol>
+
+          {/* Số phòng tắm tối thiểu */}
+          <CCol xs={12} md={4}>
+            <div className="position-relative">
+              <CInputGroup className="border-0">
+                <CInputGroupText className="bg-transparent border-0">
+                  <Calendar className="text-primary" size={20} />
+                </CInputGroupText>
+                <div className="d-flex flex-column flex-grow-1">
+                  <label className="small text-muted mb-0 ms-2">
+                    Phòng tắm tối thiểu
+                  </label>
+                  <CFormInput
+                    type="number"
+                    min="0"
+                    placeholder="Số phòng tắm"
+                    value={minBathrooms}
+                    onChange={(e) => setMinBathrooms(e.target.value)}
+                    className="border-0 ps-2 pt-0"
+                  />
+                </div>
+              </CInputGroup>
+            </div>
+          </CCol>
+        </CRow>
+
+
+
+
       </CContainer>
 
       {/* Map Modal */}

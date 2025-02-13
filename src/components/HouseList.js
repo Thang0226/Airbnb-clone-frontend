@@ -70,23 +70,29 @@ const HouseCarousel = ({ images, height = "200px" }) => {
   );
 };
 
-const HouseList = () => {
+const HouseList = ({ searchParams }) => {
   const [houses, setHouses] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Mỗi khi searchParams thay đổi, thực hiện gọi API mới (hoặc lọc dữ liệu)
   useEffect(() => {
-    // Lấy dữ liệu từ API sử dụng BASE_URL và API_ENDPOINTS
+    setLoading(true);
+    let url = `${BASE_URL}${API_ENDPOINTS.GET_HOUSES_FOR_RENTED}`;
+    // Nếu có tham số tìm kiếm, nối query string (cần encode dữ liệu cho an toàn)
+    if (searchParams && searchParams.location) {
+      url += `?location=${encodeURIComponent(searchParams.location)}&checkIn=${searchParams.checkIn}&checkOut=${searchParams.checkOut}&guests=${searchParams.guests}`;
+    }
     axios
-      .get(`${BASE_URL}${API_ENDPOINTS.GET_HOUSES_FOR_RENTED}`)
+      .get(url)
       .then((response) => {
         setHouses(response.data);
         setLoading(false);
       })
       .catch((error) => {
-        console.error("There was an error fetching the data!", error);
+        console.error("Error fetching houses:", error);
         setLoading(false);
       });
-  }, []);
+  }, [searchParams]);
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat("vi-VN", {
@@ -120,7 +126,7 @@ const HouseList = () => {
             <div className="card h-100 shadow-sm border-0 position-relative hover-shadow">
               <div className="position-relative">
                 {/* Sử dụng HouseCarousel để hiển thị danh sách hình */}
-                <HouseCarousel images={house.image} height="200px" />
+                <HouseCarousel images={house.images} height="200px" />
 
                 <CBadge
                   color="warning"
@@ -141,7 +147,7 @@ const HouseList = () => {
                   style={{ fontSize: "0.8rem" }}
                 >
                   <i className="fas fa-images me-1"></i>
-                  <span>{house.image ? house.image.length : 0}</span>
+                  <span>{house.images ? house.images.length : 0}</span>
                 </div>
                 {/* Hiển thị startDate và endDate */}
                 <div className="house-dates">
