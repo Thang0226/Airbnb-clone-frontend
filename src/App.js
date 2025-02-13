@@ -3,9 +3,13 @@ import HouseList from "./components/HouseList";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Nabav from "./components/Nabav"
+import SearchBarForHouseAvailable from "./components/SearchBarForHouseAvailable";
 function App() {
   return (
       <div>
+          <SearchBarForHouseAvailable>
+
+          </SearchBarForHouseAvailable>
         <Nabav>
 
         </Nabav>
