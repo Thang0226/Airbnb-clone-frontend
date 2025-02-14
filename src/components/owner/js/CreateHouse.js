@@ -21,51 +21,51 @@ export default function CreateHouse() {
     const navigate = useNavigate ();
 
     // Upload files
-    const [selectedFiles, setSelectedFiles] = useState([]);
-    const [previews, setPreviews] = useState([]);
+    const [selectedFiles , setSelectedFiles] = useState ( [] );
+    const [previews , setPreviews] = useState ( [] );
     const handleFileChange = (event) => {
-        const files = Array.from(event.target.files);
-        const validFiles = files.filter(file =>
+        const files = Array.from ( event.target.files );
+        const validFiles = files.filter ( file =>
             file.type === 'image/jpeg' || file.type === 'image/png'
         );
-        setSelectedFiles(validFiles);
+        setSelectedFiles ( validFiles );
 
         // Create preview URLs
-        const newPreviews = validFiles.map(file => ({
-            file: file,
-            url: URL.createObjectURL(file)
-        }));
+        const newPreviews = validFiles.map ( file => ({
+            file: file ,
+            url: URL.createObjectURL ( file )
+        }) );
 
         // Clean up old preview URLs
-        previews.forEach(preview => URL.revokeObjectURL(preview.url));
-        setPreviews(newPreviews);
+        previews.forEach ( preview => URL.revokeObjectURL ( preview.url ) );
+        setPreviews ( newPreviews );
     };
     const removeImage = (index) => {
         const newPreviews = [...previews];
         const newFiles = [...selectedFiles];
 
         // Clean up the preview URL
-        URL.revokeObjectURL(previews[index].url);
+        URL.revokeObjectURL ( previews[index].url );
 
-        newPreviews.splice(index, 1);
-        newFiles.splice(index, 1);
+        newPreviews.splice ( index , 1 );
+        newFiles.splice ( index , 1 );
 
-        setPreviews(newPreviews);
-        setSelectedFiles(newFiles);
+        setPreviews ( newPreviews );
+        setSelectedFiles ( newFiles );
     };
 
     // Map stuff
-    const [mapData, setMapData] = useState({
-        name: '',
+    const [mapData , setMapData] = useState ( {
+        name: '' ,
         address: ''
-    });
-    const [selectedAddressData, setSelectedAddressData] = useState(null);
+    } );
+    const [selectedAddressData , setSelectedAddressData] = useState ( null );
     const handleAddressSelect = (addressData) => {
-        setMapData({
-            name: addressData.formattedAddress,
+        setMapData ( {
+            name: addressData.formattedAddress ,
             address: addressData.addressComponents
-        });
-        setSelectedAddressData(addressData);
+        } );
+        setSelectedAddressData ( addressData );
     } // end Map stuff
 
     // Make CFormTextarea expandable:
@@ -88,52 +88,43 @@ export default function CreateHouse() {
         event.preventDefault ();
 
         const form = event.currentTarget
-        if (form.checkValidity() === false) {
+        if (form.checkValidity () === false) {
             event.stopPropagation ();
         }
         setValidated ( true )
 
 
-        const formData = new FormData ( form );
-        const houseData = new FormData ();
-        houseData.append ( "house" , new Blob ( [JSON.stringify ( {
-            houseName: formData.get ( "houseName" ) ,
-            address: formData.get ( "address" ) ,
-            bedrooms: Number ( formData.get ( "bedrooms" ) ) ,
-            bathrooms: Number ( formData.get ( "bathrooms" ) ) ,
-            description: formData.get ( "description" ) ,
-            price: Number ( formData.get ( "price" ) )
+        const formData = new FormData ();
+        formData.append ( "house" , new Blob ( [JSON.stringify ( {
+            houseName: form.houseName.value ,
+            address: form.address.value ,
+            bedrooms: Number ( form.bedrooms.value ) ,
+            bathrooms: Number ( form.bathrooms.value ) ,
+            description: form.description.value ,
+            price: Number ( form.price.value )
         } )] , {type: "application/json"} ) );
 
-        const houseImage = formData.get ( "houseImages" );
-        if (houseImage && houseImage.size > 0) {
-            houseData.append ( "houseImages" , houseImage ) ;
+        // Handle multiple images
+        if (selectedFiles.length > 0) {
+            selectedFiles.forEach ( file => {
+                formData.append ( "houseImages" , file );
+            } );
         }
 
+
         // Send request
-        // try {
-        //     const response = await axios.post("http://localhost:8080/api/houses/create", houseData, {
-        //         headers: { "Content-Type": "multipart/form-data" }
-        //     });
-        //     console.log("House saved:", response.data);
-        //     // navigate("/");
-        // } catch (error) {
-        //     console.error("Error:", error);
-        // }
-
-
-        fetch ( "http://localhost:8080/api/houses/create" , {
-            method: "POST" ,
-            body: houseData
-        } )
-            .then ( response => response.json () )
-            .then ( savedHouse => {
-                console.log ( "House saved:" , savedHouse );
-                // navigate("/");
-            } )
-            .catch ( error => console.error ( "Error:" , error ) );
+        try {
+            const response = await fetch ( "http://localhost:8080/api/houses/create" , {
+                method: "POST" ,
+                body: formData
+            } );
+            const savedHouse = await response.json ();
+            console.log ( "House saved:" , savedHouse );
+            // navigate("/");
+        } catch (error) {
+            console.error ( "Error:" , error );
+        }
     };
-
 
 
     return (
@@ -167,14 +158,13 @@ export default function CreateHouse() {
                     <CCol xs={12}>
                         <CFormFloating>
                             <MapSample
-                                value = {mapData.name}
-                                onChange={(newValue) => setMapData(prev => ({ ...prev, name: newValue }))}
+                                value={mapData.name}
+                                onChange={(newValue) => setMapData ( prev => ({...prev , name: newValue}) )}
                                 onAddressSelect={handleAddressSelect}
                             />
                             {/*<CFormLabel htmlFor="address">Enter House Address</CFormLabel>*/}
                         </CFormFloating>
                     </CCol>
-
 
 
                     {/*/!* Bedrooms *!/*/}
@@ -246,8 +236,7 @@ export default function CreateHouse() {
 
                     {/*/!* Image *!/*/}
                     <CCol xs={12}>
-                        <CFormLabel htmlFor="houseImages"
-                                    className="my-3">Upload House Images (PNG, JPEG)</CFormLabel>
+                        <CFormLabel htmlFor="houseImages" className="my-3">Upload House Images (PNG, JPEG)</CFormLabel>
                         <CFormInput
                             type="file"
                             id="houseImages"
@@ -260,24 +249,24 @@ export default function CreateHouse() {
                         />
                         {/* Preview */}
                         <CRow className="mt-4 g-4">
-                            {previews.map((preview, index) => (
+                            {previews.map ( (preview , index) => (
                                 <CCol key={index} xs="auto" className="position-relative">
-                                    <CButton
-                                        onClick={() => removeImage(index)}
-                                        color="danger"
-                                        className="position-absolute top-0 end-0 rounded-circle p-1"
-                                        style={{ transform: 'translate(50%, -50%)' }}
-                                    >
-                                        <CCloseButton size={16} color="white" />
-                                    </CButton>
+                                    {/*<CButton*/}
+                                    {/*    onClick={() => removeImage(index)}*/}
+                                    {/*    color="danger"*/}
+                                    {/*    className="position-absolute top-0 end-0 rounded-circle p-1"*/}
+                                    {/*    style={{ transform: 'translate(50%, -50%)' }}*/}
+                                    {/*>*/}
+                                    <CCloseButton className="position-absolute top-0 end-0 rounded-circle p-1"
+                                                  color="white" onClick={() => removeImage ( index )}/>
                                     <CImage
                                         src={preview.url}
                                         alt={`Preview ${index}`}
-                                        className="w-100 h-100 object-cover rounded"
-                                        style={{ width: '6rem', height: '6rem' }}
+                                        className="object-fit-cover rounded"
+                                        style={{width: '6rem' , height: '6rem'}}
                                     />
                                 </CCol>
-                            ))}
+                            ) )}
                         </CRow>
                     </CCol>
 
