@@ -5,6 +5,7 @@ import MapSample from "./MapSample";
 import { useNavigate } from "react-router-dom";
 import React , { useRef , useState , useEffect } from 'react'
 import styles from '../css/CreateHouse.module.css'
+import { CCloseButton , CImage , CRow } from '@coreui/react'
 import {
     CContainer ,
     CForm ,
@@ -13,10 +14,45 @@ import {
     CFormInput ,
     CButton , CFormTextarea , CFormLabel
 } from '@coreui/react';
+import axios from 'axios';
 
 export default function CreateHouse() {
     const [validated , setValidated] = useState ( false );
     const navigate = useNavigate ();
+
+    // Upload files
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [previews, setPreviews] = useState([]);
+    const handleFileChange = (event) => {
+        const files = Array.from(event.target.files);
+        const validFiles = files.filter(file =>
+            file.type === 'image/jpeg' || file.type === 'image/png'
+        );
+        setSelectedFiles(validFiles);
+
+        // Create preview URLs
+        const newPreviews = validFiles.map(file => ({
+            file: file,
+            url: URL.createObjectURL(file)
+        }));
+
+        // Clean up old preview URLs
+        previews.forEach(preview => URL.revokeObjectURL(preview.url));
+        setPreviews(newPreviews);
+    };
+    const removeImage = (index) => {
+        const newPreviews = [...previews];
+        const newFiles = [...selectedFiles];
+
+        // Clean up the preview URL
+        URL.revokeObjectURL(previews[index].url);
+
+        newPreviews.splice(index, 1);
+        newFiles.splice(index, 1);
+
+        setPreviews(newPreviews);
+        setSelectedFiles(newFiles);
+    };
 
     // Map stuff
     const [mapData, setMapData] = useState({
@@ -47,25 +83,18 @@ export default function CreateHouse() {
         }
     } , [] );
 
-    const handleSubmit = (event) => {
+    // Submit
+    const handleSubmit = async (event) => {
         event.preventDefault ();
 
-        // Map stuff
-        console.log('Form data:', mapData);
-        console.log('Selected address data:', selectedAddressData);
-
         const form = event.currentTarget
-
         if (form.checkValidity() === false) {
             event.stopPropagation ();
-
         }
         setValidated ( true )
 
 
         const formData = new FormData ( form );
-
-        //  FormData object:
         const houseData = new FormData ();
         houseData.append ( "house" , new Blob ( [JSON.stringify ( {
             houseName: formData.get ( "houseName" ) ,
@@ -74,14 +103,25 @@ export default function CreateHouse() {
             bathrooms: Number ( formData.get ( "bathrooms" ) ) ,
             description: formData.get ( "description" ) ,
             price: Number ( formData.get ( "price" ) )
-        } )] , {type: "application/json"} ) ); // append other info using Blob
+        } )] , {type: "application/json"} ) );
 
         const houseImage = formData.get ( "houseImages" );
         if (houseImage && houseImage.size > 0) {
             houseData.append ( "houseImages" , houseImage ) ;
-        } // append image
+        }
 
         // Send request
+        // try {
+        //     const response = await axios.post("http://localhost:8080/api/houses/create", houseData, {
+        //         headers: { "Content-Type": "multipart/form-data" }
+        //     });
+        //     console.log("House saved:", response.data);
+        //     // navigate("/");
+        // } catch (error) {
+        //     console.error("Error:", error);
+        // }
+
+
         fetch ( "http://localhost:8080/api/houses/create" , {
             method: "POST" ,
             body: houseData
@@ -213,10 +253,32 @@ export default function CreateHouse() {
                             id="houseImages"
                             name="houseImages"
                             accept="image/jpeg, image/png"
-                            feedbackValid="If no image is uploaded, a default image will be used."
+                            onChange={handleFileChange}
+                            // feedbackValid="If no image is uploaded, a default image will be used."
                             multiple
                             // required
                         />
+                        {/* Preview */}
+                        <CRow className="mt-4 g-4">
+                            {previews.map((preview, index) => (
+                                <CCol key={index} xs="auto" className="position-relative">
+                                    <CButton
+                                        onClick={() => removeImage(index)}
+                                        color="danger"
+                                        className="position-absolute top-0 end-0 rounded-circle p-1"
+                                        style={{ transform: 'translate(50%, -50%)' }}
+                                    >
+                                        <CCloseButton size={16} color="white" />
+                                    </CButton>
+                                    <CImage
+                                        src={preview.url}
+                                        alt={`Preview ${index}`}
+                                        className="w-100 h-100 object-cover rounded"
+                                        style={{ width: '6rem', height: '6rem' }}
+                                    />
+                                </CCol>
+                            ))}
+                        </CRow>
                     </CCol>
 
                     {/*/!* Submit Button *!/*/}

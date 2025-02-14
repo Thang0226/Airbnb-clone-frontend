@@ -11,7 +11,7 @@ export default function MapSample({onAddressSelect, value, onChange}) {
         try {
             const { data } = await axios.get('https://nominatim.openstreetmap.org/search', {
                 params: { format: 'json', q: query, limit: 5, addressdetails: 1 },
-                headers: { 'Accept': 'application/json', 'User-Agent': 'airbnb/1.0' }
+                headers: { 'Accept': 'application/json' }
             });
             setSuggestions(
                 data.map(item => ({
