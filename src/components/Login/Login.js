@@ -151,6 +151,5 @@ export default function Register() {
                 }
             </Formik>
         </Layout>
-    )
-        ;
+    );
 }
