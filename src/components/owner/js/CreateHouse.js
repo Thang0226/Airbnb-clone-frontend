@@ -100,6 +100,7 @@ export default function CreateHouse() {
         <div>
             <NavbarOwner/>
             <CContainer className="py-lg-5 py-3 w-50">
+                <h1 className="my-4">🏡 List a new house</h1>
                 <CForm
                     className="row g-3 needs-validation"
                     noValidate
