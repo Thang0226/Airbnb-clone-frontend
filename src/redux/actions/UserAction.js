@@ -31,13 +31,7 @@ export const updateUserProfile = (formData) => {
         dispatch({ type: UPDATE_USER_PROFILE });
         try {
             const response = await axios.put(
-                `${BASE_URL}/api/users/profile/update`,
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                }
+                `${BASE_URL}/api/users/profile/update`, formData
             );
             dispatch({
                 type: UPDATE_USER_PROFILE_SUCCESS,

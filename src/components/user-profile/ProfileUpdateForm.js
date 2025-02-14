@@ -20,8 +20,7 @@ import {fetchUserProfile, updateUserProfile} from "../../redux/actions/UserActio
 const validationSchema = Yup.object({
     fullName: Yup.string().required("Full Name is required"),
     phone: Yup.string()
-        .matches(/^0[0-9]{9}$/, "Must be only digits and start with 0")
-        .min(10, "Must be at least 10 digits")
+        .matches(/^0[0-9]{9}$/, "Phone number must start with 0 and have at least 10 digits")
         .required("Phone number is required")
 });
 
@@ -69,8 +68,10 @@ const ProfileUpdateForm = () => {
     const handleSubmit = (values, { setSubmitting }) => {
         const formData = new FormData();
         Object.keys(values).forEach((key) => {
-            if (key === "avatar" && values[key]) {
-                formData.append(key, values[key]);
+            if (key === "avatar") {
+                if (values[key] instanceof File) {
+                    formData.append(key, values[key]);
+                }
             } else {
                 formData.append(key, values[key]);
             }
@@ -168,13 +169,16 @@ const ProfileUpdateForm = () => {
                                                         id="fullName"
                                                         className="form-control"
                                                     />
-                                                    <CFormLabel htmlFor="fullName">Full Name <span style={{ color: 'red' }}>*</span></CFormLabel>
+                                                    <CFormLabel htmlFor="fullName">Full Name <span
+                                                        style={{color: 'red'}}>*</span></CFormLabel>
                                                 </CFormFloating>
-                                                <ErrorMessage
-                                                    name="fullName"
-                                                    component={CFormFeedback}
-                                                    className="d-block text-danger mt-1"
-                                                />
+                                                <div style={{minHeight: "20px"}}>
+                                                    <ErrorMessage
+                                                        name="fullName"
+                                                        component={CFormFeedback}
+                                                        className="d-block text-danger mt-1 ps-2"
+                                                    />
+                                                </div>
                                             </CCol>
                                         </CRow>
 
@@ -190,6 +194,7 @@ const ProfileUpdateForm = () => {
                                                     />
                                                     <CFormLabel htmlFor="address">Address</CFormLabel>
                                                 </CFormFloating>
+                                                <div style={{minHeight: "20px"}}></div>
                                             </CCol>
                                         </CRow>
 
@@ -203,13 +208,16 @@ const ProfileUpdateForm = () => {
                                                         id="phone"
                                                         className="form-control"
                                                     />
-                                                    <CFormLabel htmlFor="phone">Phone Number <span style={{ color: 'red' }}>*</span></CFormLabel>
+                                                    <CFormLabel htmlFor="phone">Phone Number <span
+                                                        style={{color: 'red'}}>*</span></CFormLabel>
                                                 </CFormFloating>
-                                                <ErrorMessage
-                                                    name="phone"
-                                                    component={CFormFeedback}
-                                                    className="d-block text-danger mt-1"
-                                                />
+                                                <div style={{minHeight: "20px"}}>
+                                                    <ErrorMessage
+                                                        name="phone"
+                                                        component={CFormFeedback}
+                                                        className="d-block text-danger mt-1 ps-2"
+                                                    />
+                                                </div>
                                             </CCol>
                                         </CRow>
 
