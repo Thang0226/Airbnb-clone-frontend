@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setHouses } from '../redux/houseSlice';
+
 import "./css/HouseList.css";
 import {
   CContainer,
@@ -40,6 +43,7 @@ const ChangeView = ({ center, zoom }) => {
 
 
 const SearchBar = ({ onSearch }) => {
+  const dispatch = useDispatch();
   const [location, setLocation] = useState('');
   const [checkIn, setCheckIn] = useState('2024-02-20'); // có thể gán mặc định từ dữ liệu mẫu
   const [checkOut, setCheckOut] = useState('2024-03-10'); // có thể gán mặc định từ dữ liệu mẫu
@@ -49,7 +53,7 @@ const SearchBar = ({ onSearch }) => {
   const [minBathrooms, setMinBathrooms] = useState('');
   const [showMap, setShowMap] = useState(false);
   const [selectedCity, setSelectedCity] = useState(null);
-  const [houses, setHouses] = useState([]);
+  const [houses] = useState([]);
   const [mapCenter, setMapCenter] = useState([16.047079, 108.206230]); // Vị trí mặc định (Đà Nẵng)
   const [zoom, setZoom] = useState(5);
 
@@ -101,21 +105,34 @@ const SearchBar = ({ onSearch }) => {
   // Khi nhấn nút "Tìm kiếm", gọi callback onSearch và truyền các tham số tìm kiếm
   const handleSearchButtonClick = () => {
     const searchData = {
-
-    }; location,
       checkIn,
       checkOut,
       guests,
       sortOrder,
       minBedrooms,
       minBathrooms,
-
+    };
     console.log("Đang gửi dữ liệu tìm kiếm đến backend với các tham số:", searchData);
 
     // Gửi POST request đến API backend (thay URL bên dưới bằng URL API của bạn)
-    axios.post('https://your-backend-api.com/search', searchData)
+    axios.post("http://localhost:8080/api/houses/search", searchData, {
+      headers: { "Content-Type": "application/json" },
+    })
       .then(response => {
+
         console.log("Phản hồi từ backend:", response.data);
+        const action= setHouses(response.data); // Lưu kết quả tifm kiếm mà bên backend trả về vào Redux
+        //bi loi thi cai npm install @reduxjs/toolkit react-redux
+
+
+        console.log("Giá trị của setHouses(response.data):", action);
+        dispatch(action);
+
+
+        if (onSearch) {
+          onSearch(searchData);
+        }
+
       })
       .catch(error => {
         console.error("Lỗi khi gửi dữ liệu đến backend:", error);

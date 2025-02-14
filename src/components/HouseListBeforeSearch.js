@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
+
 import {
   CCard,
   CCardBody,
@@ -44,15 +44,6 @@ const HouseCarousel = ({ images, height = "200px" }) => {
     );
   }
 
-
-
-
-
-
-
-
-
-
   return (
     <div style={{ position: "relative", overflow: "hidden", height: height }}>
       <div
@@ -62,10 +53,10 @@ const HouseCarousel = ({ images, height = "200px" }) => {
           transform: `translateX(-${currentIndex * 100}%)`
         }}
       >
-        {images.map((image) => (
+        {images.map((images) => (
           <img
-            key={image.id}
-            src={image.imageUrl}
+            key={images.id}
+            src={images.imageUrl}
             alt=""
             style={{
               width: "100%",
@@ -79,23 +70,39 @@ const HouseCarousel = ({ images, height = "200px" }) => {
   );
 };
 
-const HouseList = () => {
-  // Lấy danh sách nhà đã được lưu vào Redux (được set bởi component tìm kiếm)
-  const houses = useSelector((state) => state.houses);
+const HouseListBeforeSearch = () => {
+  const [houses, setHouses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Hàm format giá tiền
+  useEffect(() => {
+    // Lấy dữ liệu từ API sử dụng BASE_URL và API_ENDPOINTS
+    axios
+      .get(`${BASE_URL}${API_ENDPOINTS.GET_HOUSES_FOR_RENTED}`)
+      .then((response) => {
+        setHouses(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the data!", error);
+        setLoading(false);
+      });
+  }, []);
+
   const formatPrice = (price) => {
     return new Intl.NumberFormat("vi-VN", {
       style: "decimal",
-      maximumFractionDigits: 0,
+      maximumFractionDigits: 0
     }).format(price);
   };
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <CContainer className="py-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="h4 mb-0 fw-bold">Search</h2>
+        <h2 className="h4 mb-0 fw-bold">Houses for you</h2>
         <div className="d-flex gap-3">
           <a href="#" className="text-decoration-none text-primary">
             Top 5 Most Rented Rooms
@@ -107,8 +114,6 @@ const HouseList = () => {
         </div>
       </div>
 
-
-      {houses && houses.length > 0 ? (
       <CRow xs={{ cols: 1 }} md={{ cols: 2 }} lg={{ cols: 4 }} className="g-4">
         {houses.map((house) => (
           <CCol key={house.id}>
@@ -186,11 +191,8 @@ const HouseList = () => {
           </CCol>
         ))}
       </CRow>
-      ) : (
-      <div>Không tìm thấy nhà nào hoặc chưa có kết quả tìm kiếm.</div>
-      )}
     </CContainer>
   );
 };
 
-export default HouseList;
+export default HouseListBeforeSearch;
