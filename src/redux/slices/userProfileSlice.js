@@ -2,6 +2,12 @@ import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import axios from "axios";
 import {BASE_URL} from "../../constants/api";
 
+export const initialState = {
+    userProfile: null,
+    loading: false,
+    error: null,
+};
+
 // Async thunk for fetching user profile
 export const fetchUserProfile = createAsyncThunk(
     "userProfile/fetchUserProfile",
@@ -30,11 +36,7 @@ export const updateUserProfile = createAsyncThunk(
 
 const userProfileSlice = createSlice({
     name: "userProfile",
-    initialState: {
-        userProfile: null,
-        loading: false,
-        error: null,
-    },
+    initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder

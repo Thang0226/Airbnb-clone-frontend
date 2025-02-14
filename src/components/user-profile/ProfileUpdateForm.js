@@ -17,6 +17,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchUserProfile, updateUserProfile} from "../../redux/slices/userProfileSlice";
 import {toast} from "react-toastify";
+import {BASE_URL} from "../../constants/api";
 
 const validationSchema = Yup.object({
     fullName: Yup.string().required("Full Name is required"),
@@ -162,7 +163,7 @@ const ProfileUpdateForm = () => {
                                                     />
                                                 ) : (
                                                     <img
-                                                        src={`/images/${userProfile.avatar}`}
+                                                        src={`${BASE_URL}/images/${userProfile.avatar}`}
                                                         alt="Current Avatar"
                                                         className="rounded-circle border border-white border-3"
                                                         width="100"

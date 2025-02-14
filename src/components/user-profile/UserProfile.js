@@ -3,6 +3,7 @@ import {fetchUserProfile} from "../../redux/slices/userProfileSlice";
 import {CButton, CCard, CCardBody, CCardHeader, CCol, CRow} from "@coreui/react";
 import {useDispatch, useSelector} from "react-redux";
 import {useLocation, useNavigate} from "react-router-dom";
+import {BASE_URL} from "../../constants/api";
 
 const UserProfile = ({username}) => {
     const dispatch = useDispatch();
@@ -47,7 +48,7 @@ const UserProfile = ({username}) => {
                     <CCard className="shadow border-0">
                         <CCardHeader className="text-center p-4">
                             <img
-                                src={"/images/" + userProfile.avatar}
+                                src={`${BASE_URL}/images/${userProfile.avatar}`}
                                 alt={userProfile.username}
                                 className="rounded-circle border border-blue border-4"
                                 width="150"
