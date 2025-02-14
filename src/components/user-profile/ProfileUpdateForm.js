@@ -16,6 +16,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchUserProfile, updateUserProfile} from "../../redux/actions/UserAction";
+import {toast} from "react-toastify";
 
 const validationSchema = Yup.object({
     fullName: Yup.string().required("Full Name is required"),
@@ -66,6 +67,19 @@ const ProfileUpdateForm = () => {
     );
 
     const handleSubmit = (values, { setSubmitting }) => {
+        const originalValues = getInitialValues(userProfile);
+        let isChanged = false;
+        if (values.fullName !== originalValues.fullName) isChanged = true;
+        if (values.address !== originalValues.address) isChanged = true;
+        if (values.phoneNumber !== originalValues.phoneNumber) isChanged = true;
+        if (values.avatar instanceof File) isChanged = true;
+
+        if (!isChanged) {
+            setSubmitting(false);
+            toast.info("No changes were made.");
+            navigate("/profile");
+            return;
+        }
         const formData = new FormData();
         Object.keys(values).forEach((key) => {
             if (key === "avatar") {
@@ -76,10 +90,18 @@ const ProfileUpdateForm = () => {
                 formData.append(key, values[key]);
             }
         });
-        console.log("Updated Data:", Object.fromEntries(formData.entries()));
-        dispatch(updateUserProfile(formData));
-        setSubmitting(false);
-        navigate("/profile");
+
+        dispatch(updateUserProfile(formData))
+            .then(() => {
+                toast.success("Profile updated successfully!");
+                navigate("/profile");
+            })
+            .catch((err) => {
+                toast.error("Error updating profile: " + err.message);
+            })
+            .finally(() => {
+                setSubmitting(false);
+            });
     };
 
     const handleAvatarChange = (e, setFieldValue) => {
