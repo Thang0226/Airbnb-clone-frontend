@@ -1,6 +1,7 @@
 // Template: https://www.airbnb.com/become-a-host
 
 import NavbarOwner from "./NavbarOwner";
+import MapSample from "./MapSample";
 import { useNavigate } from "react-router-dom";
 import React , { useRef , useState , useEffect } from 'react'
 import styles from '../css/CreateHouse.module.css'
@@ -16,10 +17,23 @@ import {
 export default function CreateHouse() {
     const [validated , setValidated] = useState ( false );
     const navigate = useNavigate ();
-    const textareaRef = useRef ( null );
-    // const defaultImage = "../../../assets/cottage.jpg"
 
-    // Expandable Description CFormTextarea
+    // Map stuff
+    const [mapData, setMapData] = useState({
+        name: '',
+        address: ''
+    });
+    const [selectedAddressData, setSelectedAddressData] = useState(null);
+    const handleAddressSelect = (addressData) => {
+        setMapData({
+            name: addressData.formattedAddress,
+            address: addressData.addressComponents
+        });
+        setSelectedAddressData(addressData);
+    } // end Map stuff
+
+    // Make CFormTextarea expandable:
+    const textareaRef = useRef ( null );
     useEffect ( () => {
         const textarea = textareaRef.current;
         if (textarea) {
@@ -34,21 +48,21 @@ export default function CreateHouse() {
     } , [] );
 
     const handleSubmit = (event) => {
-        event.preventDefault ()
+        event.preventDefault ();
+
+        // Map stuff
+        console.log('Form data:', mapData);
+        console.log('Selected address data:', selectedAddressData);
+
         const form = event.currentTarget
 
-        if (!form.checkValidity ()) {
+        if (form.checkValidity() === false) {
             event.stopPropagation ();
-            return;  // Stop execution if invalid
+
         }
         setValidated ( true )
 
-        // Old code: Simply log form data
-        // const formData = new FormData(form);
-        // const formObject = Object.fromEntries(formData.entries());
-        // console.log(formObject);
 
-        // New code by ChatGPT: https://chatgpt.com/share/67adaab7-889c-800b-a9f0-204a7b2ffc2f
         const formData = new FormData ( form );
 
         //  FormData object:
@@ -64,7 +78,7 @@ export default function CreateHouse() {
 
         const houseImage = formData.get ( "houseImages" );
         if (houseImage && houseImage.size > 0) {
-            houseData.append ( "houseImages" , houseImage );
+            houseData.append ( "houseImages" , houseImage ) ;
         } // append image
 
         // Send request
@@ -79,6 +93,8 @@ export default function CreateHouse() {
             } )
             .catch ( error => console.error ( "Error:" , error ) );
     };
+
+
 
     return (
         <div>
@@ -109,17 +125,16 @@ export default function CreateHouse() {
                     {/* Address */}
                     <CCol xs={12}>
                         <CFormFloating>
-                            <CFormInput
-                                type="text"
-                                placeholder="Enter House Address"
-                                id="address"
-                                name="address"
-                                feedbackInvalid="Please enter a house address"
-                                required
+                            <MapSample
+                                value = {mapData.name}
+                                onChange={(newValue) => setMapData(prev => ({ ...prev, name: newValue }))}
+                                onAddressSelect={handleAddressSelect}
                             />
-                            <CFormLabel htmlFor="address">Enter House Address</CFormLabel>
+                            {/*<CFormLabel htmlFor="address">Enter House Address</CFormLabel>*/}
                         </CFormFloating>
                     </CCol>
+
+
 
                     {/*/!* Bedrooms *!/*/}
                     <CCol xs={12}>
