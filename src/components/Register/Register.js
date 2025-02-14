@@ -12,11 +12,15 @@ import {useRef} from "react";
 import {Formik} from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import {useDispatch} from "react-redux";
+import {setUsername} from "../../redux/slices/usernameSlice";
 import Layout from "../Layout";
 import {BASE_URL_USER} from "../../constants/api";
 
 export default function Register() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
     const REGEX = {
         username: /^[a-zA-Z0-9_]{4,30}$/,
         password: /^[a-zA-Z0-9!@#$^&)(+=._-]{6,32}$/,
@@ -84,6 +88,7 @@ export default function Register() {
                 password: formValues.password,
                 phone: formValues.phone,
             });
+            dispatch(setUsername(formValues.username));
         } catch (error) {
             console.log(error);
         }
