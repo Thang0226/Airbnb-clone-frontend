@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {fetchUserProfile} from "../../redux/actions/UserAction";
+import {fetchUserProfile} from "../../redux/slices/userProfileSlice";
 import {CButton, CCard, CCardBody, CCardHeader, CCol, CRow} from "@coreui/react";
 import {useDispatch, useSelector} from "react-redux";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -15,7 +15,7 @@ const UserProfile = ({username}) => {
         dispatch(fetchUserProfile(username));
     }, [dispatch, username]);
 
-    const {userProfile, error, loading} = useSelector((state) => state.user);
+    const {userProfile, error, loading} = useSelector((state) => state.userProfile);
 
     if (loading || !userProfile) return (
         <div className="container mt-4">

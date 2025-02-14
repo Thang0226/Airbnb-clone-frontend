@@ -8,7 +8,9 @@ import { ToastContainer } from "react-toastify";
 function App() {
     return (
         <>
-            <ToastContainer />
+            <ToastContainer
+                pauseOnFocusLoss={false}
+            />
             <BrowserRouter>
                 <Routes>
                     <Route path="/profile" element={<UserProfile username="test123" />}/>

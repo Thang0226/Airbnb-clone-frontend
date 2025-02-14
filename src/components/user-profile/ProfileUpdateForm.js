@@ -15,7 +15,7 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchUserProfile, updateUserProfile} from "../../redux/actions/UserAction";
+import {fetchUserProfile, updateUserProfile} from "../../redux/slices/userProfileSlice";
 import {toast} from "react-toastify";
 
 const validationSchema = Yup.object({
@@ -45,7 +45,7 @@ const ProfileUpdateForm = () => {
         dispatch(fetchUserProfile(username));
     }, [dispatch, username]);
 
-    const {userProfile, error, loading} = useSelector((state) => state.user);
+    const {userProfile, error, loading} = useSelector((state) => state.userProfile);
 
     if (loading || !userProfile) return (
         <div className="container mt-4">
