@@ -5,14 +5,14 @@ import MapSample from "./MapSample";
 import { useNavigate } from "react-router-dom";
 import React , { useRef , useState , useEffect } from 'react'
 import styles from '../css/CreateHouse.module.css'
-import { CCloseButton , CImage , CRow } from '@coreui/react'
 import {
     CContainer ,
     CForm ,
     CCol ,
     CFormFloating ,
     CFormInput ,
-    CButton , CFormTextarea , CFormLabel
+    CButton , CFormTextarea , CFormLabel ,
+    CCloseButton , CImage , CRow
 } from '@coreui/react';
 import axios from 'axios';
 
@@ -54,7 +54,7 @@ export default function CreateHouse() {
         setSelectedFiles ( newFiles );
     };
 
-    // Map stuff
+    // Suggest addresses from MapAPI
     const [mapData , setMapData] = useState ( {
         name: '' ,
         address: ''
@@ -90,40 +90,30 @@ export default function CreateHouse() {
         const form = event.currentTarget
         if (form.checkValidity () === false) {
             event.stopPropagation ();
-        }
-        setValidated ( true )
-
-
-        const formData = new FormData ();
-        formData.append ( "house" , new Blob ( [JSON.stringify ( {
-            houseName: form.houseName.value ,
-            address: form.address.value ,
-            bedrooms: Number ( form.bedrooms.value ) ,
-            bathrooms: Number ( form.bathrooms.value ) ,
-            description: form.description.value ,
-            price: Number ( form.price.value )
-        } )] , {type: "application/json"} ) );
-
-        // Handle multiple images
-        if (selectedFiles.length > 0) {
-            selectedFiles.forEach ( file => {
-                formData.append ( "houseImages" , file );
-            } );
+            setValidated ( true );
+            return;
         }
 
+        // Collect form data
+        const formData = new FormData ( form );
+        formData.append ( 'address' , JSON.stringify ( mapData.address ) );
+        selectedFiles.forEach ( file => {
+            formData.append ( 'houseImages' , file );
+        } );
 
         // Send request
-        try {
-            const response = await fetch ( "http://localhost:8080/api/houses/create" , {
-                method: "POST" ,
-                body: formData
+        axios.post ( 'http://localhost:8080/api/houses/create' , formData , {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        } )
+            .then ( response => {
+                console.log ( 'House created successfully:' , response.data );
+                navigate ( '/' );
+            } )
+            .catch ( error => {
+                console.error ( 'Error creating house:' , error );
             } );
-            const savedHouse = await response.json ();
-            console.log ( "House saved:" , savedHouse );
-            // navigate("/");
-        } catch (error) {
-            console.error ( "Error:" , error );
-        }
     };
 
 
@@ -162,10 +152,8 @@ export default function CreateHouse() {
                                 onChange={(newValue) => setMapData ( prev => ({...prev , name: newValue}) )}
                                 onAddressSelect={handleAddressSelect}
                             />
-                            {/*<CFormLabel htmlFor="address">Enter House Address</CFormLabel>*/}
                         </CFormFloating>
                     </CCol>
-
 
                     {/*/!* Bedrooms *!/*/}
                     <CCol xs={12}>
@@ -251,12 +239,6 @@ export default function CreateHouse() {
                         <CRow className="mt-4 g-4">
                             {previews.map ( (preview , index) => (
                                 <CCol key={index} xs="auto" className="position-relative">
-                                    {/*<CButton*/}
-                                    {/*    onClick={() => removeImage(index)}*/}
-                                    {/*    color="danger"*/}
-                                    {/*    className="position-absolute top-0 end-0 rounded-circle p-1"*/}
-                                    {/*    style={{ transform: 'translate(50%, -50%)' }}*/}
-                                    {/*>*/}
                                     <CCloseButton className="position-absolute top-0 end-0 rounded-circle p-1"
                                                   color="white" onClick={() => removeImage ( index )}/>
                                     <CImage

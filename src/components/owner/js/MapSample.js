@@ -53,6 +53,7 @@ export default function MapSample({onAddressSelect, value, onChange}) {
                 type="text"
                 id="address"
                 name="address"
+                maxLength={500}
                 value={value}
                 onChange={handleInputChange}
                 placeholder="Enter address"
