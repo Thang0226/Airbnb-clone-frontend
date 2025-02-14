@@ -3,7 +3,6 @@ import {Provider} from 'react-redux';
 import store from "./redux/store"
 import './scss/custom.scss'
 import "./App.css"
-import "react-toastify/dist/ReactToastify.css";
 
 import Register from "./components/Register/Register";
 import Login from "./components/Login/Login";
