@@ -9,14 +9,15 @@ export const initialState = {
 };
 
 // Async thunk for fetching user profile
-export const fetchUserProfile = createAsyncThunk(
+export const fetchUserProfile = createAsyncThunk (
     "userProfile/fetchUserProfile",
-    async (username, {rejectWithValue}) => {
+    async (username, thunkAPI) => {
         try {
             const response = await axios.get(`${BASE_URL}/api/users/profile/${username}`);
+            console.log(response.data)
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data?.message || "Error retrieving profile data!");
+            return thunkAPI.rejectWithValue(error.response?.data?.message || "Error retrieving profile data!");
         }
     }
 );
@@ -24,12 +25,12 @@ export const fetchUserProfile = createAsyncThunk(
 // Async thunk for updating user profile
 export const updateUserProfile = createAsyncThunk(
     "userProfile/updateUserProfile",
-    async (formData, {rejectWithValue}) => {
+    async (formData, thunkAPI) => {
         try {
             const response = await axios.put(`${BASE_URL}/api/users/profile/update`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data?.message || "Error updating profile!");
+            return thunkAPI.rejectWithValue(error.response?.data?.message || "Error updating profile!");
         }
     }
 );

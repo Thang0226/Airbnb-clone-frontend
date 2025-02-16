@@ -1,23 +1,21 @@
 import React, {useEffect, useState} from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form} from "formik";
 import * as Yup from "yup";
 import {
-    CFormLabel,
-    CFormInput,
     CButton,
     CCol,
     CRow,
-    CFormFeedback,
     CCard,
     CCardHeader,
-    CCardBody, CFormFloating
+    CCardBody
 } from "@coreui/react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchUserProfile, updateUserProfile} from "../../redux/slices/userProfileSlice";
 import {toast} from "react-toastify";
-import {BASE_URL} from "../../constants/api";
+import UPAvatarInput from "./fragments/UPAvatarInput";
+import UPTextInput from "./fragments/UPTextInput";
 
 const validationSchema = Yup.object({
     fullName: Yup.string().required("Full Name is required"),
@@ -72,7 +70,7 @@ const ProfileUpdateForm = () => {
         let isChanged = false;
         if (values.fullName !== originalValues.fullName) isChanged = true;
         if (values.address !== originalValues.address) isChanged = true;
-        if (values.phoneNumber !== originalValues.phoneNumber) isChanged = true;
+        if (values.phone !== originalValues.phone) isChanged = true;
         if (values.avatar instanceof File) isChanged = true;
 
         if (!isChanged) {
@@ -133,116 +131,34 @@ const ProfileUpdateForm = () => {
                             >
                                 {({ isSubmitting, setFieldValue }) => (
                                     <Form>
-                                        <CRow className="mb-3">
-                                            <CCol md={12}>
-                                                <CFormFloating>
-                                                    <Field
-                                                        name="username"
-                                                        as={CFormInput}
-                                                        type="text"
-                                                        id="username"
-                                                        className="form-control"
-                                                        readOnly
-                                                        style={{ cursor: "not-allowed" }}
-                                                    />
-                                                    <CFormLabel htmlFor="username">Username</CFormLabel>
-                                                </CFormFloating>
-                                            </CCol>
-                                        </CRow>
+                                        <UPTextInput label="Username" name="username" readOnly />
 
-                                        <CRow className="mb-3 justify-content-center align-items-center">
-                                            <CCol md={2}>
-                                                {avatarPreview ? (
-                                                    <img
-                                                        src={avatarPreview}
-                                                        alt="Avatar Preview"
-                                                        className="rounded-circle border border-white border-3"
-                                                        width="100"
-                                                        height="100"
-                                                        style={{objectFit: "cover"}}
-                                                    />
-                                                ) : (
-                                                    <img
-                                                        src={`${BASE_URL}/images/${userProfile.avatar}`}
-                                                        alt="Current Avatar"
-                                                        className="rounded-circle border border-white border-3"
-                                                        width="100"
-                                                        height="100"
-                                                        style={{objectFit: "cover"}}
-                                                        onError={(e) => { e.target.onerror = null; e.target.src = "/images/default.jpg"; }}
-                                                    />
-                                                )}
-                                            </CCol>
-                                            <CCol md={10} className="ps-3">
-                                                <CFormInput
-                                                    type="file"
-                                                    accept="image/*"
-                                                    onChange={(e) => handleAvatarChange(e, setFieldValue)}
-                                                />
-                                            </CCol>
-                                        </CRow>
+                                        <UPAvatarInput
+                                            avatarPreview={avatarPreview}
+                                            userProfile={userProfile}
+                                            handleAvatarChange={handleAvatarChange}
+                                            setFieldValue={setFieldValue}
+                                        />
 
-                                        <CRow className="mb-3">
-                                            <CCol md={12}>
-                                                <CFormFloating>
-                                                    <Field
-                                                        name="fullName"
-                                                        as={CFormInput}
-                                                        type="text"
-                                                        id="fullName"
-                                                        className="form-control"
-                                                    />
-                                                    <CFormLabel htmlFor="fullName">Full Name <span
-                                                        style={{color: 'red'}}>*</span></CFormLabel>
-                                                </CFormFloating>
-                                                <div style={{minHeight: "20px"}}>
-                                                    <ErrorMessage
-                                                        name="fullName"
-                                                        component={CFormFeedback}
-                                                        className="d-block text-danger mt-1 ps-2"
-                                                    />
-                                                </div>
-                                            </CCol>
-                                        </CRow>
+                                        <UPTextInput
+                                            label="Full Name"
+                                            name="fullName"
+                                            placeholder="Enter your full name"
+                                            required
+                                        />
 
-                                        <CRow className="mb-3">
-                                            <CCol md={12}>
-                                                <CFormFloating>
-                                                    <Field
-                                                        name="address"
-                                                        as={CFormInput}
-                                                        type="text"
-                                                        id="address"
-                                                        className="form-control"
-                                                    />
-                                                    <CFormLabel htmlFor="address">Address</CFormLabel>
-                                                </CFormFloating>
-                                                <div style={{minHeight: "20px"}}></div>
-                                            </CCol>
-                                        </CRow>
+                                        <UPTextInput
+                                            label="Address"
+                                            name="address"
+                                            placeholder="Enter your address"
+                                        />
 
-                                        <CRow className="mb-3">
-                                            <CCol md={12}>
-                                                <CFormFloating>
-                                                    <Field
-                                                        name="phone"
-                                                        as={CFormInput}
-                                                        type="text"
-                                                        id="phone"
-                                                        className="form-control"
-                                                    />
-                                                    <CFormLabel htmlFor="phone">Phone Number <span
-                                                        style={{color: 'red'}}>*</span></CFormLabel>
-                                                </CFormFloating>
-                                                <div style={{minHeight: "20px"}}>
-                                                    <ErrorMessage
-                                                        name="phone"
-                                                        component={CFormFeedback}
-                                                        className="d-block text-danger mt-1 ps-2"
-                                                    />
-                                                </div>
-                                            </CCol>
-                                        </CRow>
+                                        <UPTextInput
+                                            label="Phone Number"
+                                            name="phone"
+                                            placeholder="Enter your phone number"
+                                            required
+                                        />
 
                                         <div className="text-center">
                                             <CButton type="submit" color="primary" disabled={isSubmitting}>
