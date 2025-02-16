@@ -1,28 +1,23 @@
-import {HashRouter, Routes, Route} from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import store from './redux/store'
 import './scss/custom.scss'
-import "./App.css"
-import HouseList from "./components/HouseList";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import Nabav from "./components/Nabav"
-import SearchBarForHouseAvailable from "./components/SearchBarForHouseAvailable";
+import './App.css'
 
-import Register from "./components/Register/Register";
+import { ToastContainer } from 'react-toastify'
+import Register from './components/Register/Register'
+import Login from './components/Login/Login'
 
-function App() {
-    return (
-        <div className="App">
-            <HashRouter>
-                <Routes>
-                    <Route path="/" element={<div>
-                          <Nabav/>
-                          <SearchBarForHouseAvailable/>
-                          <HouseList />
-                          </div>}/>
-                    <Route path="/register" element={<Register/>}/>
-                </Routes>
-            </HashRouter>
-        </div>
-    );
-
-export default App;
+export default function App() {
+  return (
+    <Provider store={store}>
+      <ToastContainer position="top-right" pauseOnFocusLoss={false} />
+      <HashRouter>
+        <Routes>
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </HashRouter>
+    </Provider>
+  )
+}
