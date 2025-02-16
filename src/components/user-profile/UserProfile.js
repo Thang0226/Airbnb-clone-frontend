@@ -1,9 +1,10 @@
 import React, {useEffect} from 'react';
 import {fetchUserProfile} from "../../redux/slices/userProfileSlice";
-import {CButton, CCard, CCardBody, CCardHeader, CCol, CRow} from "@coreui/react";
+import {CButton, CCard, CCardBody, CCardHeader, CCol, CRow, CSpinner} from "@coreui/react";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {BASE_URL} from "../../constants/api";
+import UserInfoRow from "./fragments/UPInfoRow";
 
 const UserProfile = ({username}) => {
     const dispatch = useDispatch();
@@ -19,17 +20,14 @@ const UserProfile = ({username}) => {
     const {userProfile, error, loading} = useSelector((state) => state.userProfile);
 
     if (loading || !userProfile) return (
-        <div className="container mt-4">
-            <CRow className="justify-content-center mt-4">
-                <CCol md={6}>
-                    <h1 className="text-center">Loading profile...</h1>
-                </CCol>
-            </CRow>
+        <div className="d-flex flex-column align-items-center justify-content-center vh-100">
+            <CSpinner color="primary" size="lg"/>
+            <h1 className="mt-3">Loading profile...</h1>
         </div>
     );
     if (error) return (
         <div className="container mt-4">
-            <CRow className="justify-content-center mt-4">
+            <CRow className="mt-4">
                 <CCol md={6}>
                     <h1 className="text-danger">Lỗi: {error}</h1>
                 </CCol>
@@ -58,18 +56,9 @@ const UserProfile = ({username}) => {
                             <h3 className="mt-3">{userProfile.username}</h3>
                         </CCardHeader>
                         <CCardBody className="p-4 row">
-                            <CRow className="mb-3">
-                                <CCol md={4} className="fw-bold">Full Name</CCol>
-                                <CCol md={8}>{userProfile.fullName}</CCol>
-                            </CRow>
-                            <CRow className="mb-3">
-                                <CCol md={4} className="fw-bold">Address</CCol>
-                                <CCol md={8}>{userProfile.address}</CCol>
-                            </CRow>
-                            <CRow>
-                                <CCol md={4} className="fw-bold">Phone</CCol>
-                                <CCol md={8}>{userProfile.phone}</CCol>
-                            </CRow>
+                            <UserInfoRow label="Full Name" value={userProfile.fullName} />
+                            <UserInfoRow label="Address" value={userProfile.address} />
+                            <UserInfoRow label="Phone" value={userProfile.phone} />
                             <div className="text-center mt-3">
                                 <CButton color="primary" onClick={goToProfileEdit}>
                                     Edit Profile
