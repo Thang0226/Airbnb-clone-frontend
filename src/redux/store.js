@@ -1,10 +1,10 @@
-import {configureStore} from "@reduxjs/toolkit";
-import {usernameSlice} from "./slices/usernameSlice";
+import { configureStore } from '@reduxjs/toolkit'
+import { accountSlice } from './slices/accountSlice'
 
 const store = configureStore({
-    reducer: {
-        username: usernameSlice.reducer
-    }
-});
+  reducer: {
+    account: accountSlice.reducer,
+  },
+})
 
-export default store;
+export default store

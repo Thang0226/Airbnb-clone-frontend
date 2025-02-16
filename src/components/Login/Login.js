@@ -6,6 +6,7 @@ import {
   CRow,
   CFormLabel,
 } from '@coreui/react'
+import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import styles from './styles.module.css'
 import { useRef } from 'react'
@@ -13,13 +14,14 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { resetUsername, setUsername } from '../../redux/slices/usernameSlice'
+import { setToken, setUsername, setPassword, deletePassword } from '../../redux/slices/accountSlice'
 import Layout from '../Layout'
 import { BASE_URL_USER } from '../../constants/api'
 
 export default function Login() {
   const navigate = useNavigate()
-  const username = useSelector(state => state.username.username)
+  const registeredUsername = useSelector(state => state.account.username)
+  const registeredPassword = useSelector(state => state.account.password)
   const dispatch = useDispatch()
   const REGEX = {
     username: /^[a-zA-Z0-9_]{4,30}$/,
@@ -32,9 +34,13 @@ export default function Login() {
   }
   const formikRef = useRef(null)
 
-  const handleUsernameChange = (e, formikHandleChange) => {
+  const handleFormChange = (e, formikHandleChange) => {
     formikHandleChange(e)
-    dispatch(setUsername(e.target.value))
+    if (e.target.name === 'username') {
+      dispatch(setUsername(e.target.value))
+    } else {
+      dispatch(setPassword(e.target.value))
+    }
   }
 
   const validationSchema = Yup.object().shape({
@@ -51,15 +57,19 @@ export default function Login() {
   const handleSubmit = async () => {
     const formValues = formikRef.current.values
     await axios.post(`${BASE_URL_USER}/login`, {
-      username: formValues.username,
-      password: formValues.password,
-    }).then((res) => {
-      dispatch(setUsername(formValues.username))
-    }).catch((err) => {
-      console.log(err)
-      dispatch(resetUsername())
-      alert('')
+      username: formValues.username || registeredUsername,
+      password: formValues.password || registeredPassword,
     })
+      .then((res) => {
+        dispatch(setToken(res.data.token))
+        dispatch(setUsername(res.data.username))
+        dispatch(deletePassword())
+        toast.success('Login successful', { hideProgressBar: true })
+        navigate('/')
+      })
+      .catch((err) => {
+        toast.error(err.response.data, { hideProgressBar: true })
+      })
   }
 
   return (
@@ -77,7 +87,7 @@ export default function Login() {
               </CFormLabel>
               <CCol sm={8}>
                 <CFormInput type="text" placeholder="user_name123" id="username" name="username"
-                            value={username} onChange={(e) => handleUsernameChange(e, handleChange)}
+                            value={registeredUsername} onChange={(e) => handleFormChange(e, handleChange)}
                             required />
                 {touched.username && errors.username &&
                   <p className={styles.error}>{errors.username}</p>}
@@ -88,7 +98,8 @@ export default function Login() {
                 Password:
               </CFormLabel>
               <CCol sm={8}>
-                <CFormInput type="password" id="password" name="password" onChange={handleChange}
+                <CFormInput type="password" id="password" name="password"
+                            value={registeredPassword} onChange={(e) => handleFormChange(e, handleChange)}
                             required />
                 {touched.password && errors.password &&
                   <p className={styles.error}>{errors.password}</p>}
