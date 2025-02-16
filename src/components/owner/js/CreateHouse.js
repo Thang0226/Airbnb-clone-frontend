@@ -1,5 +1,3 @@
-// Template: https://www.airbnb.com/become-a-host
-
 import NavbarOwner from "./NavbarOwner";
 import MapSample from "./MapSample";
 import { useNavigate } from "react-router-dom";
@@ -255,14 +253,20 @@ export default function CreateHouse() {
                     {/*/!* Submit Button *!/*/}
                     <CCol xs={12} className="mt-5">
                         <CButton
+                            color="light rounded-pill"
+                            className="me-3"
+                            onClick={() => navigate("/")}
+                        >
+                            Back
+                        </CButton>
+                        <CButton
                             color="dark rounded-pill"
-                            variant="outline"
                             type="submit"
-                            className={styles["btn-add-house"]}
                         >
                             Add House
                         </CButton>
                     </CCol>
+
 
                 </CForm>
             </CContainer>
