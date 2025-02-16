@@ -44,9 +44,12 @@ export default function Register() {
       .test('Duplicate username', 'Username already exists', async function(value) {
         if (!value) return true
         try {
-          await axios.post(`${BASE_URL_USER}/register/validate-username`, {
-            username: value,
-          })
+          await axios.post(`${BASE_URL_USER}/register/validate-username`, value,
+            {
+              headers: {
+                'Content-Type': 'text/plain',
+              },
+            })
           return true
         } catch (error) {
           // console.log(error)
@@ -58,9 +61,12 @@ export default function Register() {
       .test('Duplicate phone number', 'Phone number already exists', async function(value) {
         if (!value) return true
         try {
-          await axios.post(`${BASE_URL_USER}/register/validate-phone`, {
-            phone: value,
-          })
+          await axios.post(`${BASE_URL_USER}/register/validate-phone`, value,
+            {
+              headers: {
+                'Content-Type': 'text/plain',
+              },
+            })
           return true
         } catch (error) {
           // console.log(error)
@@ -115,7 +121,7 @@ export default function Register() {
                 <CFormInput type="text" placeholder="user_name123" id="username" name="username"
                             onChange={handleChange} required />
                 {touched.username && errors.username &&
-                  <p className={styles.error}>{errors.username}</p>}
+                  <p className="text-warning-emphasis">{errors.username}</p>}
               </CCol>
             </CRow>
             <CRow className="mb-3">
@@ -126,7 +132,7 @@ export default function Register() {
                 <CFormInput type="text" placeholder="0123456789" id="phone" name="phone"
                             onChange={handleChange}
                             required />
-                {touched.phone && errors.phone && <p className={styles.error}>{errors.phone}</p>}
+                {touched.phone && errors.phone && <p className="text-warning-emphasis">{errors.phone}</p>}
               </CCol>
             </CRow>
             <CRow className="mb-3">
@@ -137,7 +143,7 @@ export default function Register() {
                 <CFormInput type="password" id="password" name="password" onChange={handleChange}
                             required />
                 {touched.password && errors.password &&
-                  <p className={styles.error}>{errors.password}</p>}
+                  <p className="text-warning-emphasis">{errors.password}</p>}
               </CCol>
             </CRow>
             <CRow className="mb-4">
@@ -148,7 +154,7 @@ export default function Register() {
                 <CFormInput type="password" id="confirm_password" name="confirm_password"
                             onChange={handleChange} required />
                 {touched.confirm_password && errors.confirm_password &&
-                  <p className={styles.error}>{errors.confirm_password}</p>}
+                  <p className="text-warning-emphasis">{errors.confirm_password}</p>}
               </CCol>
             </CRow>
             <CButton color="primary" type="submit">
