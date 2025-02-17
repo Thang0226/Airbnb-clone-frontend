@@ -95,7 +95,12 @@ export default function CreateHouse() {
         }
 
         // Collect form data
-        const formData = new FormData ( form );
+        const formData = new FormData (  );
+        formData.append('houseName', form.houseName.value);
+        formData.append('bedrooms', form.bedrooms.value);
+        formData.append('bathrooms', form.bathrooms.value);
+        formData.append('price', form.price.value);
+        formData.append('description', form.description.value);
         if (selectedAddressData && selectedAddressData.formattedAddress) {
             formData.append('address', selectedAddressData.formattedAddress);
         } else if (mapData.address) {
@@ -116,18 +121,20 @@ export default function CreateHouse() {
         console.log('Address being sent:', formData.get('address'));
 
         // Send request
-        axios.post ( 'http://localhost:8080/api/houses/create' , formData , {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        } )
-            .then ( response => {
-                console.log ( 'House created successfully:' , response.data );
-                // navigate ( '/' );
-            } )
-            .catch ( error => {
-                console.error ( 'Error creating house:' , error );
-            } );
+        try {
+            const response = await axios.post('http://localhost:8080/api/houses/create',
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+            );
+            console.log('House created successfully:', response.data);
+            // navigate('/');
+        } catch (error) {
+            console.error('Error creating house:', error);
+        }
     };
 
 
