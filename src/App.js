@@ -9,6 +9,8 @@ import './App.css'
 import { ToastContainer } from 'react-toastify'
 import Register from './components/Register/Register'
 import Login from './components/Login/Login'
+import UserProfile from "./components/user-profile/UserProfile";
+import ProfileUpdateForm from "./components/user-profile/ProfileUpdateForm";
 
 export default function App() {
   return (
@@ -18,6 +20,8 @@ export default function App() {
         <Routes>
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/profile" element={<UserProfile />}/>
+          <Route path="/profile/edit" element={<ProfileUpdateForm />}/>
         </Routes>
       </HashRouter>
     </Provider>
