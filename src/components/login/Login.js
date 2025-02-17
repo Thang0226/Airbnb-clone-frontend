@@ -64,7 +64,7 @@ export default function Login() {
         dispatch(setToken(res.data.token))
         dispatch(setUsername(res.data.username))
         dispatch(deletePassword())
-        toast.success('Login successful', { hideProgressBar: true })
+        toast.success('login successful', { hideProgressBar: true })
         navigate('/')
       })
       .catch((err) => {
@@ -73,7 +73,7 @@ export default function Login() {
   }
 
   return (
-    <Layout>
+    <>
       <h2 className={styles.title}>Login</h2>
       <Formik initialValues={initialValues}
               validationSchema={validationSchema}
@@ -113,6 +113,6 @@ export default function Login() {
           </CForm>)
         }
       </Formik>
-    </Layout>
+    </>
   )
 }

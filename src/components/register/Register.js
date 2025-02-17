@@ -100,12 +100,12 @@ export default function Register() {
     } catch (error) {
       console.log(error)
     }
-    toast.success('Register successfully!', { hideProgressBar: true })
+    toast.success('register successfully!', { hideProgressBar: true })
     navigate('/login')
   }
 
   return (
-    <Layout>
+    <>
       <h2 className={styles.title}>Register New Account</h2>
       <Formik initialValues={initialValues}
               validationSchema={validationSchema}
@@ -163,7 +163,7 @@ export default function Register() {
           </CForm>)
         }
       </Formik>
-    </Layout>
+    </>
   )
 
 }

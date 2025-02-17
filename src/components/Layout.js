@@ -1,19 +1,21 @@
-import {CContainer, CFooter} from "@coreui/react";
-import MenuBar from "./MenuBar";
+import { CContainer, CFooter } from '@coreui/react'
+import MenuBar from './MenuBar'
+import { ToastContainer } from 'react-toastify'
 
-export default function Layout({children}) {
-    return (
-        <div className="flex flex-col min-h-screen">
-            {/* Navbar */}
-            <MenuBar/>
+export default function Layout({ children }) {
+  return (
+    <div className="flex flex-col min-h-screen">
+      <ToastContainer position="top-right" pauseOnFocusLoss={false} />
+      {/* Navbar */}
+      <MenuBar />
 
-            {/* Content */}
-            <CContainer className="p-4 overflow-auto flex-1">{children}</CContainer>
+      {/* Content */}
+      <CContainer className="p-4 overflow-auto flex-1">{children}</CContainer>
 
-            {/* Footer */}
-            <CFooter className="primary-bg-subtle p-4 mt-auto justify-content-center">
-                © 2025 My Application. All rights reserved.
-            </CFooter>
-        </div>
-    );
+      {/* Footer */}
+      <CFooter className="primary-bg-subtle p-4 mt-auto justify-content-center">
+        © 2025 My Application. All rights reserved.
+      </CFooter>
+    </div>
+  )
 }

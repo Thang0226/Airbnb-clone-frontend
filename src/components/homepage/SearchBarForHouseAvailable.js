@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { setHouses } from '../redux/houseSlice';
-import MapSample from './MapSampletoSearch';
-import "./css/HouseList.css";
+import React, { useState } from 'react'
+import axios from 'axios'
+import { useDispatch } from 'react-redux'
+import { setHouses } from '../../redux/houseSlice'
+import MapSample from './MapSampletoSearch'
+import './HouseList.css'
 import {
   CContainer,
   CRow,
@@ -20,14 +20,14 @@ import {
   CModalHeader,
   CModalBody,
   CModalTitle,
-} from '@coreui/react';
-import { Search, Calendar, Users } from 'lucide-react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+} from '@coreui/react'
+import { Search, Calendar, Users } from 'lucide-react'
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 
 // Fix Leaflet default icon issue
-delete L.Icon.Default.prototype._getIconUrl;
+delete L.Icon.Default.prototype._getIconUrl
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
     'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
@@ -35,89 +35,78 @@ L.Icon.Default.mergeOptions({
     'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
   shadowUrl:
     'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-});
+})
 
 // Component to change map view
 const ChangeView = ({ center, zoom }) => {
-  const map = useMap();
-  map.setView(center, zoom);
-  return null;
-};
-
-
-
-
-
-
-
-
-
+  const map = useMap()
+  map.setView(center, zoom)
+  return null
+}
 
 
 const SearchBar = ({ onSearch }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   // const [location, setLocation] = useState('');
-  const [address, setAddress] = useState('');
-  const [checkIn, setCheckIn] = useState('2024-02-20');
-  const [checkOut, setCheckOut] = useState('2024-03-10');
-  const [guests, setGuests] = useState(1);
-  const [sortOrder, setSortOrder] = useState('asc');
-  const [minBedrooms, setMinBedrooms] = useState('');
-  const [minBathrooms, setMinBathrooms] = useState('');
-  const [showMap, setShowMap] = useState(false);
-  const [selectedCity, setSelectedCity] = useState(null);
-  const [houses] = useState([]);
-  const [mapCenter, setMapCenter] = useState([16.047079, 108.206230]); // Default address (Da Nang)
-  const [zoom, setZoom] = useState(5);
+  const [address, setAddress] = useState('')
+  const [checkIn, setCheckIn] = useState('2024-02-20')
+  const [checkOut, setCheckOut] = useState('2024-03-10')
+  const [guests, setGuests] = useState(1)
+  const [sortOrder, setSortOrder] = useState('asc')
+  const [minBedrooms, setMinBedrooms] = useState('')
+  const [minBathrooms, setMinBathrooms] = useState('')
+  const [showMap, setShowMap] = useState(false)
+  const [selectedCity, setSelectedCity] = useState(null)
+  const [houses] = useState([])
+  const [mapCenter, setMapCenter] = useState([16.047079, 108.206230]) // Default address (Da Nang)
+  const [zoom, setZoom] = useState(5)
 
   //mapData chứa thông tin định dạng của địa chỉ, gồm 2 trườn
 //selectedAddressData lưu toàn bộ dữ liệu địa chỉ được chọn (nếu cần dùng cho các xử lý khác).
   const [mapData, setMapData] = useState({
     name: '',
-    address: ''
-  });
-  const [selectedAddressData, setSelectedAddressData] = useState(null);
+    address: '',
+  })
+  const [selectedAddressData, setSelectedAddressData] = useState(null)
 
   const handleAddressSelect = (addressData) => {
     setMapData({
       name: addressData.formattedAddress,
-      address: addressData.addressComponents
-    });
-    setSelectedAddressData(addressData);
-  };
-
-
+      address: addressData.addressComponents,
+    })
+    setSelectedAddressData(addressData)
+  }
 
 
   // Sample houses data
   const sampleHouses = [
     {
       id: 1,
-      city: "Ho Chi Minh City",
+      city: 'Ho Chi Minh City',
       latitude: 10.7769,
       longitude: 106.7009,
-      name: "Mini condominium in District 1",
-      price: "$600/day"
+      name: 'Mini condominium in District 1',
+      price: '$600/day',
     },
     {
       id: 2,
-      city: "Lao Cai",
+      city: 'Lao Cai',
       latitude: 22.3364,
       longitude: 103.8430,
-      name: "Mountain view guesthouse in Sapa",
-      price: "$700/day"
-    }
-  ];
+      name: 'Mountain view guesthouse in Sapa',
+      price: '$700/day',
+    },
+  ]
 
   // List of major cities
   const cities = [
-    { name: "Ho Chi Minh City", lat: 10.7769, lng: 106.7009 },
-    { name: "Hanoi", lat: 21.0285, lng: 105.8542 },
-    { name: "Da Nang", lat: 16.0544, lng: 108.2022 },
-    { name: "Lao Cai", lat: 22.3364, lng: 103.8430 },
-    { name: "Nha Trang", lat: 12.2388, lng: 109.1967 },
-    { name: "Can Tho", lat: 10.0452, lng: 105.7469 }
-  ];
+    { name: 'Ho Chi Minh City', lat: 10.7769, lng: 106.7009 },
+    { name: 'Hanoi', lat: 21.0285, lng: 105.8542 },
+    { name: 'Da Nang', lat: 16.0544, lng: 108.2022 },
+    { name: 'Lao Cai', lat: 22.3364, lng: 103.8430 },
+    { name: 'Nha Trang', lat: 12.2388, lng: 109.1967 },
+    { name: 'Can Tho', lat: 10.0452, lng: 105.7469 },
+  ]
 
   // const handleCitySelect = (city) => {
   //   setSelectedCity(city);
@@ -134,30 +123,30 @@ const SearchBar = ({ onSearch }) => {
 
   const handleSearchButtonClick = () => {
     const searchData = {
-        address: mapData.name,
+      address: mapData.name,
       checkIn,
       checkOut,
       guests,
       sortOrder,
       minBedrooms,
       minBathrooms,
-    };
-    console.log("Sending search data to backend:", searchData);
+    }
+    console.log('Sending search data to backend:', searchData)
 
-    axios.post("http://localhost:8080/api/houses/search", searchData, {
-      headers: { "Content-Type": "application/json" },
+    axios.post('http://localhost:8080/api/houses/search', searchData, {
+      headers: { 'Content-Type': 'application/json' },
     })
       .then(response => {
-        console.log("Backend response:", response.data);
-        dispatch(setHouses(response.data));
+        console.log('Backend response:', response.data)
+        dispatch(setHouses(response.data))
         if (onSearch) {
-          onSearch(searchData);
+          onSearch(searchData)
         }
       })
       .catch(error => {
-        console.error("Error sending search data to backend:", error);
-      });
-  };
+        console.error('Error sending search data to backend:', error)
+      })
+  }
 
   return (
     <>
@@ -392,7 +381,7 @@ const SearchBar = ({ onSearch }) => {
         </CModalBody>
       </CModal>
     </>
-  );
-};
+  )
+}
 
-export default SearchBar;
+export default SearchBar

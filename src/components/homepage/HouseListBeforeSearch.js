@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 import {
   CCard,
@@ -8,26 +8,25 @@ import {
   CCol,
   CContainer,
   CButton,
-  CBadge
-} from "@coreui/react";
-import { Heart } from "lucide-react";
-import "@coreui/coreui/dist/css/coreui.min.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./css/HouseList.css";
-import { BASE_URL, API_ENDPOINTS } from "../constants/api";
+  CBadge,
+} from '@coreui/react'
+import '@coreui/coreui/dist/css/coreui.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import './HouseList.css'
+import { BASE_URL, API_ENDPOINTS } from '../../constants/api'
 
 // Component Carousel cho hình ảnh của căn nhà
-const HouseCarousel = ({ images, height = "200px" }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+const HouseCarousel = ({ images, height = '200px' }) => {
+  const [currentIndex, setCurrentIndex] = useState(0)
 
   useEffect(() => {
     if (images && images.length > 0) {
       const timer = setInterval(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-      }, 7000); // thay đổi hình mỗi 3 giây
-      return () => clearInterval(timer);
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length)
+      }, 7000) // thay đổi hình mỗi 3 giây
+      return () => clearInterval(timer)
     }
-  }, [images]);
+  }, [images])
 
   // Nếu không có hình, hiển thị hình mặc định
   if (!images || images.length === 0) {
@@ -36,21 +35,21 @@ const HouseCarousel = ({ images, height = "200px" }) => {
         src="/api/placeholder/400/300"
         alt="placeholder"
         style={{
-          width: "100%",
+          width: '100%',
           height: height,
-          objectFit: "cover"
+          objectFit: 'cover',
         }}
       />
-    );
+    )
   }
 
   return (
-    <div style={{ position: "relative", overflow: "hidden", height: height }}>
+    <div style={{ position: 'relative', overflow: 'hidden', height: height }}>
       <div
         style={{
-          display: "flex",
-          transition: "transform 0.5s ease-in-out",
-          transform: `translateX(-${currentIndex * 100}%)`
+          display: 'flex',
+          transition: 'transform 0.5s ease-in-out',
+          transform: `translateX(-${currentIndex * 100}%)`,
         }}
       >
         {images.map((images) => (
@@ -59,44 +58,44 @@ const HouseCarousel = ({ images, height = "200px" }) => {
             src={images.imageUrl}
             alt=""
             style={{
-              width: "100%",
+              width: '100%',
               flexShrink: 0,
-              objectFit: "cover"
+              objectFit: 'cover',
             }}
           />
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
 const HouseListBeforeSearch = () => {
-  const [houses, setHouses] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [houses, setHouses] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     // Lấy dữ liệu từ API sử dụng BASE_URL và API_ENDPOINTS
     axios
       .get(`${BASE_URL}${API_ENDPOINTS.GET_HOUSES_FOR_RENTED}`)
       .then((response) => {
-        setHouses(response.data);
-        setLoading(false);
+        setHouses(response.data)
+        setLoading(false)
       })
       .catch((error) => {
-        console.error("There was an error fetching the data!", error);
-        setLoading(false);
-      });
-  }, []);
+        console.error('There was an error fetching the data!', error)
+        setLoading(false)
+      })
+  }, [])
 
   const formatPrice = (price) => {
-    return new Intl.NumberFormat("vi-VN", {
-      style: "decimal",
-      maximumFractionDigits: 0
-    }).format(price);
-  };
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'decimal',
+      maximumFractionDigits: 0,
+    }).format(price)
+  }
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
 
   return (
@@ -125,20 +124,20 @@ const HouseListBeforeSearch = () => {
                 <CBadge
                   color="warning"
                   className="position-absolute top-0 start-0 m-2"
-                  style={{ fontSize: "0.8rem" }}
+                  style={{ fontSize: '0.8rem' }}
                 >
                   VIP
                 </CBadge>
                 <CBadge
                   color="danger" // Bạn có thể thay đổi màu theo status nếu cần.
                   className="position-absolute top-0 end-0 m-2"
-                  style={{ fontSize: "0.8rem" }}
+                  style={{ fontSize: '0.8rem' }}
                 >
                   {house.status}
                 </CBadge>
                 <div
                   className="position-absolute bottom-0 end-0 m-2 bg-dark bg-opacity-75 rounded px-2 py-1 text-white d-flex align-items-center"
-                  style={{ fontSize: "0.8rem" }}
+                  style={{ fontSize: '0.8rem' }}
                 >
                   <i className="fas fa-images me-1"></i>
                   <span>{house.images ? house.images.length : 0}</span>
@@ -153,10 +152,10 @@ const HouseListBeforeSearch = () => {
                 <h3
                   className="h6 fw-bold mb-2"
                   style={{
-                    display: "-webkit-box",
+                    display: '-webkit-box',
                     WebkitLineClamp: 2,
-                    WebkitBoxOrient: "vertical",
-                    overflow: "hidden"
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
                   }}
                 >
                   {house.houseName}
@@ -173,7 +172,7 @@ const HouseListBeforeSearch = () => {
                 <div className="d-flex align-items-center text-muted mb-3">
                   <i className="fas fa-map-marker-alt me-2"></i>
                   <small>
-                     {house.address}
+                    {house.address}
                   </small>
                 </div>
 
@@ -192,7 +191,7 @@ const HouseListBeforeSearch = () => {
         ))}
       </CRow>
     </CContainer>
-  );
-};
+  )
+}
 
-export default HouseListBeforeSearch;
+export default HouseListBeforeSearch
