@@ -57,11 +57,11 @@ export default function MenuBar() {
               </CNavLink>
             </CNavItem>
             <CNavItem>
-              <CNavLink href="#">Airbnb Your Home</CNavLink>
+              <CNavLink href="/#/owner">Airbnb Your Home</CNavLink>
             </CNavItem>
             <CNavItem>
               <CNavLink href="#" disabled>
-                Disabled
+                Disable
               </CNavLink>
             </CNavItem>
           </CNavbarNav>

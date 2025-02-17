@@ -12,9 +12,13 @@ export const initialState = {
 export const fetchUserProfile = createAsyncThunk (
     "userProfile/fetchUserProfile",
     async (username, thunkAPI) => {
+        const token = thunkAPI.getState().account.token;
         try {
-            const response = await axios.get(`${BASE_URL}/api/users/profile/${username}`);
-            console.log(response.data)
+            const response = await axios.get(`${BASE_URL}/api/users/profile/${username}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response?.data?.message || "Error retrieving profile data!");
@@ -26,8 +30,13 @@ export const fetchUserProfile = createAsyncThunk (
 export const updateUserProfile = createAsyncThunk(
     "userProfile/updateUserProfile",
     async (formData, thunkAPI) => {
+        const token = thunkAPI.getState().account.token; // Lấy token từ Redux Store
         try {
-            const response = await axios.put(`${BASE_URL}/api/users/profile/update`, formData);
+            const response = await axios.put(`${BASE_URL}/api/users/profile/update`, formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response?.data?.message || "Error updating profile!");

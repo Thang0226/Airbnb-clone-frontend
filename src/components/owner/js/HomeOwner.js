@@ -1,13 +1,12 @@
-import NavbarOwner from "./NavbarOwner";
-import BodyOwner from "./BodyOwner";
+import BodyOwner from './BodyOwner'
 
 
-function HomeOwner(){
-    return (
-        <div>
-            <NavbarOwner />
-            <BodyOwner />
-        </div>
-    )
+function HomeOwner() {
+  return (
+    <div>
+      <BodyOwner />
+    </div>
+  )
 }
-export default HomeOwner;
+
+export default HomeOwner
