@@ -58,13 +58,15 @@ export default function CreateHouse() {
         address: ''
     } );
     const [selectedAddressData , setSelectedAddressData] = useState ( null );
+
     const handleAddressSelect = (addressData) => {
-        setMapData ( {
-            name: addressData.formattedAddress ,
-            address: addressData.addressComponents
-        } );
-        setSelectedAddressData ( addressData );
-    } // end Map stuff
+        const formattedAddress = addressData.formattedAddress || '';
+        setMapData({
+            name: formattedAddress,
+            address: formattedAddress
+        });
+        setSelectedAddressData(addressData);
+    };
 
     // Make CFormTextarea expandable:
     const textareaRef = useRef ( null );
@@ -94,10 +96,24 @@ export default function CreateHouse() {
 
         // Collect form data
         const formData = new FormData ( form );
-        formData.append ( 'address' , JSON.stringify ( mapData.address ) );
-        selectedFiles.forEach ( file => {
-            formData.append ( 'houseImages' , file );
-        } );
+        if (selectedAddressData && selectedAddressData.formattedAddress) {
+            formData.append('address', selectedAddressData.formattedAddress);
+        } else if (mapData.address) {
+            formData.append('address', mapData.address);
+        }
+
+        // Append houseImages only if there are selected files
+        if (selectedFiles.length > 0) {
+            selectedFiles.forEach(file => {
+                formData.append('houseImages', file);
+            });
+        }
+
+        // Log FormData for debugging
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
+        }
+        console.log('Address being sent:', formData.get('address'));
 
         // Send request
         axios.post ( 'http://localhost:8080/api/houses/create' , formData , {
@@ -107,7 +123,7 @@ export default function CreateHouse() {
         } )
             .then ( response => {
                 console.log ( 'House created successfully:' , response.data );
-                navigate ( '/' );
+                // navigate ( '/' );
             } )
             .catch ( error => {
                 console.error ( 'Error creating house:' , error );
@@ -252,18 +268,19 @@ export default function CreateHouse() {
 
                     {/*/!* Submit Button *!/*/}
                     <CCol xs={12} className="mt-5">
-                        <CButton
-                            color="light rounded-pill"
-                            className="me-3"
-                            onClick={() => navigate("/")}
-                        >
-                            Back
-                        </CButton>
+
                         <CButton
                             color="dark rounded-pill"
                             type="submit"
                         >
-                            Add House
+                            Add a House
+                        </CButton>
+                        <CButton
+                            color="light rounded-pill"
+                            className="ms-3"
+                            onClick={() => navigate("/")}
+                        >
+                            Cancel
                         </CButton>
                     </CCol>
 
