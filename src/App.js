@@ -37,6 +37,8 @@ export default function App() {
                     <Route path="/search" element={<MapSample/>}/>
                     <Route path="/login" element={<Login/>}/>
                     <Route path="/register" element={<Register/>}/>
+                    <Route path="/profile" element={<UserProfile/>}/>
+                    <Route path="/profile/edit" element={<ProfileUpdateForm/>}/>
                 </Routes>
             </HashRouter>
         </Provider>
