@@ -2,7 +2,7 @@ import {HashRouter, Routes, Route} from 'react-router-dom'
 import {Provider} from 'react-redux'
 import store from './redux/store'
 import './scss/custom.scss'
-// import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
 // import '@coreui/coreui/dist/css/coreui.min.css'
 import './App.css'
 import HomeOwner from "./components/owner/js/HomeOwner";

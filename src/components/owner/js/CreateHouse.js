@@ -131,7 +131,7 @@ export default function CreateHouse() {
                 }
             );
             console.log('House created successfully:', response.data);
-            // navigate('/');
+            navigate('/');
         } catch (error) {
             console.error('Error creating house:', error);
         }
