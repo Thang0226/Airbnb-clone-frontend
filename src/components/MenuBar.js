@@ -74,12 +74,20 @@ export default function MenuBar() {
           <CDropdown variant="dropdown" popper={true}>
             <CDropdownToggle color="secondary">User</CDropdownToggle>
             <CDropdownMenu>
-              <CDropdownItem href="/#/register">Register</CDropdownItem>
-              <CDropdownItem href="/#/login">Login</CDropdownItem>
-              <CDropdownDivider />
-              <CDropdownItem onClick={handleLogout} style={{ cursor: 'pointer' }}>
-                Logout
-              </CDropdownItem>
+              {token ? (
+                <>
+                  <CDropdownItem href="/#/profile">Profile</CDropdownItem>
+                  <CDropdownDivider />
+                  <CDropdownItem onClick={handleLogout} style={{ cursor: 'pointer' }}>
+                    Logout
+                  </CDropdownItem>
+                </>
+              ) : (
+                <>
+                  <CDropdownItem href="/#/register">Register</CDropdownItem>
+                  <CDropdownItem href="/#/login">Login</CDropdownItem>
+                </>
+              )}
             </CDropdownMenu>
           </CDropdown>
         </CCollapse>

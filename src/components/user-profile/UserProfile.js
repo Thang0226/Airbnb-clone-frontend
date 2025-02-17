@@ -6,12 +6,10 @@ import {useNavigate} from "react-router-dom";
 import {BASE_URL} from "../../constants/api";
 import UserInfoRow from "./fragments/UPInfoRow";
 
-const UserProfile = ({username}) => {
+const UserProfile = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    // const location = useLocation();
-    // const { username } = location.state || {};
+    const username = useSelector(state => state.account.username)
 
     useEffect(() => {
         dispatch(fetchUserProfile(username));
