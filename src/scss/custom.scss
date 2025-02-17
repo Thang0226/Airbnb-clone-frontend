@@ -1,0 +1,38 @@
+// Default variable overrides - remove !default after customized
+// scss-docs-start theme-color-variables
+$primary: #D13660;
+$secondary: #c2c2c2;
+$success: #FF385C;
+$info: #008A05;
+$warning: #C13515;
+$danger: #FEF8F6;
+// scss-docs-end theme-color-variables
+
+// scss-docs-start theme-text-variables
+$primary-text-emphasis: #3634a3 !default;
+$secondary-text-emphasis: #212233 !default;
+$success-text-emphasis: #0f5722 !default;
+$info-text-emphasis: #184c77 !default;
+$warning-text-emphasis: #C13515;
+$danger-text-emphasis: #671414 !default;
+// scss-docs-end theme-text-variables
+
+// scss-docs-start theme-bg-subtle-variables
+$primary-bg-subtle: #EBEBEB;
+$secondary-bg-subtle: #ced2d8 !default;
+$success-bg-subtle: #cbedd6 !default;
+$info-bg-subtle: #c0e6ff !default;
+$warning-bg-subtle: #feecc5 !default;
+$danger-bg-subtle: #f9d4d4 !default;
+// scss-docs-end theme-bg-subtle-variables
+
+// scss-docs-start theme-border-subtle-variables
+$primary-border-subtle: #9d92e6 !default;
+$secondary-border-subtle: #9da5b1 !default;
+$success-border-subtle: #96dbad !default;
+$info-border-subtle: #80c6ff !default;
+$warning-border-subtle: #fcd88a !default;
+$danger-border-subtle: #f2a9a9 !default;
+// scss-docs-end theme-border-subtle-variables
+
+@import "../../node_modules/@coreui/coreui/scss/coreui";
