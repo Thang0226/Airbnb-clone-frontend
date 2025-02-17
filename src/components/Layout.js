@@ -1,0 +1,19 @@
+import {CContainer, CFooter} from "@coreui/react";
+import MenuBar from "./MenuBar";
+
+export default function Layout({children}) {
+    return (
+        <div className="flex flex-col min-h-screen">
+            {/* Navbar */}
+            <MenuBar/>
+
+            {/* Content */}
+            <CContainer className="p-4 overflow-auto flex-1">{children}</CContainer>
+
+            {/* Footer */}
+            <CFooter className="primary-bg-subtle p-4 mt-auto justify-content-center">
+                © 2025 My Application. All rights reserved.
+            </CFooter>
+        </div>
+    );
+}
