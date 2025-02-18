@@ -1,0 +1,21 @@
+Index: .idea/inspectionProfiles/Project_Default.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><component name=\"InspectionProjectProfileManager\">\r\n  <profile version=\"1.0\">\r\n    <option name=\"myName\" value=\"Project Default\" />\r\n    <inspection_tool class=\"DuplicatedCode\" enabled=\"true\" level=\"WEAK WARNING\" enabled_by_default=\"true\">\r\n      <Languages>\r\n        <language minSize=\"51\" name=\"JavaScript\" />\r\n      </Languages>\r\n    </inspection_tool>\r\n  </profile>\r\n</component>
+===================================================================
+diff --git a/.idea/inspectionProfiles/Project_Default.xml b/.idea/inspectionProfiles/Project_Default.xml
+--- a/.idea/inspectionProfiles/Project_Default.xml	(revision 3211079e4a2311792d52a35d6e4d619f72f4f543)
++++ b/.idea/inspectionProfiles/Project_Default.xml	(date 1739776528621)
+@@ -1,10 +1,6 @@
+ <component name="InspectionProjectProfileManager">
+   <profile version="1.0">
+     <option name="myName" value="Project Default" />
+-    <inspection_tool class="DuplicatedCode" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+-      <Languages>
+-        <language minSize="51" name="JavaScript" />
+-      </Languages>
+-    </inspection_tool>
++    <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
+   </profile>
+ </component>
+\ No newline at end of file
