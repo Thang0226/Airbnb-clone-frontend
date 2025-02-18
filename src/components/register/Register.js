@@ -9,7 +9,7 @@ import {
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import styles from './styles.module.css'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
@@ -36,6 +36,10 @@ export default function Register() {
     isHost: false,
   }
   const formikRef = useRef(null)
+
+  useEffect(() => {
+    document.title = 'Airbnb | Register'
+  }, [])
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
