@@ -26,6 +26,8 @@ const validationSchema = Yup.object({
     .matches(/^0[0-9]{9}$/, 'Phone number must start with 0 and have at least 10 digits')
     .required('Phone number is required'),
   avatar: Yup.mixed()
+    .nullable()
+    .notRequired()
     .test('fileSize', 'Maximum file size is 5MB', (value) => {
       if (value) {
         return value.size <= FILE_SIZE_LIMIT
@@ -47,7 +49,7 @@ const getInitialValues = (userProfile) => ({
   fullName: userProfile.fullName || '',
   address: userProfile.address || '',
   phone: userProfile.phone || '',
-  avatar: userProfile.avatar || '',
+  avatar: '',
 })
 
 const ProfileUpdateForm = () => {

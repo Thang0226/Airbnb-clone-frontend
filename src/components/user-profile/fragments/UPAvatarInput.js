@@ -26,17 +26,24 @@ const UPAvatarInput = ({ avatarPreview, userProfile, handleAvatarChange, setFiel
       />
     </CCol>
     <CCol md={10} className="ps-3">
+      <div style={{minHeight: "24px"}}></div>
       <CFormInput
+        name="avatar"
         type="file"
         accept="image/*"
         onChange={(e) => handleAvatarChange(e, setFieldValue, setFieldError)}
       />
-      <ErrorMessage
-        name="avatar"
-        component={CFormFeedback}
-        className="d-block text-danger mt-1 ps-2"
-        style={{minHeight: "20px"}}
-      />
+      <div
+        style={{minHeight: "24px"}}
+        className="mt-1"
+      >
+        <ErrorMessage
+          name="avatar"
+          component={CFormFeedback}
+          className="d-block text-danger ps-2"
+        />
+      </div>
+
     </CCol>
   </CRow>
 )
