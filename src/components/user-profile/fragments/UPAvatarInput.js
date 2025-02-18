@@ -1,8 +1,9 @@
 import React from 'react'
-import { CRow, CCol, CFormInput } from '@coreui/react'
+import { CRow, CCol, CFormInput, CFormFeedback } from '@coreui/react'
 import { BASE_URL } from '../../../constants/api'
+import { ErrorMessage } from 'formik'
 
-const UPAvatarInput = ({ avatarPreview, userProfile, handleAvatarChange, setFieldValue }) => (
+const UPAvatarInput = ({ avatarPreview, userProfile, handleAvatarChange, setFieldValue, setFieldError }) => (
   <CRow className="mb-3 justify-content-center align-items-center">
     <CCol md={2}>
       <img
@@ -28,7 +29,13 @@ const UPAvatarInput = ({ avatarPreview, userProfile, handleAvatarChange, setFiel
       <CFormInput
         type="file"
         accept="image/*"
-        onChange={(e) => handleAvatarChange(e, setFieldValue)}
+        onChange={(e) => handleAvatarChange(e, setFieldValue, setFieldError)}
+      />
+      <ErrorMessage
+        name="avatar"
+        component={CFormFeedback}
+        className="d-block text-danger mt-1 ps-2"
+        style={{minHeight: "20px"}}
       />
     </CCol>
   </CRow>

@@ -17,11 +17,29 @@ import { toast } from 'react-toastify'
 import UPAvatarInput from './fragments/UPAvatarInput'
 import UPTextInput from './fragments/UPTextInput'
 
+const FILE_SIZE_LIMIT = 5 * 1024 * 1024 // 5MB
+const SUPPORTED_FORMATS = ['image/jpeg', 'image/png', 'image/jpg']
+
 const validationSchema = Yup.object({
   fullName: Yup.string().required('Full Name is required'),
   phone: Yup.string()
     .matches(/^0[0-9]{9}$/, 'Phone number must start with 0 and have at least 10 digits')
     .required('Phone number is required'),
+  avatar: Yup.mixed()
+    .test('fileSize', 'Maximum file size is 5MB', (value) => {
+      if (value) {
+        return value.size <= FILE_SIZE_LIMIT
+      } else {
+        return true
+      }
+    })
+    .test('fileFormat', 'Invalid file format. Only JPG, JPEG, PNG are allowed.', (value) => {
+      if (value) {
+        return SUPPORTED_FORMATS.includes(value.type)
+      } else {
+        return true
+      }
+    }),
 })
 
 const getInitialValues = (userProfile) => ({
@@ -107,9 +125,20 @@ const ProfileUpdateForm = () => {
       })
   }
 
-  const handleAvatarChange = (e, setFieldValue) => {
+  const handleAvatarChange = (e, setFieldValue, setFieldError) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0]
+
+      if (file.size > FILE_SIZE_LIMIT) {
+        setFieldError('avatar', 'File size must be 5MB or less')
+        return
+      }
+      if (!SUPPORTED_FORMATS.includes(file.type)) {
+        setFieldError('avatar', 'Invalid file format. Only JPG, JPEG, PNG are allowed.')
+        return
+      }
+
+      // Nếu không có lỗi, cập nhật giá trị cho avatar
       setFieldValue('avatar', file)
       const reader = new FileReader()
       reader.onload = () => {
@@ -133,7 +162,7 @@ const ProfileUpdateForm = () => {
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
               >
-                {({ isSubmitting, setFieldValue }) => (
+                {({ isSubmitting, setFieldValue, setFieldError }) => (
                   <Form>
                     <UPTextInput label="Username" name="username" readOnly />
 
@@ -142,6 +171,7 @@ const ProfileUpdateForm = () => {
                       userProfile={userProfile}
                       handleAvatarChange={handleAvatarChange}
                       setFieldValue={setFieldValue}
+                      setFieldError={setFieldError}
                     />
 
                     <UPTextInput
