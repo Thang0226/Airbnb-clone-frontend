@@ -12,6 +12,10 @@ const UserProfile = () => {
   const username = useSelector(state => state.account.username)
 
   useEffect(() => {
+    document.title = 'Airbnb | Profile'
+  }, [])
+
+  useEffect(() => {
     dispatch(fetchUserProfile(username))
   }, [dispatch, username])
 
@@ -72,7 +76,6 @@ const UserProfile = () => {
       </CRow>
     </div>
   )
-
 }
 
 export default UserProfile
