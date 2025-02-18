@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route } from 'react-router-dom'
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './redux/store'
 import './scss/custom.scss'
@@ -12,26 +12,25 @@ import Register from './components/register/Register'
 import Login from './components/login/Login'
 import UserProfile from './components/user-profile/UserProfile'
 import ProfileUpdateForm from './components/user-profile/ProfileUpdateForm'
-import { ToastContainer } from 'react-toastify'
 import Layout from './components/Layout'
 import Homepage from './components/homepage/Homepage'
 
 
 export default function App() {
-
+  const isLoggedIn = JSON.parse(localStorage.getItem('loggedIn'))
   return (
     <Provider store={store}>
       <HashRouter>
         <Layout>
           <Routes>
             <Route path="/" element={<Homepage />} />
-            <Route path="/owner" element={<HomeOwner />} />
-            <Route path="/create" element={<CreateHouse />} />
+            <Route path="/owner" element={isLoggedIn ? <HomeOwner /> : <Navigate to={'/'} />} />
+            <Route path="/create" element={isLoggedIn ? <CreateHouse /> : <Navigate to={'/'} />} />
             <Route path="/search" element={<MapSample />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<UserProfile />} />
-            <Route path="/profile/edit" element={<ProfileUpdateForm />} />
+            <Route path="/profile" element={isLoggedIn ? <UserProfile /> : <Navigate to={'/'} />} />
+            <Route path="/profile/edit" element={isLoggedIn ? <ProfileUpdateForm /> : <Navigate to={'/'} />} />
           </Routes>
         </Layout>
       </HashRouter>

@@ -29,7 +29,7 @@ const getInitialValues = (userProfile) => ({
   fullName: userProfile.fullName || '',
   address: userProfile.address || '',
   phone: userProfile.phone || '',
-  avatar: userProfile.avatar || 'default.jpg',
+  avatar: userProfile.avatar || '',
 })
 
 const ProfileUpdateForm = () => {

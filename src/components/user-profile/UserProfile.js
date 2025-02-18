@@ -9,7 +9,7 @@ import UserInfoRow from './fragments/UPInfoRow'
 const UserProfile = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const username = useSelector(state => state.account.username)
+  const username = localStorage.getItem('username')
 
   useEffect(() => {
     document.title = 'Airbnb | Profile'

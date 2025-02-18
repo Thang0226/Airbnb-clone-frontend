@@ -21,7 +21,7 @@ import { resetAccount } from '../redux/slices/accountSlice'
 export default function MenuBar() {
   const [visible, setVisible] = useState(false)
   const navigate = useNavigate()
-  const token = useSelector(state => state.account.token)
+  const token = localStorage.getItem('token')
   const dispatch = useDispatch()
 
   const handleLogout = async () => {
@@ -37,6 +37,7 @@ export default function MenuBar() {
       .then(res => {
         toast.success(res.data, { hideProgressBar: true })
         dispatch(resetAccount())
+        localStorage.clear()
         navigate('/login')
       })
       .catch(err => {
