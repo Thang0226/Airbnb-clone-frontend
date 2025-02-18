@@ -32,7 +32,7 @@ const HouseCarousel = ({ images, height = '200px' }) => {
   if (!images || images.length === 0) {
     return (
       <img
-        src="/api/placeholder/400/300"
+        // src="/api/placeholder/400/300"
         alt="placeholder"
         style={{
           width: '100%',
