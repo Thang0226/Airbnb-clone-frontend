@@ -4,22 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-
-    <list default="true" id="a79b1d44-9f5f-411c-a597-b16591e7848c" name="Changes" comment="complete file validation for avatar upload">
+    <list default="true" id="a79b1d44-9f5f-411c-a597-b16591e7848c" name="Changes" comment="Done user register as a Host, send host request to Admin and DB, admin page fetch host request and approve, user login as Host">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Layout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MenuBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MenuBar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/homepage/HouseList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/homepage/HouseList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/homepage/HouseListBeforeSearch.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/homepage/HouseListBeforeSearch.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/homepage/MapSampletoSearch.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/homepage/MapSampletoSearch.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/login/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/login/Login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/user-profile/ProfileUpdateForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/user-profile/ProfileUpdateForm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/user-profile/UserProfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/user-profile/UserProfile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/user-profile/fragments/UPAvatarInput.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/user-profile/fragments/UPAvatarInput.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/user-profile/fragments/UPTextInput.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/user-profile/fragments/UPTextInput.js" afterDir="false" />
-
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,12 +28,12 @@
     &quot;assignee&quot;: &quot;dunglt94&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Thang0226/Airbnb-clone-frontend&quot;,
-    &quot;accountId&quot;: &quot;2ebcbf45-ad82-4668-8cc5-54e3b1b8c4b3&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Thang0226/Airbnb-clone-frontend.git",
+    "accountId": "37b14f66-09b9-4b7b-99a7-90cab060ce29"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -62,9 +48,8 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-
-    "git-widget-placeholder": "dev",
-
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "feature/UserRegister",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -77,7 +62,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-WS-242.22855.79" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-WS-243.22562.222" />
       </set>
     </attachedChunks>
   </component>
@@ -91,8 +76,8 @@
       <updated>1739863398058</updated>
       <workItem from="1739863400003" duration="11186000" />
       <workItem from="1739929800784" duration="7982000" />
+      <workItem from="1739949332511" duration="620000" />
     </task>
-
     <task id="LOCAL-00001" summary="complete file validation for avatar upload">
       <option name="closed" value="true" />
       <created>1739872938081</created>
@@ -100,7 +85,6 @@
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
       <updated>1739872938081</updated>
-
     </task>
     <option name="localTasksCounter" value="2" />
     <servers />
@@ -121,9 +105,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="improve user dropdown bar UI" />
-
     <MESSAGE value="complete file validation for avatar upload" />
     <option name="LAST_COMMIT_MESSAGE" value="complete file validation for avatar upload" />
-
   </component>
 </project>
