@@ -21,9 +21,15 @@ export default function AdminHostRequests(){
     fetchHostRequests();
   }, []);
 
+  const token = localStorage.getItem('token');
+
   const fetchHostRequests = async () => {
     try {
-      const response = await axios.get(`${BASE_URL_USER}/host-requests`);
+      const response = await axios.get(`${BASE_URL_USER}/host-requests`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setRequests(response.data);
     } catch (error) {
       console.error('Error fetching requests:', error);
@@ -33,10 +39,16 @@ export default function AdminHostRequests(){
 
   const handleApprove = async (requestId) => {
     try {
-      await axios.post(`${BASE_URL_USER}/host-requests/${requestId}/approve`);
+      await axios.post(`${BASE_URL_USER}/host-requests/${requestId}/approve`,
+        {}, // empty body
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
       toast.success('Host request approved!');
-      // Refresh the list
-      fetchHostRequests();
+      await fetchHostRequests(); // Refresh the list
     } catch (error) {
       console.error('Error approving request:', error);
       toast.error('Failed to approve request');
