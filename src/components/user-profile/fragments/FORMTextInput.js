@@ -1,7 +1,7 @@
 import {CCol, CFormFeedback, CFormFloating, CFormInput, CFormLabel, CRow} from "@coreui/react";
 import {ErrorMessage, Field} from "formik";
 
-const UPTextInput = ({
+const FORMTextInput = ({
                          label,
                          name,
                          required = false,
@@ -36,4 +36,4 @@ const UPTextInput = ({
     </CRow>
 );
 
-export default UPTextInput;
+export default FORMTextInput;

@@ -96,7 +96,7 @@ export default function Login() {
                 Username:
               </CFormLabel>
               <CCol sm={8}>
-                <CFormInput type="text" placeholder="user_name123" id="username" name="username"
+                <CFormInput type="text" placeholder="Enter username" id="username" name="username"
                             value={registeredUsername} onChange={(e) => handleFormChange(e, handleChange)}
                             required />
                 {touched.username && errors.username &&

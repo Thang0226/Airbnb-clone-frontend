@@ -138,7 +138,7 @@ export default function Register() {
                 Username:
               </CFormLabel>
               <CCol sm={8}>
-                <CFormInput type="text" placeholder="user_name123" id="username" name="username"
+                <CFormInput type="text" placeholder="Enter username" id="username" name="username"
                             onChange={handleChange} required />
                 {touched.username && errors.username &&
                   <p className="text-warning-emphasis">{errors.username}</p>}
@@ -204,7 +204,6 @@ export default function Register() {
               </CCol>
             </CRow>
             <CRow className="mb-4">
-              <CCol sm={8}>
                 <CFormCheck
                   id="isHost"
                   name="isHost"
@@ -212,11 +211,12 @@ export default function Register() {
                   checked={values.isHost}
                   onChange={handleChange}
                 />
-              </CCol>
             </CRow>
-            <CButton color="primary" type="submit">
-              Register
-            </CButton>
+            <CRow className="justify-content-center">
+              <CButton color="primary" type="submit" className="w-25">
+                Register
+              </CButton>
+            </CRow>
           </CForm>)
         }
       </Formik>
