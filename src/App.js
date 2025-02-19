@@ -14,6 +14,7 @@ import ProfileUpdateForm from './components/user-profile/ProfileUpdateForm'
 import Layout from './components/Layout'
 import Homepage from './components/homepage/Homepage'
 import AdminHostRequests from './components/admin/AdminHostRequests'
+import ChangePassword from './components/user-change-password/ChangePassword'
 
 
 
@@ -25,6 +26,7 @@ export default function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<Homepage />} />
+            <Route path="/user/change-password" element={<ChangePassword/>} />
             <Route path="/owner" element={isLoggedIn ? <HomeOwner /> : <Navigate to={'/'} />} />
             <Route path="/create" element={isLoggedIn ? <CreateHouse /> : <Navigate to={'/'} />} />
             <Route path="/search" element={<MapSample />} />
