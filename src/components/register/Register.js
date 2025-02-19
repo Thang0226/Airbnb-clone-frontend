@@ -4,22 +4,26 @@ import {
   CFormInput,
   CCol,
   CRow,
-  CFormLabel, CFormCheck,
+  CFormLabel, CFormCheck, CInputGroup, CInputGroupText,
 } from '@coreui/react'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import styles from './styles.module.css'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { setUsername, setPassword } from '../../redux/slices/accountSlice'
 import { BASE_URL_USER } from '../../constants/api'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
 export default function Register() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const REGEX = {
     username: /^[a-zA-Z0-9_]{4,30}$/,
@@ -134,7 +138,7 @@ export default function Register() {
                 Username:
               </CFormLabel>
               <CCol sm={8}>
-                <CFormInput type="text" placeholder="user_name123" id="username" name="username"
+                <CFormInput type="text" placeholder="Enter username" id="username" name="username"
                             onChange={handleChange} required />
                 {touched.username && errors.username &&
                   <p className="text-warning-emphasis">{errors.username}</p>}
@@ -156,10 +160,23 @@ export default function Register() {
                 Password:
               </CFormLabel>
               <CCol sm={8}>
-                <CFormInput type="password" id="password" name="password" onChange={handleChange}
-                            required />
+                <CInputGroup>
+                  <CFormInput
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Enter password"
+                    onChange={handleChange}
+                    required
+                  />
+                  <CInputGroupText
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setShowPassword((prev) => !prev)}
+                  >
+                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                  </CInputGroupText>
+                </CInputGroup>
                 {touched.password && errors.password &&
-                  <p className="text-warning-emphasis">{errors.password}</p>}
+                  <p className={styles.error}>{errors.password}</p>}
               </CCol>
             </CRow>
             <CRow className="mb-4">
@@ -167,14 +184,26 @@ export default function Register() {
                 Confirm Password:
               </CFormLabel>
               <CCol sm={8}>
-                <CFormInput type="password" id="confirm_password" name="confirm_password"
-                            onChange={handleChange} required />
+                <CInputGroup>
+                  <CFormInput
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirm_password"
+                    placeholder="Enter password"
+                    onChange={handleChange}
+                    required
+                  />
+                  <CInputGroupText
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setShowConfirmPassword((prev) => !prev)}
+                  >
+                    <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
+                  </CInputGroupText>
+                </CInputGroup>
                 {touched.confirm_password && errors.confirm_password &&
                   <p className="text-warning-emphasis">{errors.confirm_password}</p>}
               </CCol>
             </CRow>
             <CRow className="mb-4">
-              <CCol sm={8}>
                 <CFormCheck
                   id="isHost"
                   name="isHost"
@@ -182,11 +211,12 @@ export default function Register() {
                   checked={values.isHost}
                   onChange={handleChange}
                 />
-              </CCol>
             </CRow>
-            <CButton color="primary" type="submit">
-              Register
-            </CButton>
+            <CRow className="justify-content-center">
+              <CButton color="primary" type="submit" className="w-25">
+                Register
+              </CButton>
+            </CRow>
           </CForm>)
         }
       </Formik>

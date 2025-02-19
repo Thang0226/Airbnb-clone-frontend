@@ -3,7 +3,7 @@ import { CRow, CCol, CFormInput, CFormFeedback } from '@coreui/react'
 import { BASE_URL } from '../../../constants/api'
 import { ErrorMessage } from 'formik'
 
-const UPAvatarInput = ({ avatarPreview, userProfile, handleAvatarChange, setFieldValue }) => (
+const FORMAvatarInput = ({ avatarPreview, userProfile, handleAvatarChange, setFieldValue }) => (
   <CRow className="mb-3 justify-content-center align-items-center">
     <CCol md={2}>
       <img
@@ -47,4 +47,4 @@ const UPAvatarInput = ({ avatarPreview, userProfile, handleAvatarChange, setFiel
   </CRow>
 )
 
-export default UPAvatarInput
+export default FORMAvatarInput
