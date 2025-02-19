@@ -13,8 +13,8 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUserProfile, updateUserProfile } from '../../redux/slices/userProfileSlice'
 import { toast } from 'react-toastify'
-import FORMAvatarInput from './fragments/FORMAvatarInput'
-import FORMTextInput from './fragments/FORMTextInput'
+import FORMAvatarInput from '../_fragments/FORMAvatarInput'
+import FORMTextInput from '../_fragments/FORMTextInput'
 
 const FILE_SIZE_LIMIT = 5 * 1024 * 1024 // 5MB
 const SUPPORTED_FORMATS = ['image/jpeg', 'image/png', 'image/jpg']
