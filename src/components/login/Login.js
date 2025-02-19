@@ -4,24 +4,27 @@ import {
   CFormInput,
   CCol,
   CRow,
-  CFormLabel,
+  CFormLabel, CInputGroupText, CInputGroup,
 } from '@coreui/react'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import styles from './styles.module.css'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { setToken, setUsername, setPassword, deletePassword } from '../../redux/slices/accountSlice'
 import { BASE_URL_USER } from '../../constants/api'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
 export default function Login() {
   const navigate = useNavigate()
   const registeredUsername = useSelector(state => state.account.username)
   const registeredPassword = useSelector(state => state.account.password)
   const dispatch = useDispatch()
+  const [showPassword, setShowPassword] = useState(false);
   const REGEX = {
     username: /^[a-zA-Z0-9_]{4,30}$/,
     password: /^[a-zA-Z0-9!@#$^&)(+=._-]{6,32}$/,
@@ -105,9 +108,21 @@ export default function Login() {
                 Password:
               </CFormLabel>
               <CCol sm={8}>
-                <CFormInput type="password" id="password" name="password"
-                            value={registeredPassword} onChange={(e) => handleFormChange(e, handleChange)}
-                            required />
+                <CInputGroup>
+                  <CFormInput
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Enter password"
+                    value={registeredPassword} onChange={(e) => handleFormChange(e, handleChange)}
+                    required
+                  />
+                  <CInputGroupText
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setShowPassword((prev) => !prev)}
+                  >
+                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                  </CInputGroupText>
+                </CInputGroup>
                 {touched.password && errors.password &&
                   <p className={styles.error}>{errors.password}</p>}
               </CCol>
