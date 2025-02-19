@@ -107,11 +107,18 @@ export default function Register() {
       })
       dispatch(setUsername(formValues.username))
       dispatch(setPassword(formValues.password))
+
+      if (formValues.isHost) {
+        toast.info('Your host request has been submitted for review!', { hideProgressBar: true })
+      } else {
+        toast.success('Registered successfully!', { hideProgressBar: true })
+      }
+      navigate('/login')
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      toast.error('Registration failed!', { hideProgressBar: true })
+
     }
-    toast.success('Registered successfully!', { hideProgressBar: true })
-    navigate('/login')
   }
 
   return (
