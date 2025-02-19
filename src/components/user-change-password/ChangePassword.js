@@ -4,7 +4,7 @@ import {
   CFormInput,
   CCol,
   CRow,
-  CFormLabel, CInputGroupText, CInputGroup,
+  CFormLabel, CInputGroupText, CInputGroup, CCard, CCardHeader, CCardBody,
 } from '@coreui/react'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
@@ -16,32 +16,30 @@ import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { setPassword, deletePassword } from '../../redux/slices/accountSlice'
 import { BASE_URL_USER } from '../../constants/api'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import FORMPasswordInput from '../_fragments/FORMPasswordInput'
+import FORMTextInput from '../_fragments/FORMTextInput'
 
 export default function ChangePassword() {
   const navigate = useNavigate()
   const username = useSelector(state => state.account.username)
   const token = useSelector(state => state.account.token)
   const dispatch = useDispatch()
-  const [showOldPassword, setShowOldPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const REGEX = {
     password: /^[a-zA-Z0-9!@#$^&)(+=._-]{6,32}$/,
   }
 
+  useEffect(() => {
+    document.title = 'User | Change Password'
+  }, [])
+
   const initialValues = {
+    username: username,
     old_password: '',
     new_password: '',
     confirm_password: ''
   }
   const formikRef = useRef(null)
-
-  useEffect(() => {
-    document.title = 'User | Change Password'
-  }, [])
 
   const validationSchema = Yup.object().shape({
     old_password: Yup.string()
@@ -87,102 +85,57 @@ export default function ChangePassword() {
   }
 
   return (
-    <>
-      <h2 className={styles.title}>Change Password</h2>
-      <Formik initialValues={initialValues}
-              validationSchema={validationSchema}
-              onSubmit={handleSubmit}
-              innerRef={formikRef}>
-        {({ errors, touched, handleChange, handleSubmit }) => (
-          <CForm className={styles.formBox} onSubmit={handleSubmit}>
-            <CRow className="mb-3">
-              <CFormLabel htmlFor="username" className="col-sm-3 col-form-label">
-                Username<span style={{color:"red"}}>*</span>
-              </CFormLabel>
-              <CCol sm={8}>
-                <CFormInput type="text" id="username" name="username" value={username} disabled />
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CFormLabel htmlFor="old_password" className="col-sm-3 col-form-label">
-                Old Password<span style={{ color: 'red' }}>*</span>
-              </CFormLabel>
-              <CCol sm={8}>
-              <CInputGroup>
-                  <CFormInput
-                    type={showOldPassword ? "text" : "password"}
-                    id="old_password"
-                    name="old_password"
-                    onChange={handleChange}
-                    required
-                  />
-                  <CInputGroupText
-                    style={{ cursor: "pointer" }}
-                    onClick={() => setShowOldPassword((prev) => !prev)}
-                  >
-                    <FontAwesomeIcon icon={showOldPassword ? faEyeSlash : faEye} />
-                  </CInputGroupText>
-                </CInputGroup>
-                {touched.old_password && errors.old_password &&
-                  <p className={styles.error}>{errors.old_password}</p>}
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CFormLabel htmlFor="new_password" className="col-sm-3 col-form-label">
-                New Password<span style={{ color: 'red' }}>*</span>
-              </CFormLabel>
-              <CCol sm={8}>
-              <CInputGroup>
-                  <CFormInput
-                    type={showNewPassword ? "text" : "password"}
-                    id="new_password"
-                    name="new_password"
-                    onChange={handleChange}
-                    required
-                  />
-                  <CInputGroupText
-                    style={{ cursor: "pointer" }}
-                    onClick={() => setShowNewPassword((prev) => !prev)}
-                  >
-                    <FontAwesomeIcon icon={showNewPassword ? faEyeSlash : faEye} />
-                  </CInputGroupText>
-                </CInputGroup>
-                {touched.new_password && errors.new_password &&
-                  <p className={styles.error}>{errors.new_password}</p>}
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CFormLabel htmlFor="confirm_password" className="col-sm-3 col-form-label">
-                Confirm New Password<span style={{ color: 'red' }}>*</span>
-              </CFormLabel>
-              <CCol sm={8}>
-              <CInputGroup>
-                  <CFormInput
-                    type={showConfirmPassword ? "text" : "password"}
-                    id="confirm_password"
-                    name="confirm_password"
-                    onChange={handleChange}
-                    required
-                  />
-                  <CInputGroupText
-                    style={{ cursor: "pointer" }}
-                    onClick={() => setShowConfirmPassword((prev) => !prev)}
-                  >
-                    <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
-                  </CInputGroupText>
-                </CInputGroup>
-                {touched.confirm_password && errors.confirm_password &&
-                  <p className={styles.error}>{errors.confirm_password}</p>}
-              </CCol>
-            </CRow>
-            <CRow className="justify-content-center">
-              <CButton color="primary" type="submit" className="w-25">
-                Change password
-              </CButton>
-            </CRow>
-          </CForm>)
-        }
-      </Formik>
-    </>
-  )
+    <div className="container mt-4">
+      <CRow
+        xs={{ cols: 1 }} md={{ cols: 1 }} lg={{ cols: 2 }}
+        className="justify-content-center mt-4"
+      >
+        <CCol>
+          <CCard className="shadow border-0">
+            <CCardHeader className="text-center p-4">
+              <h3>Change Password</h3>
+            </CCardHeader>
+            <CCardBody className="p-4">
+              <Formik initialValues={initialValues}
+                      validationSchema={validationSchema}
+                      onSubmit={handleSubmit}
+                      innerRef={formikRef}>
+                {({ handleSubmit }) => (
+                  <CForm onSubmit={handleSubmit}>
+                    <FORMTextInput
+                      label="Username"
+                      name="username"
+                      disabled
+                    />
+                    <FORMPasswordInput
+                      label="Old Password"
+                      name="old_password"
+                      placeholder="Enter password"
+                      required
+                    />
+                    <FORMPasswordInput
+                      label="New Password"
+                      name="new_password"
+                      placeholder="Enter password"
+                      required
+                    />
+                    <FORMPasswordInput
+                      label="Confirm New Password"
+                      name="confirm_password"
+                      placeholder="Enter password"
+                      required
+                    />
+                    <CRow className="justify-content-center">
+                      <CButton color="primary" type="submit" className="w-auto fs-5">
+                        Change password
+                      </CButton>
+                    </CRow>
+                  </CForm>)
+                }
+              </Formik>
+            </CCardBody>
+          </CCard>
+        </CCol>
+      </CRow>
+    </div>)
 }

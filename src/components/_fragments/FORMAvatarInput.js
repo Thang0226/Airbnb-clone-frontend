@@ -1,6 +1,6 @@
 import React from 'react'
 import { CRow, CCol, CFormInput, CFormFeedback } from '@coreui/react'
-import { BASE_URL } from '../../../constants/api'
+import { BASE_URL } from '../../constants/api'
 import { ErrorMessage } from 'formik'
 
 const FORMAvatarInput = ({ avatarPreview, userProfile, handleAvatarChange, setFieldValue }) => (

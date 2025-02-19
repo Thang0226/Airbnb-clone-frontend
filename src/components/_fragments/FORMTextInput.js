@@ -6,6 +6,7 @@ const FORMTextInput = ({
                          name,
                          required = false,
                          readOnly = false,
+                         disabled = false,
                          placeholder = ""
                      }) => (
     <CRow className="mb-3">
@@ -19,13 +20,14 @@ const FORMTextInput = ({
                     placeholder={placeholder}
                     className="form-control"
                     readOnly={readOnly}
+                    disabled={disabled}
                     style={readOnly ? {cursor: "not-allowed"} : {}}
                 />
                 <CFormLabel htmlFor={name}>
                     {label} {required && <span style={{color: 'red'}}>*</span>}
                 </CFormLabel>
             </CFormFloating>
-            <div style={{minHeight: "24px"}} className="mt-1">
+            <div style={{minHeight: "20px"}} className="mt-1">
                 <ErrorMessage
                     name={name}
                     component={CFormFeedback}
