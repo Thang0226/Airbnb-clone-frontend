@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import HouseCarousel from './HouseCarousel'
-
+import { useSelector } from 'react-redux'
 import {
   CCardBody,
   CRow,
@@ -13,7 +13,6 @@ import {
 import './HouseList.css'
 import { BASE_URL, API_ENDPOINTS } from '../../constants/api'
 import { setHouses } from '../../redux/slices/houseSlice'
-import { useSelector } from 'react-redux'
 
 const HouseList = () => {
   const houseList = useSelector(state => state.houses.list)

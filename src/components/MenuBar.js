@@ -13,16 +13,27 @@ import { TbBrandAirbnb } from 'react-icons/tb'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-import { BASE_URL_USER } from '../constants/api'
-import { useState } from 'react'
+import { BASE_URL, BASE_URL_USER } from '../constants/api'
+import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { resetAccount } from '../redux/slices/accountSlice'
+import { fetchUserProfile } from '../redux/slices/userProfileSlice'
 
 export default function MenuBar() {
   const [visible, setVisible] = useState(false)
   const navigate = useNavigate()
-  const token = useSelector(state => state.account.token)
+  const token = localStorage.getItem('token')
   const dispatch = useDispatch()
+  const username = localStorage.getItem('username')
+
+  useEffect(() => {
+    if (username) {
+      dispatch(fetchUserProfile(username))
+    }
+
+  }, [dispatch, username])
+
+  const { userProfile } = useSelector((state) => state.userProfile)
 
   const handleLogout = async () => {
     await axios.post(
@@ -37,6 +48,7 @@ export default function MenuBar() {
       .then(res => {
         toast.success(res.data, { hideProgressBar: true })
         dispatch(resetAccount())
+        localStorage.clear()
         navigate('/login')
       })
       .catch(err => {
@@ -60,8 +72,8 @@ export default function MenuBar() {
               <CNavLink href="/#/owner">Airbnb Your Home</CNavLink>
             </CNavItem>
             <CNavItem>
-              <CNavLink href="#" disabled>
-                Disable
+              <CNavLink href="#/admin">
+                Admin Dashboard
               </CNavLink>
             </CNavItem>
           </CNavbarNav>
@@ -71,8 +83,33 @@ export default function MenuBar() {
               Search
             </CButton>
           </CForm>
-          <CDropdown variant="dropdown" popper={true}>
-            <CDropdownToggle color="secondary">User</CDropdownToggle>
+          <CDropdown variant="dropdown" popper={true} className="bg-gradient rounded">
+            <CDropdownToggle
+              caret={false}
+              color="primary"
+              variant="outline"
+              className="d-flex align-items-center gap-2"
+              style={{
+                borderRadius: '50px',
+                height: '48px',
+              }}
+            >
+              <i className="bi bi-list" style={{ fontSize: '1.2rem' }}></i>
+
+              <img
+                src={token && userProfile?.avatar
+                  ? `${BASE_URL}/images/${userProfile.avatar}`
+                  : `${BASE_URL}/images/default.jpg`}
+                alt="avatar"
+                className="border border-dark"
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                }}
+              />
+            </CDropdownToggle>
             <CDropdownMenu>
               {token ? (
                 <>

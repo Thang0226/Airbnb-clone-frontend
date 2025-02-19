@@ -21,6 +21,10 @@ export default function CreateHouse() {
   const token = useSelector(state => state.account.token)
   const username = useSelector(state => state.account.username)
 
+  useEffect(() => {
+    document.title = 'Airbnb | Add House'
+  }, [])
+
   // Upload files
   const [selectedFiles, setSelectedFiles] = useState([])
   const [previews, setPreviews] = useState([])

@@ -9,13 +9,12 @@ import {
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import styles from './styles.module.css'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { setToken, setUsername, setPassword, deletePassword } from '../../redux/slices/accountSlice'
-import Layout from '../Layout'
 import { BASE_URL_USER } from '../../constants/api'
 
 export default function Login() {
@@ -33,6 +32,11 @@ export default function Login() {
     password: '',
   }
   const formikRef = useRef(null)
+
+  useEffect(() => {
+    document.title = 'Airbnb | Login'
+  }, [])
+
 
   const handleFormChange = (e, formikHandleChange) => {
     formikHandleChange(e)
@@ -64,6 +68,9 @@ export default function Login() {
         dispatch(setToken(res.data.token))
         dispatch(setUsername(res.data.username))
         dispatch(deletePassword())
+        localStorage.setItem('token', res.data.token)
+        localStorage.setItem('loggedIn', JSON.stringify(true))
+        localStorage.setItem('username', res.data.username)
         toast.success('login successful', { hideProgressBar: true })
         navigate('/')
       })
