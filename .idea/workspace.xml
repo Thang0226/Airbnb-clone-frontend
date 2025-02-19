@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="373252d9-15d8-484a-b9ac-90a2f953f0ab" name="Changes" comment="&quot;Complete the search bar, except for the address field.&quot;">
+    <list default="true" id="373252d9-15d8-484a-b9ac-90a2f953f0ab" name="Changes" comment="Add minPrice and maxPrice, remove the guest column.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/homepage/HouseList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/homepage/HouseList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/homepage/HouseListBeforeSearch.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/homepage/HouseListBeforeSearch.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/homepage/MapSampletoSearch.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/homepage/MapSampletoSearch.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/homepage/SearchBarForHouseAvailable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/homepage/SearchBarForHouseAvailable.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,8 +95,18 @@
       <workItem from="1739775560117" duration="4637000" />
       <workItem from="1739785953439" duration="1206000" />
       <workItem from="1739801876090" duration="3911000" />
-      <workItem from="1739841053946" duration="749000" />
+      <workItem from="1739841053946" duration="4489000" />
+      <workItem from="1739868035730" duration="71000" />
     </task>
+    <task id="LOCAL-00001" summary="fix repository have new query search">
+      <option name="closed" value="true" />
+      <created>1739846642324</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1739846642324</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -117,6 +125,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="&quot;Complete the search bar, except for the address field.&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="&quot;Complete the search bar, except for the address field.&quot;" />
+    <MESSAGE value="fix repository have new query search" />
+    <MESSAGE value="Add minPrice and maxPrice, remove the guest column." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add minPrice and maxPrice, remove the guest column." />
   </component>
 </project>

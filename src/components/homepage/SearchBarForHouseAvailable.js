@@ -51,7 +51,6 @@ const SearchBar = ({ onSearch }) => {
   const [address, setAddress] = useState('')
   const [checkIn, setCheckIn] = useState('2024-02-20')
   const [checkOut, setCheckOut] = useState('2024-03-10')
-  const [guests, setGuests] = useState(1)
   const [sortOrder, setSortOrder] = useState('asc')
   const [minBedrooms, setMinBedrooms] = useState('')
   const [minBathrooms, setMinBathrooms] = useState('')
@@ -60,6 +59,8 @@ const SearchBar = ({ onSearch }) => {
   const [houses] = useState([])
   const [mapCenter, setMapCenter] = useState([16.047079, 108.206230]) // Default address (Da Nang)
   const [zoom, setZoom] = useState(5)
+  const [minPrice, setMinPrice] = useState('')
+  const [maxPrice, setMaxPrice] = useState('')
 
   //mapData chứa thông tin định dạng của địa chỉ, gồm 2 trườn
 //selectedAddressData lưu toàn bộ dữ liệu địa chỉ được chọn (nếu cần dùng cho các xử lý khác).
@@ -126,10 +127,12 @@ const SearchBar = ({ onSearch }) => {
       address: mapData.name,
       checkIn,
       checkOut,
-      guests,
       sortOrder,
       minBedrooms,
       minBathrooms,
+      // BỔ SUNG:
+      minPrice,
+      maxPrice,
     }
     console.log('Sending search data to backend:', searchData)
 
@@ -204,25 +207,6 @@ const SearchBar = ({ onSearch }) => {
             </div>
           </CCol>
 
-          {/* Guests */}
-          <CCol xs={12} md>
-            <div className="position-relative border-start">
-              <CDropdown>
-                <CDropdownToggle className="w-100 bg-transparent border-0 text-start ps-3">
-                  <Users className="text-primary me-2" size={20} />
-                  <span className="small text-muted d-block">Guests</span>
-                  <span>{guests} guest{guests > 1 ? 's' : ''}</span>
-                </CDropdownToggle>
-                <CDropdownMenu>
-                  {[1, 2, 3, 4].map(num => (
-                    <CDropdownItem key={num} onClick={() => setGuests(num)}>
-                      {num} guest{num > 1 ? 's' : ''}
-                    </CDropdownItem>
-                  ))}
-                </CDropdownMenu>
-              </CDropdown>
-            </div>
-          </CCol>
 
           {/* Search Button */}
           <CCol xs={12} md="auto">
@@ -255,6 +239,83 @@ const SearchBar = ({ onSearch }) => {
               </CDropdownMenu>
             </CDropdown>
           </CCol>
+
+
+          {/* Price Range Dropdown */}
+          <CCol xs={12} md={4}>
+            <CDropdown>
+              {/* Toggle hiển thị giá đã chọn (hoặc “Select Range”) */}
+              <CDropdownToggle className="w-100 bg-transparent border-0 text-start ps-3">
+                Price Range (VND):{' '}
+                {minPrice && maxPrice
+                  ? `${minPrice} - ${maxPrice}`
+                  : 'Select Range'}
+              </CDropdownToggle>
+
+              <CDropdownMenu style={{ minWidth: '250px' }}>
+                {/* 1) Các mức gợi ý */}
+                <CDropdownItem
+                  onClick={() => {
+                    setMinPrice(100000)
+                    setMaxPrice(200000)
+                  }}
+                >
+                  100.000 - 200.000
+                </CDropdownItem>
+                <CDropdownItem
+                  onClick={() => {
+                    setMinPrice(200000)
+                    setMaxPrice(500000)
+                  }}
+                >
+                  200.000 - 500.000
+                </CDropdownItem>
+                <CDropdownItem
+                  onClick={() => {
+                    setMinPrice(500000)
+                    setMaxPrice(1000000)
+                  }}
+                >
+                  500.000 - 1.000.000
+                </CDropdownItem>
+                <CDropdownItem divider />
+
+                {/* 2) Cho phép nhập thủ công */}
+                <div className="px-3 py-2">
+                  <label className="form-label mb-1 fw-semibold">Custom Range</label>
+                  <div className="d-flex gap-2 mb-2">
+                    <CFormInput
+                      type="number"
+                      placeholder="Min"
+                      min={100000}
+                      max={1000000}
+                      value={minPrice}
+                      onChange={(e) => setMinPrice(e.target.value)}
+                    />
+                    <CFormInput
+                      type="number"
+                      placeholder="Max"
+                      min={100000}
+                      max={1000000}
+                      value={maxPrice}
+                      onChange={(e) => setMaxPrice(e.target.value)}
+                    />
+                  </div>
+                  <CButton
+                    color="primary"
+                    size="sm"
+                    onClick={() => {
+                      // Bấm "Apply" => đóng Dropdown (nếu muốn)
+                      // => Tự động filter khi Search
+                    }}
+                  >
+                    Apply
+                  </CButton>
+                </div>
+              </CDropdownMenu>
+            </CDropdown>
+          </CCol>
+
 
           {/* Minimum Bedrooms */}
           <CCol xs={12} md={4}>
@@ -305,6 +366,7 @@ const SearchBar = ({ onSearch }) => {
           </CCol>
         </CRow>
       </CContainer>
+
 
       {/* Map Modal */}
       <CModal visible={showMap} onClose={() => setShowMap(false)} size="lg">
