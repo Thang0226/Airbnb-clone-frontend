@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import HouseCarousel from './HouseCarousel'
 
 import {
-  CCard,
   CCardBody,
   CRow,
   CCol,
@@ -10,64 +10,8 @@ import {
   CButton,
   CBadge,
 } from '@coreui/react'
-import '@coreui/coreui/dist/css/coreui.min.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import './HouseList.css'
 import { BASE_URL, API_ENDPOINTS } from '../../constants/api'
-
-// Component Carousel cho hình ảnh của căn nhà
-const HouseCarousel = ({ images, height = '200px' }) => {
-  const [currentIndex, setCurrentIndex] = useState(0)
-
-  useEffect(() => {
-    if (images && images.length > 0) {
-      const timer = setInterval(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length)
-      }, 7000) // thay đổi hình mỗi 3 giây
-      return () => clearInterval(timer)
-    }
-  }, [images])
-
-  // Nếu không có hình, hiển thị hình mặc định
-  if (!images || images.length === 0) {
-    return (
-      <img
-        // src="/api/placeholder/400/300"
-        alt="placeholder"
-        style={{
-          width: '100%',
-          height: height,
-          objectFit: 'cover',
-        }}
-      />
-    )
-  }
-
-  return (
-    <div style={{ position: 'relative', overflow: 'hidden', height: height }}>
-      <div
-        style={{
-          display: 'flex',
-          transition: 'transform 0.5s ease-in-out',
-          transform: `translateX(-${currentIndex * 100}%)`,
-        }}
-      >
-        {images.map((images) => (
-          <img
-            key={images.id}
-            src={images.imageUrl}
-            alt=""
-            style={{
-              width: '100%',
-              flexShrink: 0,
-              objectFit: 'cover',
-            }}
-          />
-        ))}
-      </div>
-    </div>
-  )
-}
 
 const HouseListBeforeSearch = () => {
   const [houses, setHouses] = useState([])
@@ -80,6 +24,7 @@ const HouseListBeforeSearch = () => {
       .then((response) => {
         setHouses(response.data)
         setLoading(false)
+        console.log(response.data)
       })
       .catch((error) => {
         console.error('There was an error fetching the data!', error)
@@ -112,15 +57,13 @@ const HouseListBeforeSearch = () => {
           </a>
         </div>
       </div>
-
       <CRow xs={{ cols: 1 }} md={{ cols: 2 }} lg={{ cols: 4 }} className="g-4">
         {houses.map((house) => (
           <CCol key={house.id}>
             <div className="card h-100 shadow-sm border-0 position-relative hover-shadow">
               <div className="position-relative">
                 {/* Sử dụng HouseCarousel để hiển thị danh sách hình */}
-                <HouseCarousel images={house.images} height="200px" />
-
+                <HouseCarousel images={house.houseImages} height="150px" />
                 <CBadge
                   color="warning"
                   className="position-absolute top-0 start-0 m-2"
@@ -140,17 +83,13 @@ const HouseListBeforeSearch = () => {
                   style={{ fontSize: '0.8rem' }}
                 >
                   <i className="fas fa-images me-1"></i>
-                  <span>{house.images ? house.images.length : 0}</span>
-                </div>
-                {/* Hiển thị startDate và endDate */}
-                <div className="house-dates">
-                  {new Date(house.startDate).toLocaleDateString()} - {new Date(house.endDate).toLocaleDateString()}
+                  <span>{house.houseImages ? house.houseImages.length : 0}</span>
                 </div>
               </div>
 
               <CCardBody className="d-flex flex-column">
-                <h3
-                  className="h6 fw-bold mb-2"
+                <p
+                  className="fw-bold mb-2"
                   style={{
                     display: '-webkit-box',
                     WebkitLineClamp: 2,
@@ -159,14 +98,14 @@ const HouseListBeforeSearch = () => {
                   }}
                 >
                   {house.houseName}
-                </h3>
+                </p>
 
                 <div className="d-flex align-items-center gap-2 mb-2">
-                  <span className="text-danger fw-bold">
+                  <span className="fw-bold" style={{ color: "#D13660" }}>
                     {formatPrice(house.price)} đ/ngày
                   </span>
                   <span className="text-muted">·</span>
-                  <span>{house.bedrooms} m²</span>
+                  <span>{house.bedrooms}{(house.bedrooms > 1) ? " bedrooms" : " bedroom"}</span>
                 </div>
 
                 <div className="d-flex align-items-center text-muted mb-3">
