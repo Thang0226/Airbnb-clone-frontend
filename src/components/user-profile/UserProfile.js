@@ -43,8 +43,11 @@ const UserProfile = () => {
 
   return (
     <div className="container mt-4">
-      <CRow className="justify-content-center mt-4">
-        <CCol md={6}>
+      <CRow
+        xs={{cols: 1}} md={{cols: 1}} lg={{cols: 2}}
+        className="justify-content-center mt-4"
+      >
+        <CCol>
           <CCard className="shadow border-0">
             <CCardHeader className="text-center p-4">
               <img

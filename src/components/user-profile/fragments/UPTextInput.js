@@ -25,11 +25,11 @@ const UPTextInput = ({
                     {label} {required && <span style={{color: 'red'}}>*</span>}
                 </CFormLabel>
             </CFormFloating>
-            <div style={{minHeight: "20px"}}>
+            <div style={{minHeight: "24px"}} className="mt-1">
                 <ErrorMessage
                     name={name}
                     component={CFormFeedback}
-                    className="d-block text-danger mt-1 ps-2"
+                    className="d-block text-warning ps-2"
                 />
             </div>
         </CCol>
