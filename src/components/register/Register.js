@@ -4,7 +4,7 @@ import {
   CFormInput,
   CCol,
   CRow,
-  CFormLabel,
+  CFormLabel, CFormCheck,
 } from '@coreui/react'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
@@ -15,7 +15,6 @@ import * as Yup from 'yup'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { setUsername, setPassword } from '../../redux/slices/accountSlice'
-import Layout from '../Layout'
 import { BASE_URL_USER } from '../../constants/api'
 
 export default function Register() {
@@ -33,6 +32,7 @@ export default function Register() {
     phone: '',
     password: '',
     confirm_password: '',
+    isHost: false,
   }
   const formikRef = useRef(null)
 
@@ -89,23 +89,35 @@ export default function Register() {
           return this.parent.password === value
         },
       ),
+
+
+    isHost: Yup.boolean(),
   })
 
   const handleSubmit = async () => {
     const formValues = formikRef.current.values
+    console.log('Form Values:', formValues)
     try {
       await axios.post(`${BASE_URL_USER}/register`, {
         username: formValues.username,
         password: formValues.password,
         phone: formValues.phone,
+        host: formValues.isHost,
       })
       dispatch(setUsername(formValues.username))
       dispatch(setPassword(formValues.password))
+
+      if (formValues.isHost) {
+        toast.info('Your host request has been submitted for review!', { hideProgressBar: true })
+      } else {
+        toast.success('Registered successfully!', { hideProgressBar: true })
+      }
+      navigate('/login')
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      toast.error('Registration failed!', { hideProgressBar: true })
+
     }
-    toast.success('register successfully!', { hideProgressBar: true })
-    navigate('/login')
   }
 
   return (
@@ -115,7 +127,7 @@ export default function Register() {
               validationSchema={validationSchema}
               onSubmit={handleSubmit}
               innerRef={formikRef}>
-        {({ errors, touched, handleChange, handleSubmit }) => (
+        {({ errors, touched, handleChange, handleSubmit, values }) => (
           <CForm className={styles.formBox} onSubmit={handleSubmit}>
             <CRow className="mb-3">
               <CFormLabel htmlFor="username" className="col-sm-4 col-form-label">
@@ -159,6 +171,17 @@ export default function Register() {
                             onChange={handleChange} required />
                 {touched.confirm_password && errors.confirm_password &&
                   <p className="text-warning-emphasis">{errors.confirm_password}</p>}
+              </CCol>
+            </CRow>
+            <CRow className="mb-4">
+              <CCol sm={8}>
+                <CFormCheck
+                  id="isHost"
+                  name="isHost"
+                  label="Register as a Host"
+                  checked={values.isHost}
+                  onChange={handleChange}
+                />
               </CCol>
             </CRow>
             <CButton color="primary" type="submit">

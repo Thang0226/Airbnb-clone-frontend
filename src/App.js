@@ -13,6 +13,8 @@ import UserProfile from './components/user-profile/UserProfile'
 import ProfileUpdateForm from './components/user-profile/ProfileUpdateForm'
 import Layout from './components/Layout'
 import Homepage from './components/homepage/Homepage'
+import AdminHostRequests from './components/admin/AdminHostRequests'
+
 
 
 export default function App() {
@@ -30,6 +32,7 @@ export default function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={isLoggedIn ? <UserProfile /> : <Navigate to={'/'} />} />
             <Route path="/profile/edit" element={isLoggedIn ? <ProfileUpdateForm /> : <Navigate to={'/'} />} />
+            <Route path="/admin" element={isLoggedIn ? <AdminHostRequests /> : <Navigate to={'/'} />} />
           </Routes>
         </Layout>
       </HashRouter>
