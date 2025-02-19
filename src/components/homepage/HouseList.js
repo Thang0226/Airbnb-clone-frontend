@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import { useSelector } from 'react-redux'
 import {
-  CCard,
   CCardBody,
   CRow,
   CCol,
@@ -10,8 +8,7 @@ import {
   CButton,
   CBadge,
 } from '@coreui/react'
-import '@coreui/coreui/dist/css/coreui.min.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
+
 import './HouseList.css'
 import { BASE_URL, API_ENDPOINTS } from '../../constants/api'
 

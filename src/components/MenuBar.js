@@ -86,8 +86,9 @@ export default function MenuBar() {
           <CDropdown variant="dropdown" popper={true} className="bg-gradient rounded">
             <CDropdownToggle
               caret={false}
-              color="white"
-              className="border border-dark d-flex align-items-center gap-2"
+              color="primary"
+              variant="outline"
+              className="d-flex align-items-center gap-2"
               style={{
                 borderRadius: '50px',
                 height: '48px',

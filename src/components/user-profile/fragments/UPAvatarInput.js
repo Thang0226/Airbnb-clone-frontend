@@ -3,7 +3,7 @@ import { CRow, CCol, CFormInput, CFormFeedback } from '@coreui/react'
 import { BASE_URL } from '../../../constants/api'
 import { ErrorMessage } from 'formik'
 
-const UPAvatarInput = ({ avatarPreview, userProfile, handleAvatarChange, setFieldValue, setFieldError }) => (
+const UPAvatarInput = ({ avatarPreview, userProfile, handleAvatarChange, setFieldValue }) => (
   <CRow className="mb-3 justify-content-center align-items-center">
     <CCol md={2}>
       <img
@@ -19,28 +19,27 @@ const UPAvatarInput = ({ avatarPreview, userProfile, handleAvatarChange, setFiel
         width="100"
         height="100"
         style={{ objectFit: 'cover' }}
-        onError={(e) => {
-          e.target.onerror = null
-          e.target.src = '/images/default.jpg'
-        }}
       />
     </CCol>
     <CCol md={10} className="ps-3">
-      <div style={{minHeight: "24px"}}></div>
+      <div style={{minHeight: "24px"}} className="ps-2 mb-1">
+        Maximum file size is 5MB. Only accepts JPG, JPEG, PNG.
+      </div>
       <CFormInput
-        name="avatar"
         type="file"
+        name="avatar"
+        id="avatar"
         accept="image/*"
-        onChange={(e) => handleAvatarChange(e, setFieldValue, setFieldError)}
+        onChange={(e) => handleAvatarChange(e, setFieldValue)}
       />
       <div
-        style={{minHeight: "24px"}}
+        style={{ minHeight: '24px' }}
         className="mt-1"
       >
         <ErrorMessage
           name="avatar"
           component={CFormFeedback}
-          className="d-block text-danger ps-2"
+          className="d-block text-warning ps-2"
         />
       </div>
 

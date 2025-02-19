@@ -4,11 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a79b1d44-9f5f-411c-a597-b16591e7848c" name="Changes" comment="improve user dropdown bar UI">
+    <list default="true" id="a79b1d44-9f5f-411c-a597-b16591e7848c" name="Changes" comment="complete file validation for avatar upload">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Layout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MenuBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MenuBar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/homepage/HouseList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/homepage/HouseList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/homepage/HouseListBeforeSearch.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/homepage/HouseListBeforeSearch.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/homepage/MapSampletoSearch.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/homepage/MapSampletoSearch.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/login/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/login/Login.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/user-profile/ProfileUpdateForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/user-profile/ProfileUpdateForm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/user-profile/UserProfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/user-profile/UserProfile.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/user-profile/fragments/UPAvatarInput.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/user-profile/fragments/UPAvatarInput.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/user-profile/fragments/UPTextInput.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/user-profile/fragments/UPTextInput.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,21 +27,21 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "dunglt94"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;dunglt94&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Thang0226/Airbnb-clone-frontend",
-    "accountId": "2ebcbf45-ad82-4668-8cc5-54e3b1b8c4b3"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Thang0226/Airbnb-clone-frontend&quot;,
+    &quot;accountId&quot;: &quot;2ebcbf45-ad82-4668-8cc5-54e3b1b8c4b3&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 1
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="2tCkMVEfNolPukwz1RixkQIZBZ1" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -44,7 +53,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "feature/profileUpdateForm",
+    "git-widget-placeholder": "dev",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -69,15 +78,37 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1739863398058</updated>
-      <workItem from="1739863400003" duration="9096000" />
+      <workItem from="1739863400003" duration="11186000" />
+      <workItem from="1739929800784" duration="7982000" />
     </task>
+    <task id="LOCAL-00001" summary="complete file validation for avatar upload">
+      <option name="closed" value="true" />
+      <created>1739872938081</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1739872938081</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="improve user dropdown bar UI" />
-    <option name="LAST_COMMIT_MESSAGE" value="improve user dropdown bar UI" />
+    <MESSAGE value="complete file validation for avatar upload" />
+    <option name="LAST_COMMIT_MESSAGE" value="complete file validation for avatar upload" />
   </component>
 </project>

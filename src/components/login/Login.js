@@ -15,7 +15,6 @@ import * as Yup from 'yup'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { setToken, setUsername, setPassword, deletePassword } from '../../redux/slices/accountSlice'
-import Layout from '../Layout'
 import { BASE_URL_USER } from '../../constants/api'
 
 export default function Login() {

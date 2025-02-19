@@ -9,7 +9,6 @@ import {
   CCardHeader,
   CCardBody,
 } from '@coreui/react'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUserProfile, updateUserProfile } from '../../redux/slices/userProfileSlice'
@@ -28,7 +27,8 @@ const validationSchema = Yup.object({
   avatar: Yup.mixed()
     .nullable()
     .notRequired()
-    .test('fileSize', 'Maximum file size is 5MB', (value) => {
+    .test('fileSize', 'File size exceeds 5MB.', (value) => {
+      console.log(value)
       if (value) {
         return value.size <= FILE_SIZE_LIMIT
       } else {
@@ -127,33 +127,37 @@ const ProfileUpdateForm = () => {
       })
   }
 
-  const handleAvatarChange = (e, setFieldValue, setFieldError) => {
+  const handleAvatarChange = (e, setFieldValue) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0]
+      setFieldValue('avatar', file)
 
       if (file.size > FILE_SIZE_LIMIT) {
-        setFieldError('avatar', 'File size must be 5MB or less')
         return
       }
       if (!SUPPORTED_FORMATS.includes(file.type)) {
-        setFieldError('avatar', 'Invalid file format. Only JPG, JPEG, PNG are allowed.')
         return
       }
 
       // Nếu không có lỗi, cập nhật giá trị cho avatar
-      setFieldValue('avatar', file)
+
       const reader = new FileReader()
       reader.onload = () => {
         setAvatarPreview(reader.result)
       }
       reader.readAsDataURL(file)
+    } else {
+      setFieldValue('avatar', '')
     }
   }
 
   return (
     <div className="container mt-4">
-      <CRow className="justify-content-center mt-4">
-        <CCol md={6}>
+      <CRow
+        xs={{cols: 1}} md={{cols: 1}} lg={{cols: 2}}
+        className="justify-content-center mt-4"
+      >
+        <CCol>
           <CCard className="shadow border-0">
             <CCardHeader className="text-center p-4">
               <h3>Update Profile</h3>
@@ -173,7 +177,6 @@ const ProfileUpdateForm = () => {
                       userProfile={userProfile}
                       handleAvatarChange={handleAvatarChange}
                       setFieldValue={setFieldValue}
-                      setFieldError={setFieldError}
                     />
 
                     <UPTextInput
