@@ -17,6 +17,7 @@ import HostRequests from './components/admin/HostRequests'
 import RequireAuth from './components/auth/RequireAuth'
 import AdminLayout from './components/admin/AdminLayout'
 import Dashboard from './components/admin/Dashboard'
+import { UserList } from './components/admin/UserList'
 
 export default function App() {
   return (
@@ -43,7 +44,7 @@ export default function App() {
             <Route element={<AdminLayout />}>
               <Route path="/admin" element={<Dashboard />} />
               <Route path="/admin/host/request" element={<HostRequests />} />
-              <Route path="/admin/users" element={<HostRequests />} />
+              <Route path="/admin/users" element={<UserList />} />
               {/* Các route admin khác có thể thêm tại đây */}
             </Route>
           </Route>
