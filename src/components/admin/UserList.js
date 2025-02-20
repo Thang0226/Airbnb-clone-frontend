@@ -15,9 +15,11 @@ import {
   CTableRow,
 } from '@coreui/react'
 import { toast } from 'react-toastify'
+import Pagination from 'react-bootstrap/Pagination';
 
 export const UserList = () => {
-  const [page, setPage] = useState(0)
+  const [page, setPage] = useState(0);
+  const [size] = useState(10);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -25,10 +27,10 @@ export const UserList = () => {
   }, [])
 
   useEffect(() => {
-    dispatch(fetchUsers(page));
-  }, [dispatch,page]);
+    dispatch(fetchUsers({page, size}));
+  }, [dispatch,page,size]);
 
-  const { users, error, loading } = useSelector((state) => state.userManagement);
+  const { users, error, loading, totalPages } = useSelector((state) => state.userManagement);
 
   if (loading || !users) return (
     <DisplayLoading/>
@@ -53,12 +55,18 @@ export const UserList = () => {
             </div>
           );
         }
-        dispatch(fetchUsers(page));
+        dispatch(fetchUsers(page, size));
       })
       .catch((error) => {
         toast.error("Error updating user status:", error);
       });
   }
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 0 && newPage < totalPages) {
+      setPage(newPage);
+    }
+  };
 
   return (
     <div className="container mt-4">
@@ -69,7 +77,7 @@ export const UserList = () => {
         <CCol>
           <CCard>
             <CCardHeader>
-              <h4 className="mb-0">User List</h4>
+              <h4 className="my-3">User List</h4>
             </CCardHeader>
             <CCardBody>
               <CTable hover responsive>
