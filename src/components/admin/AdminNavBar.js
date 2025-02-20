@@ -13,17 +13,17 @@ import { TbBrandAirbnb } from 'react-icons/tb'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-import { BASE_URL, BASE_URL_USER } from '../constants/api'
+import { BASE_URL, BASE_URL_USER } from '../../constants/api'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { resetAccount } from '../redux/slices/accountSlice'
-import { fetchUserProfile } from '../redux/slices/userProfileSlice'
+import { resetAccount } from '../../redux/slices/accountSlice'
+import { fetchUserProfile } from '../../redux/slices/userProfileSlice'
 
-export default function MenuBar() {
+export default function AdminNavBar() {
   const [visible, setVisible] = useState(false)
   const navigate = useNavigate()
-  const token = localStorage.getItem('token')
   const dispatch = useDispatch()
+  const token = localStorage.getItem('token')
   const username = localStorage.getItem('username')
 
   useEffect(() => {
@@ -52,30 +52,21 @@ export default function MenuBar() {
         navigate('/login')
       })
       .catch(err => {
-        console.log(err)
-        toast.error(err.response.data || err.message, { hideProgressBar: true })
-        navigate('/')
+        toast.error(err.response.data, { hideProgressBar: true })
       })
-  }
-
-  const handleChangePassword = () => {
-    navigate('/user/change-password')
   }
 
   return (
     <CNavbar expand="lg" className="bg-body-tertiary">
       <CContainer fluid>
-        <CNavbarBrand href="#"><TbBrandAirbnb color={'#FF385C'} size={40} /></CNavbarBrand>
+        <CNavbarBrand></CNavbarBrand>
         <CNavbarToggler onClick={() => setVisible(!visible)} />
         <CCollapse className="navbar-collapse" visible={visible}>
           <CNavbarNav className="me-auto">
             <CNavItem>
-              <CNavLink href="#" active>
+              <CNavLink href="#/admin" active>
                 Home
               </CNavLink>
-            </CNavItem>
-            <CNavItem>
-              <CNavLink href="/#/owner">Airbnb Your Home</CNavLink>
             </CNavItem>
           </CNavbarNav>
           <CForm className="d-inline-flex">
@@ -116,9 +107,6 @@ export default function MenuBar() {
                 <>
                   <CDropdownItem href="/#/profile">Profile</CDropdownItem>
                   <CDropdownDivider />
-                  <CDropdownItem onClick={handleChangePassword} style={{ cursor: 'pointer' }}>
-                    Change Password
-                  </CDropdownItem>
                   <CDropdownItem onClick={handleLogout} style={{ cursor: 'pointer' }}>
                     Logout
                   </CDropdownItem>

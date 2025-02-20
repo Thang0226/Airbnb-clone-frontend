@@ -4,6 +4,8 @@ import { CButton, CCard, CCardBody, CCardHeader, CCol, CRow, CSpinner } from '@c
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { BASE_URL } from '../../constants/api'
+import { DisplayLoading, displayLoading } from '../DisplayLoading'
+import { DisplayError } from '../DisplayError'
 import UserInfoRow from '../_fragments/FORMInfoRow'
 
 const UserProfile = () => {
@@ -22,19 +24,10 @@ const UserProfile = () => {
   const { userProfile, error, loading } = useSelector((state) => state.userProfile)
 
   if (loading || !userProfile) return (
-    <div className="d-flex flex-column align-items-center justify-content-center vh-100">
-      <CSpinner color="primary" size="lg" />
-      <h1 className="mt-3">Loading profile...</h1>
-    </div>
+    <DisplayLoading/>
   )
   if (error) return (
-    <div className="container mt-4">
-      <CRow className="mt-4">
-        <CCol md={6}>
-          <h1 className="text-danger">Lỗi: {error}</h1>
-        </CCol>
-      </CRow>
-    </div>
+    <DisplayError error={error} />
   )
 
   const goToProfileEdit = () => {
