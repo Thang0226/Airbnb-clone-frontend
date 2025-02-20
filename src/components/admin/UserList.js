@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { fetchUsers, updateUserStatus } from '../../redux/slices/userManagementSlice'
 import { DisplayLoading } from '../DisplayLoading'
 import { DisplayError } from '../DisplayError'
@@ -15,8 +15,11 @@ import {
   CTableRow,
 } from '@coreui/react'
 import { toast } from 'react-toastify'
+import Pagination from 'react-bootstrap/Pagination';
 
 export const UserList = () => {
+  const [page, setPage] = useState(0);
+  const [size] = useState(10);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -24,10 +27,10 @@ export const UserList = () => {
   }, [])
 
   useEffect(() => {
-    dispatch(fetchUsers());
-  }, [dispatch]);
+    dispatch(fetchUsers({page, size}));
+  }, [dispatch,page,size]);
 
-  const { users, error, loading } = useSelector((state) => state.userManagement);
+  const { users, error, loading, totalPages } = useSelector((state) => state.userManagement);
 
   if (loading || !users) return (
     <DisplayLoading/>
@@ -52,12 +55,18 @@ export const UserList = () => {
             </div>
           );
         }
-        dispatch(fetchUsers());
+        dispatch(fetchUsers(page, size));
       })
       .catch((error) => {
         toast.error("Error updating user status:", error);
       });
   }
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 0 && newPage < totalPages) {
+      setPage(newPage);
+    }
+  };
 
   return (
     <div className="container mt-4">
@@ -68,7 +77,7 @@ export const UserList = () => {
         <CCol>
           <CCard>
             <CCardHeader>
-              <h4 className="mb-0">User List</h4>
+              <h4 className="my-3">User List</h4>
             </CCardHeader>
             <CCardBody>
               <CTable hover responsive>
@@ -113,9 +122,23 @@ export const UserList = () => {
                   ))}
                 </CTableBody>
               </CTable>
+              <Pagination className="mt-3 justify-content-center">
+                <Pagination.First onClick={() => handlePageChange(0)} disabled={page === 0} />
+                <Pagination.Prev onClick={() => handlePageChange(page - 1)} disabled={page === 0} />
+
+                {[...Array(totalPages)].map((_, index) => (
+                  <Pagination.Item key={index} active={index === page} onClick={() => handlePageChange(index)}>
+                    {index + 1}
+                  </Pagination.Item>
+                ))}
+
+                <Pagination.Next onClick={() => handlePageChange(page + 1)} disabled={page === totalPages - 1} />
+                <Pagination.Last onClick={() => handlePageChange(totalPages - 1)} disabled={page === totalPages - 1} />
+              </Pagination>
             </CCardBody>
           </CCard>
         </CCol>
+
       </CRow>
     </div>
   )

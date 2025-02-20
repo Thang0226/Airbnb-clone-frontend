@@ -4,21 +4,29 @@ import { BASE_URL } from '../../constants/api'
 
 export const initialState = {
   users: [],
+  totalPages: 1,
   loading: false,
   error: null,
 }
 
 export const fetchUsers = createAsyncThunk(
   'userManagement/fetchUsers',
-  async (thunkAPI) => {
+  async ({ page, size }, thunkAPI) => {
     const token = localStorage.getItem('token')
+    console.log(page)
+    console.log(size)
+
     try {
-      const response = await axios.get(`${BASE_URL}/api/admin/users`, {
+      const response = await axios.get(`${BASE_URL}/api/admin/users?page=${page}&size=${size}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-      return response.data
+      console.log(response.data.content)
+      return {
+        users: response.data.content,
+        totalPages: response.data.totalPages,
+      };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving profile data!')
     }
@@ -57,7 +65,8 @@ const UserManagementSlice = createSlice({
         state.error = null
       })
       .addCase(fetchUsers.fulfilled, (state, action) => {
-        state.users = action.payload
+        state.users = action.payload.users;
+        state.totalPages = action.payload.totalPages;
         state.loading = false
       })
       .addCase(fetchUsers.rejected, (state, action) => {

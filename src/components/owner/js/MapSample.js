@@ -1,5 +1,5 @@
 import React , { useRef , useState } from 'react';
-import { CFormInput , CFormLabel } from '@coreui/react';
+import { CFormInput } from '@coreui/react';
 import axios from 'axios';
 
 export default function MapSample({onAddressSelect, value, onChange}) {
