@@ -2,9 +2,7 @@ import MapSample from './MapSample'
 import { useNavigate } from 'react-router-dom'
 import React , { useRef , useState , useEffect } from 'react'
 import { toast } from 'react-toastify'
-import styles from '../css/CreateHouse.module.css'
 import { X } from 'lucide-react'
-
 import {
   CContainer ,
   CForm ,
@@ -12,7 +10,7 @@ import {
   CFormFloating ,
   CFormInput ,
   CButton , CFormTextarea , CFormLabel ,
-  CCloseButton , CImage , CRow ,
+  CImage , CRow ,
 } from '@coreui/react'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
@@ -21,7 +19,7 @@ export default function CreateHouse() {
   const [validated , setValidated] = useState ( false )
   const navigate = useNavigate ()
   const token = useSelector ( state => state.account.token )
-  const username = useSelector ( state => state.account.username )
+  const username = localStorage.getItem ( 'username' )
 
   useEffect ( () => {
     document.title = 'Airbnb | Add House'
@@ -34,6 +32,7 @@ export default function CreateHouse() {
   const handleFileChange = (event) => {
     const files = Array.from ( event.target.files )
     const validFiles = []
+    let totalSize = 0
     let hasError = false
 
     files.forEach ( file => {
@@ -41,10 +40,14 @@ export default function CreateHouse() {
         hasError = true
       } else if (file.type === 'image/jpeg' || file.type === 'image/png') {
         validFiles.push ( file )
+        totalSize += file.size
       }
     } )
+    if (totalSize > 100 * 1024 * 1024) {
+      hasError = true;
+    }
 
-    setError ( hasError ? 'Each image must be 5MB or smaller.' : '' )
+    setError ( hasError ? 'Each image must be <=5MB. Total size must be <=100MB' : '' )
     setSelectedFiles ( validFiles )
 
     const newPreviews = validFiles.map ( file => ({
@@ -129,10 +132,10 @@ export default function CreateHouse() {
       } )
     } // Append houseImages only if there are selected files
 
+
     for (let pair of formData.entries ()) {
       console.log ( pair[0] + ': ' + pair[1] )
     }
-    console.log ( 'Address being sent:' , formData.get ( 'address' ) ) // Log FormData for debugging
 
 
     try {
@@ -174,8 +177,10 @@ export default function CreateHouse() {
                 id="houseName"
                 name="houseName"
                 placeholder="Enter House Name"
+                color="warning"
                 feedbackInvalid="Please enter a house name"
                 required
+
               />
               <CFormLabel htmlFor="houseName">Enter House Name</CFormLabel>
             </CFormFloating>
@@ -301,8 +306,6 @@ export default function CreateHouse() {
               ) )}
             </CRow>
           </CCol>
-
-
 
 
           {/*/!* Submit Button *!/*/}

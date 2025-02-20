@@ -5,6 +5,7 @@ const FORMTextInput = ({
                          label,
                          name,
                          required = false,
+                         type='text',
                          readOnly = false,
                          disabled = false,
                          placeholder = ""
@@ -15,7 +16,7 @@ const FORMTextInput = ({
                 <Field
                     name={name}
                     as={CFormInput}
-                    type="text"
+                    type={type}
                     id={name}
                     placeholder={placeholder}
                     className="form-control"
