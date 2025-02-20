@@ -21,6 +21,7 @@ import { Search, Calendar, Users, BedDouble, Bath } from 'lucide-react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { IMaskInput } from 'react-imask'
+import { BASE_URL_HOUSE } from '../../constants/api'
 
 // Fix Leaflet default icon issue
 delete L.Icon.Default.prototype._getIconUrl
@@ -42,11 +43,11 @@ const SearchBar = () => {
   const dispatch = useDispatch()
   const [checkIn, setCheckIn] = useState(today.toISOString().split('T')[0])
   const [checkOut, setCheckOut] = useState(tomorrow.toISOString().split('T')[0])
-  const [sortOrder, setSortOrder] = useState('')
+  const [priceOrder, setPriceOrder] = useState('')
   const [minBedrooms, setMinBedrooms] = useState('')
   const [minBathrooms, setMinBathrooms] = useState('')
-  const [minPrice, setMinPrice] = useState()
-  const [maxPrice, setMaxPrice] = useState()
+  const [minPrice, setMinPrice] = useState('')
+  const [maxPrice, setMaxPrice] = useState('')
 
   const [mapData, setMapData] = useState({
     name: '',
@@ -63,17 +64,16 @@ const SearchBar = () => {
   const handleSearchButtonClick = () => {
     const searchData = {
       address: mapData.name,
-      checkIn,
-      checkOut,
-      sortOrder,
-      minBedrooms,
-      minBathrooms,
-      minPrice,
-      maxPrice,
+      checkIn: checkIn,
+      checkOut: checkOut,
+      minBedrooms: minBedrooms,
+      minBathrooms: minBathrooms,
+      minPrice: minPrice,
+      maxPrice: maxPrice,
+      priceOrder: priceOrder
     }
     console.log('Sending search data to backend:', searchData)
-
-    axios.post('http://localhost:8080/api/houses/search', searchData, {
+    axios.post(`${BASE_URL_HOUSE}`, searchData, {
       headers: { 'Content-Type': 'application/json' },
     })
       .then(response => {
@@ -145,13 +145,13 @@ const SearchBar = () => {
           <CCol sm={6} md={2} className="justify-content-center pt-3">
             <CDropdown>
               <CDropdownToggle color="secondary">
-                {sortOrder ? ((sortOrder === 'ASC') ? "Price: Low to High" : "Price: High to Low") : "Sort by Price"}
+                {priceOrder ? ((priceOrder === 'ASC') ? "Price: Low to High" : "Price: High to Low") : "Sort by Price"}
               </CDropdownToggle>
               <CDropdownMenu>
-                <CDropdownItem onClick={() => setSortOrder('ASC')}>
+                <CDropdownItem onClick={() => setPriceOrder('ASC')} style={{cursor: 'pointer'}}>
                   Low to High
                 </CDropdownItem>
-                <CDropdownItem onClick={() => setSortOrder('DESC')}>
+                <CDropdownItem onClick={() => setPriceOrder('DESC')} style={{cursor: 'pointer'}}>
                   High to Low
                 </CDropdownItem>
               </CDropdownMenu>
@@ -211,7 +211,7 @@ const SearchBar = () => {
           {/* Price Range */}
           <CCol sm={8} md={4}>
             <div className="px-3 py-2">
-              <label className="form-label mb-1 fw-semibold">Price Range</label>
+              <label className="form-label mb-1 fw-semibold">Price Range (VND)</label>
               <div className="d-flex gap-2">
                 <IMaskInput
                   mask={Number} // Numeric mask
@@ -222,7 +222,7 @@ const SearchBar = () => {
                   id="minPrice"
                   placeholder="Min"
                   value={minPrice}
-                  onAccept={(val) => setMinPrice(val)}
+                  onAccept={(val, mask) => setMinPrice(mask.unmaskedValue)}
                 />
                 <IMaskInput
                   mask={Number} // Numeric mask
@@ -233,7 +233,7 @@ const SearchBar = () => {
                   id="maxPrice"
                   placeholder="Max"
                   value={maxPrice}
-                  onAccept={(val) => setMaxPrice(val)}
+                  onAccept={(val, mask) => setMaxPrice(mask.unmaskedValue)}
                 />
               </div>
             </div>
@@ -243,7 +243,7 @@ const SearchBar = () => {
           <CCol sm={4} md={2} className="pt-4 justify-content-center">
             <CButton
               color="primary"
-              className="ms-4"
+              className="ms-4 w-75"
               onClick={handleSearchButtonClick}
             >
               <Search size={20} />

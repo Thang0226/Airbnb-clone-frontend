@@ -10,8 +10,7 @@ const houseSlice = createSlice({
   },
   reducers: {
     setHouses: (state, action) => {
-      console.log("Đã nhận được dữ liệu từ dispatch trong reducer:", action.payload);
-      state.list = action.payload; // Cập nhật danh sách nhà từ API
+      state.list = action.payload;
     },
   },
 });
