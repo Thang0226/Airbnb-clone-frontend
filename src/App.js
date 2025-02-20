@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { HashRouter , Routes , Route , Navigate } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './redux/store'
 import './scss/custom.scss'
@@ -18,7 +18,6 @@ import RequireAuth from './components/auth/RequireAuth'
 import AdminLayout from './components/admin/AdminLayout'
 import Dashboard from './components/admin/Dashboard'
 import { UserList } from './components/admin/UserList'
-import AdminHostRequests from './components/admin/AdminHostRequests'
 import ChangePassword from './components/user-change-password/ChangePassword'
 
 export default function App() {
@@ -33,12 +32,10 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
 
-            <Route element={<RequireAuth allowedRoles={['ROLE_USER', 'ROLE_ADMIN']} />}>
-              <Route path="/owner" element={<HomeOwner />} />
-              <Route path="/create" element={<CreateHouse />} />
+            <Route element={<RequireAuth allowedRoles={['ROLE_USER' , 'ROLE_ADMIN', 'ROLE_HOST']} />}>
               <Route path="/profile" element={<UserProfile />} />
               <Route path="/profile/edit" element={<ProfileUpdateForm />} />
-              <Route path="/user/change-password" element={<ChangePassword/>} />
+              <Route path="/user/change-password" element={<ChangePassword />} />
             </Route>
           </Route>
 
@@ -49,6 +46,14 @@ export default function App() {
               <Route path="/admin/host/request" element={<HostRequests />} />
               <Route path="/admin/users" element={<UserList />} />
               {/* Các route admin khác có thể thêm tại đây */}
+            </Route>
+          </Route>
+
+          {/* Các route dành riêng cho Host */}
+          <Route element={<RequireAuth allowedRoles={['ROLE_HOST']} />}>
+            <Route element={<Layout />}>
+              <Route path="/owner" element={<HomeOwner />} />
+              <Route path="/create" element={<CreateHouse />} />
             </Route>
           </Route>
 
