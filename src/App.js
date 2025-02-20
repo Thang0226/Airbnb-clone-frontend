@@ -16,6 +16,7 @@ import Homepage from './components/homepage/Homepage'
 import HostRequests from './components/admin/HostRequests'
 import RequireAuth from './components/auth/RequireAuth'
 import AdminLayout from './components/admin/AdminLayout'
+import Dashboard from './components/admin/Dashboard'
 import ChangePassword from './components/user-change-password/ChangePassword'
 
 
@@ -46,7 +47,9 @@ export default function App() {
           {/* Các route dành riêng cho admin */}
           <Route element={<RequireAuth allowedRoles={['ROLE_ADMIN']} />}>
             <Route element={<AdminLayout />}>
-              <Route path="/admin" element={<HostRequests />} />
+              <Route path="/admin" element={<Dashboard />} />
+              <Route path="/admin/host/request" element={<HostRequests />} />
+              <Route path="/admin/users" element={<HostRequests />} />
               {/* Các route admin khác có thể thêm tại đây */}
             </Route>
           </Route>
