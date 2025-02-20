@@ -1,7 +1,6 @@
 import {
   CCol,
   CFormFeedback,
-  CFormFloating,
   CFormInput,
   CFormLabel,
   CInputGroup,

@@ -4,7 +4,7 @@ import {
   CFormInput,
   CCol,
   CRow,
-  CFormLabel, CInputGroupText, CInputGroup,
+  CFormLabel, CInputGroupText, CInputGroup, CCard, CCardHeader, CCardBody,
 } from '@coreui/react'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
@@ -18,6 +18,9 @@ import { setToken, setUsername, setPassword, deletePassword } from '../../redux/
 import { BASE_URL_USER } from '../../constants/api'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import FORMTextInput from '../_fragments/FORMTextInput'
+import FORMPasswordInput from '../_fragments/FORMPasswordInput'
+import SubmitButton from '../_fragments/FORMSubmitButton'
 
 export default function Login() {
   const navigate = useNavigate()
@@ -83,58 +86,43 @@ export default function Login() {
   }
 
   return (
-    <>
-      <h2 className={styles.title}>Login</h2>
-      <Formik initialValues={initialValues}
-              validationSchema={validationSchema}
-              onSubmit={handleSubmit}
-              innerRef={formikRef}>
-        {({ errors, touched, handleChange, handleSubmit }) => (
-          <CForm className={styles.formBox} onSubmit={handleSubmit}>
-            <CRow className="mb-3">
-              <CFormLabel htmlFor="username" className="col-sm-3 col-form-label">
-                Username:
-              </CFormLabel>
-              <CCol sm={8}>
-                <CFormInput type="text" placeholder="Enter username" id="username" name="username"
-                            value={registeredUsername} onChange={(e) => handleFormChange(e, handleChange)}
-                            required />
-                {touched.username && errors.username &&
-                  <p className={styles.error}>{errors.username}</p>}
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CFormLabel htmlFor="password" className="col-sm-3 col-form-label">
-                Password:
-              </CFormLabel>
-              <CCol sm={8}>
-                <CInputGroup>
-                  <CFormInput
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    placeholder="Enter password"
-                    value={registeredPassword} onChange={(e) => handleFormChange(e, handleChange)}
-                    required
-                  />
-                  <CInputGroupText
-                    style={{ cursor: "pointer" }}
-                    onClick={() => setShowPassword((prev) => !prev)}
-                  >
-                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-                  </CInputGroupText>
-                </CInputGroup>
-                {touched.password && errors.password &&
-                  <p className={styles.error}>{errors.password}</p>}
-              </CCol>
-            </CRow>
-            <CRow className="justify-content-center">
-              <CButton color="primary" type="submit" className="w-25">
-                Login
-              </CButton>
-            </CRow>
-          </CForm>)
-        }
-      </Formik>
-    </>
+      <div className="container mt-4">
+        <CRow
+          xs={{ cols: 1 }} md={{ cols: 1 }} lg={{ cols: 2 }}
+          className="justify-content-center mt-4"
+        >
+          <CCol>
+            <CCard className="shadow border-0">
+              <CCardHeader className="text-center p-4">
+                <h3>Login</h3>
+              </CCardHeader>
+              <CCardBody className="p-4">
+                <Formik initialValues={initialValues}
+                        validationSchema={validationSchema}
+                        onSubmit={handleSubmit}
+                        innerRef={formikRef}>
+                  {({ handleSubmit }) => (
+                    <CForm onSubmit={handleSubmit}>
+                      <FORMTextInput
+                        label="Username"
+                        name="username"
+                        placeholder="Enter username"
+                      />
+                      <FORMPasswordInput
+                        label="Password"
+                        name="password"
+                        placeholder="Enter password"
+                      />
+                      <SubmitButton
+                        label="Login"
+                      />
+                    </CForm>)
+                  }
+                </Formik>
+              </CCardBody>
+            </CCard>
+          </CCol>
+        </CRow>
+      </div>
   )
 }

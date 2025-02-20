@@ -52,7 +52,8 @@ export default function MenuBar() {
         navigate('/login')
       })
       .catch(err => {
-        toast.error(err.response.data, { hideProgressBar: true })
+        console.log(err)
+        toast.error(err.response.data || err.message, { hideProgressBar: true })
         navigate('/')
       })
   }
