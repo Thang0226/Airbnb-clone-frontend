@@ -13,8 +13,8 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function FORMPasswordInput ({
-                         label,
-                         name,
+                         label = "",
+                         name = "",
                          required = false,
                          readOnly = false,
                          disabled = false,

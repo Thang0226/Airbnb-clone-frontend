@@ -78,7 +78,7 @@ export default function MenuBar() {
               <CNavLink href="/#/owner">Airbnb Your Home</CNavLink>
             </CNavItem>
             <CNavItem>
-              <CNavLink href="#/admin">
+              <CNavLink href="/#/admin">
                 Admin Dashboard
               </CNavLink>
             </CNavItem>

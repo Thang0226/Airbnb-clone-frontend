@@ -130,7 +130,6 @@ export default function Register() {
     } catch (error) {
       console.log(error);
       toast.error('Registration failed!', { hideProgressBar: true })
-
     }
   }
 
@@ -197,5 +196,4 @@ export default function Register() {
         </CRow>
       </div>
   )
-
 }

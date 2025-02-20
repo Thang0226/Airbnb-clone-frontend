@@ -2,8 +2,8 @@ import {CCol, CFormFeedback, CFormFloating, CFormInput, CFormLabel, CRow} from "
 import {ErrorMessage, Field} from "formik";
 
 const FORMTextInput = ({
-                         label,
-                         name,
+                         label = "",
+                         name = "",
                          required = false,
                          readOnly = false,
                          disabled = false,
