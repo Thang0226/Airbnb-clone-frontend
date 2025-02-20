@@ -18,6 +18,7 @@ export default function HostRequests(){
   const [requests, setRequests] = useState([]);
 
   useEffect(() => {
+    document.title = 'Admin | Host Requests';
     fetchHostRequests();
   }, []);
 
