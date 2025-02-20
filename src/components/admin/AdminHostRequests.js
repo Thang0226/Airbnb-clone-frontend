@@ -1,59 +1,59 @@
-import { useEffect, useState } from 'react'
+import { useEffect , useState } from 'react'
 import axios from 'axios'
 import { BASE_URL_USER } from '../../constants/api'
 import { toast } from 'react-toastify'
 import {
-  CBadge,
-  CButton,
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CTable,
-  CTableBody,
-  CTableDataCell, CTableHead, CTableHeaderCell,
-  CTableRow,
+  CBadge ,
+  CButton ,
+  CCard ,
+  CCardBody ,
+  CCardHeader ,
+  CTable ,
+  CTableBody ,
+  CTableDataCell , CTableHead , CTableHeaderCell ,
+  CTableRow ,
 } from '@coreui/react'
 
-export default function AdminHostRequests(){
-  const [requests, setRequests] = useState([]);
+export default function AdminHostRequests() {
+  const [requests , setRequests] = useState ( [] )
 
-  useEffect(() => {
-    fetchHostRequests();
-  }, []);
+  useEffect ( () => {
+    fetchHostRequests ()
+  } , [])
 
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem ( 'token' )
 
   const fetchHostRequests = async () => {
     try {
-      const response = await axios.get(`${BASE_URL_USER}/host-requests`, {
+      const response = await axios.get ( `${BASE_URL_USER}/host-requests` , {
         headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setRequests(response.data);
+          Authorization: `Bearer ${token}` ,
+        } ,
+      } )
+      setRequests ( response.data )
     } catch (error) {
-      console.error('Error fetching requests:', error);
-      toast.error('Failed to load host requests');
+      console.error ( 'Error fetching requests:' , error )
+      toast.error ( 'Failed to load host requests' )
     }
-  };
+  }
 
   const handleApprove = async (requestId) => {
     try {
-      await axios.post(`${BASE_URL_USER}/host-requests/${requestId}/approve`,
-        {}, // empty body
+      await axios.post ( `${BASE_URL_USER}/host-requests/${requestId}/approve` ,
+        {} , // empty body
         {
           headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      );
-      toast.success('Host request approved!');
-      await fetchHostRequests(); // Refresh the list
+            'Authorization': `Bearer ${token}` ,
+          } ,
+        } ,
+      )
+      toast.success ( 'Host request approved!' )
+      await fetchHostRequests () // Refresh the list
     } catch (error) {
-      console.error('Error approving request:', error);
-      toast.error('Failed to approve request');
+      console.error ( 'Error approving request:' , error )
+      toast.error ( 'Failed to approve request' )
     }
-  };
+  }
 
   return (
     <CCard>
@@ -72,30 +72,30 @@ export default function AdminHostRequests(){
             </CTableRow>
           </CTableHead>
           <CTableBody>
-            {requests.map((request) => (
+            {requests.map ( (request) => (
               <CTableRow key={request.id}>
                 <CTableDataCell>{request.user.username}</CTableDataCell>
                 <CTableDataCell>{request.user.phone}</CTableDataCell>
                 <CTableDataCell>
-                  {new Date(request.requestDate).toLocaleDateString()}
+                  {new Date ( request.requestDate ).toLocaleDateString ()}
                 </CTableDataCell>
                 <CTableDataCell>
-                  <CBadge color="warning">{request.status}</CBadge>
+                  <CBadge color="warning rounded-pill">Pending</CBadge>
                 </CTableDataCell>
                 <CTableDataCell>
                   <CButton
-                    color="success"
+                    color="info"
                     size="sm"
-                    onClick={() => handleApprove(request.id)}
+                    onClick={() => handleApprove ( request.id )}
                   >
                     Approve
                   </CButton>
                 </CTableDataCell>
               </CTableRow>
-            ))}
+            ) )}
           </CTableBody>
         </CTable>
       </CCardBody>
     </CCard>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-// import SearchBarForHouseAvailable from './SearchBarForHouseAvailable'
+import SearchBarForHouseAvailable from './SearchBarForHouseAvailable'
 import HouseList from './HouseList'
 import HouseListBeforeSearch from './HouseListBeforeSearch'
 import { useEffect, useState } from 'react'
@@ -15,7 +15,7 @@ export default function Homepage() {
 
   return (
     <>
-      {/*<SearchBarForHouseAvailable onSearch={handleSearch} />*/}
+      <SearchBarForHouseAvailable onSearch={handleSearch} />
       {/* Hiển thị HouseList nếu đã tìm kiếm, ngược lại hiển thị HouseListBeforeSearch */}
       {searchPerformed ? <HouseList /> : <HouseListBeforeSearch />}
     </>

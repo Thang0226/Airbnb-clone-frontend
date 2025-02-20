@@ -25,7 +25,7 @@ export default function CreateHouse() {
     document.title = 'Airbnb | Add House'
   }, [])
 
-  // Upload files
+  // Upload Images
   const [selectedFiles, setSelectedFiles] = useState([])
   const [previews, setPreviews] = useState([])
   const handleFileChange = (event) => {
@@ -35,22 +35,20 @@ export default function CreateHouse() {
     )
     setSelectedFiles(validFiles)
 
-    // Create preview URLs
     const newPreviews = validFiles.map(file => ({
       file: file,
       url: URL.createObjectURL(file),
-    }))
+    })) // Create preview URLs
 
-    // Clean up old preview URLs
     previews.forEach(preview => URL.revokeObjectURL(preview.url))
-    setPreviews(newPreviews)
+    setPreviews(newPreviews) // Clean up old preview URLs
   }
+  // Remove Images
   const removeImage = (index) => {
     const newPreviews = [...previews]
     const newFiles = [...selectedFiles]
 
-    // Clean up the preview URL
-    URL.revokeObjectURL(previews[index].url)
+    URL.revokeObjectURL(previews[index].url) // Clean up the preview URL
 
     newPreviews.splice(index, 1)
     newFiles.splice(index, 1)
@@ -59,13 +57,12 @@ export default function CreateHouse() {
     setSelectedFiles(newFiles)
   }
 
-  // Suggest addresses from MapAPI
+  // MapAPI for Address input
   const [mapData, setMapData] = useState({
     name: '',
     address: '',
   })
   const [selectedAddressData, setSelectedAddressData] = useState(null)
-
   const handleAddressSelect = (addressData) => {
     const formattedAddress = addressData.formattedAddress || ''
     setMapData({
@@ -114,21 +111,18 @@ export default function CreateHouse() {
     } else if (mapData.address) {
       formData.append('address', mapData.address)
     }
-
-    // Append houseImages only if there are selected files
     if (selectedFiles.length > 0) {
       selectedFiles.forEach(file => {
         formData.append('houseImages', file)
       })
-    }
+    } // Append houseImages only if there are selected files
 
-    // Log FormData for debugging
     for (let pair of formData.entries()) {
       console.log(pair[0] + ', ' + pair[1])
     }
-    console.log('Address being sent:', formData.get('address'))
+    console.log('Address being sent:', formData.get('address')) // Log FormData for debugging
 
-    // Send request
+
     try {
       const response = await axios.post('http://localhost:8080/api/houses/create',
         formData,
@@ -138,7 +132,7 @@ export default function CreateHouse() {
             Authorization: `Bearer ${token}`,
           },
         },
-      )
+      ) // Send request
       console.log('House created successfully:', response.data)
       toast.success('House created successfully')
       navigate('/owner')

@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { HashRouter , Routes , Route , Navigate } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './redux/store'
 
@@ -18,16 +18,15 @@ import Homepage from './components/homepage/Homepage'
 import AdminHostRequests from './components/admin/AdminHostRequests'
 
 
-
 export default function App() {
-  const isLoggedIn = JSON.parse(localStorage.getItem('loggedIn'))
+  const isLoggedIn = JSON.parse ( localStorage.getItem ( 'loggedIn' ) )
   return (
     <Provider store={store}>
       <HashRouter>
         <Layout>
           <Routes>
             <Route path="/" element={<Homepage />} />
-            <Route path="/owner" element={isLoggedIn ? <HomeOwner /> : <Navigate to={'/'} />} />
+            <Route path="/owner" element={isLoggedIn  ? <HomeOwner /> : <Navigate to={'/'} />} />
             <Route path="/create" element={isLoggedIn ? <CreateHouse /> : <Navigate to={'/'} />} />
             <Route path="/search" element={<MapSample />} />
             <Route path="/login" element={<Login />} />

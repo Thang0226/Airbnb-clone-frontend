@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
-import { setHouses } from '../../redux/houseSlice'
+import { setHouses } from '../../redux/slices/houseSlice'
 import MapSample from './MapSampletoSearch'
 import './HouseList.css'
 import {

@@ -72,6 +72,7 @@ export default function Login() {
         localStorage.setItem('loggedIn', JSON.stringify(true))
         localStorage.setItem('username', res.data.username)
         toast.success('login successful', { hideProgressBar: true })
+
         navigate('/')
       })
       .catch((err) => {
