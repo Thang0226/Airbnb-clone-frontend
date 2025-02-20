@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { fetchUsers, updateUserStatus } from '../../redux/slices/userManagementSlice'
 import { DisplayLoading } from '../DisplayLoading'
 import { DisplayError } from '../DisplayError'
@@ -17,6 +17,7 @@ import {
 import { toast } from 'react-toastify'
 
 export const UserList = () => {
+  const [page, setPage] = useState(0)
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -24,8 +25,8 @@ export const UserList = () => {
   }, [])
 
   useEffect(() => {
-    dispatch(fetchUsers());
-  }, [dispatch]);
+    dispatch(fetchUsers(page));
+  }, [dispatch,page]);
 
   const { users, error, loading } = useSelector((state) => state.userManagement);
 
@@ -52,7 +53,7 @@ export const UserList = () => {
             </div>
           );
         }
-        dispatch(fetchUsers());
+        dispatch(fetchUsers(page));
       })
       .catch((error) => {
         toast.error("Error updating user status:", error);
@@ -113,9 +114,23 @@ export const UserList = () => {
                   ))}
                 </CTableBody>
               </CTable>
+              <Pagination className="mt-3 justify-content-center">
+                <Pagination.First onClick={() => handlePageChange(0)} disabled={page === 0} />
+                <Pagination.Prev onClick={() => handlePageChange(page - 1)} disabled={page === 0} />
+
+                {[...Array(totalPages)].map((_, index) => (
+                  <Pagination.Item key={index} active={index === page} onClick={() => handlePageChange(index)}>
+                    {index + 1}
+                  </Pagination.Item>
+                ))}
+
+                <Pagination.Next onClick={() => handlePageChange(page + 1)} disabled={page === totalPages - 1} />
+                <Pagination.Last onClick={() => handlePageChange(totalPages - 1)} disabled={page === totalPages - 1} />
+              </Pagination>
             </CCardBody>
           </CCard>
         </CCol>
+
       </CRow>
     </div>
   )
