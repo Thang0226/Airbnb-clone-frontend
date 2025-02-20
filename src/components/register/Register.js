@@ -4,7 +4,7 @@ import {
   CFormInput,
   CCol,
   CRow,
-  CFormLabel, CFormCheck, CInputGroup, CInputGroupText,
+  CFormLabel, CFormCheck, CInputGroup, CInputGroupText, CCard, CCardHeader, CCardBody,
 } from '@coreui/react'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
@@ -18,6 +18,9 @@ import { setUsername, setPassword } from '../../redux/slices/accountSlice'
 import { BASE_URL_USER } from '../../constants/api'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import FORMTextInput from '../_fragments/FORMTextInput'
+import FORMPasswordInput from '../_fragments/FORMPasswordInput'
+import SubmitButton from '../_fragments/FORMSubmitButton'
 
 export default function Register() {
   const navigate = useNavigate()
@@ -125,102 +128,62 @@ export default function Register() {
   }
 
   return (
-    <>
-      <h2 className={styles.title}>Register New Account</h2>
-      <Formik initialValues={initialValues}
-              validationSchema={validationSchema}
-              onSubmit={handleSubmit}
-              innerRef={formikRef}>
-        {({ errors, touched, handleChange, handleSubmit, values }) => (
-          <CForm className={styles.formBox} onSubmit={handleSubmit}>
-            <CRow className="mb-3">
-              <CFormLabel htmlFor="username" className="col-sm-4 col-form-label">
-                Username:
-              </CFormLabel>
-              <CCol sm={8}>
-                <CFormInput type="text" placeholder="Enter username" id="username" name="username"
-                            onChange={handleChange} required />
-                {touched.username && errors.username &&
-                  <p className="text-warning-emphasis">{errors.username}</p>}
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CFormLabel htmlFor="phone" className="col-sm-4 col-form-label">
-                Phone:
-              </CFormLabel>
-              <CCol sm={8}>
-                <CFormInput type="text" placeholder="0123456789" id="phone" name="phone"
-                            onChange={handleChange}
-                            required />
-                {touched.phone && errors.phone && <p className="text-warning-emphasis">{errors.phone}</p>}
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CFormLabel htmlFor="password" className="col-sm-4 col-form-label">
-                Password:
-              </CFormLabel>
-              <CCol sm={8}>
-                <CInputGroup>
-                  <CFormInput
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    placeholder="Enter password"
-                    onChange={handleChange}
-                    required
-                  />
-                  <CInputGroupText
-                    style={{ cursor: "pointer" }}
-                    onClick={() => setShowPassword((prev) => !prev)}
-                  >
-                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-                  </CInputGroupText>
-                </CInputGroup>
-                {touched.password && errors.password &&
-                  <p className={styles.error}>{errors.password}</p>}
-              </CCol>
-            </CRow>
-            <CRow className="mb-4">
-              <CFormLabel htmlFor="confirm_password" className="col-sm-4 col-form-label">
-                Confirm Password:
-              </CFormLabel>
-              <CCol sm={8}>
-                <CInputGroup>
-                  <CFormInput
-                    type={showConfirmPassword ? "text" : "password"}
-                    name="confirm_password"
-                    placeholder="Enter password"
-                    onChange={handleChange}
-                    required
-                  />
-                  <CInputGroupText
-                    style={{ cursor: "pointer" }}
-                    onClick={() => setShowConfirmPassword((prev) => !prev)}
-                  >
-                    <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
-                  </CInputGroupText>
-                </CInputGroup>
-                {touched.confirm_password && errors.confirm_password &&
-                  <p className="text-warning-emphasis">{errors.confirm_password}</p>}
-              </CCol>
-            </CRow>
-            <CRow className="mb-4">
-                <CFormCheck
-                  id="isHost"
-                  name="isHost"
-                  label="Register as a Host"
-                  checked={values.isHost}
-                  onChange={handleChange}
-                />
-            </CRow>
-            <CRow className="justify-content-center">
-              <CButton color="primary" type="submit" className="w-25">
-                Register
-              </CButton>
-            </CRow>
-          </CForm>)
-        }
-      </Formik>
-    </>
+      <div className="container mt-0">
+        <CRow
+          xs={{ cols: 1 }} md={{ cols: 1 }} lg={{ cols: 2 }}
+          className="justify-content-center mt-0"
+        >
+          <CCol>
+            <CCard className="shadow border-0">
+              <CCardHeader className="text-center p-4">
+                <h3>Register New Account</h3>
+              </CCardHeader>
+              <CCardBody className="p-4">
+                <Formik initialValues={initialValues}
+                        validationSchema={validationSchema}
+                        onSubmit={handleSubmit}
+                        innerRef={formikRef}>
+                  {({ handleSubmit }) => (
+                    <CForm onSubmit={handleSubmit}>
+                      <FORMTextInput
+                        label="Username"
+                        name="username"
+                        placeholder="Enter username"
+                      />
+                      <FORMPasswordInput
+                        label="Password"
+                        name="password"
+                        placeholder="Enter password"
+                      />
+                      <FORMPasswordInput
+                        label="Confirm Password"
+                        name="confirm_password"
+                        placeholder="Enter confirm password"
+                      />
+                      <FORMTextInput
+                        label="Phone"
+                        name="phone"
+                        placeholder="0123456789"
+                        required
+                      />
+                      <CRow className="m-auto mb-4">
+                        <CFormCheck
+                          id="isHost"
+                          name="isHost"
+                          label="Register as a Host"
+                        />
+                      </CRow>
+                      <SubmitButton
+                        label="Register"
+                      />
+                    </CForm>)
+                  }
+                </Formik>
+              </CCardBody>
+            </CCard>
+          </CCol>
+        </CRow>
+      </div>
   )
 
 }
