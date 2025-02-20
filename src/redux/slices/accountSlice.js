@@ -17,7 +17,7 @@ export const accountSlice = createSlice({
     setToken: (state, action) => {
       state.token = action.payload || ''
     },
-    deletePassword: (state, action) => {
+    deletePassword: (state) => {
       state.password = ''
     },
     resetAccount: (state) => {

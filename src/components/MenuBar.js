@@ -52,8 +52,14 @@ export default function MenuBar() {
         navigate('/login')
       })
       .catch(err => {
-        toast.error(err.response.data, { hideProgressBar: true })
+        console.log(err)
+        toast.error(err.response.data || err.message, { hideProgressBar: true })
+        navigate('/')
       })
+  }
+
+  const handleChangePassword = () => {
+    navigate('/user/change-password')
   }
 
   return (
@@ -110,6 +116,9 @@ export default function MenuBar() {
                 <>
                   <CDropdownItem href="/#/profile">Profile</CDropdownItem>
                   <CDropdownDivider />
+                  <CDropdownItem onClick={handleChangePassword} style={{ cursor: 'pointer' }}>
+                    Change Password
+                  </CDropdownItem>
                   <CDropdownItem onClick={handleLogout} style={{ cursor: 'pointer' }}>
                     Logout
                   </CDropdownItem>

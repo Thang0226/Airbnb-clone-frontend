@@ -18,6 +18,8 @@ import RequireAuth from './components/auth/RequireAuth'
 import AdminLayout from './components/admin/AdminLayout'
 import Dashboard from './components/admin/Dashboard'
 import { UserList } from './components/admin/UserList'
+import AdminHostRequests from './components/admin/AdminHostRequests'
+import ChangePassword from './components/user-change-password/ChangePassword'
 
 export default function App() {
   return (
@@ -36,6 +38,7 @@ export default function App() {
               <Route path="/create" element={<CreateHouse />} />
               <Route path="/profile" element={<UserProfile />} />
               <Route path="/profile/edit" element={<ProfileUpdateForm />} />
+              <Route path="/user/change-password" element={<ChangePassword/>} />
             </Route>
           </Route>
 

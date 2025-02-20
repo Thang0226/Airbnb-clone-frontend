@@ -4,22 +4,29 @@ import {
   CFormInput,
   CCol,
   CRow,
-  CFormLabel, CFormCheck,
+  CFormLabel, CFormCheck, CInputGroup, CInputGroupText, CCard, CCardHeader, CCardBody,
 } from '@coreui/react'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import styles from './styles.module.css'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { setUsername, setPassword } from '../../redux/slices/accountSlice'
 import { BASE_URL_USER } from '../../constants/api'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import FORMTextInput from '../_fragments/FORMTextInput'
+import FORMPasswordInput from '../_fragments/FORMPasswordInput'
+import SubmitButton from '../_fragments/FORMSubmitButton'
 
 export default function Register() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const REGEX = {
     username: /^[a-zA-Z0-9_]{4,30}$/,
@@ -121,76 +128,62 @@ export default function Register() {
   }
 
   return (
-    <>
-      <h2 className={styles.title}>Register New Account</h2>
-      <Formik initialValues={initialValues}
-              validationSchema={validationSchema}
-              onSubmit={handleSubmit}
-              innerRef={formikRef}>
-        {({ errors, touched, handleChange, handleSubmit, values }) => (
-          <CForm className={styles.formBox} onSubmit={handleSubmit}>
-            <CRow className="mb-3">
-              <CFormLabel htmlFor="username" className="col-sm-4 col-form-label">
-                Username:
-              </CFormLabel>
-              <CCol sm={8}>
-                <CFormInput type="text" placeholder="user_name123" id="username" name="username"
-                            onChange={handleChange} required />
-                {touched.username && errors.username &&
-                  <p className="text-warning-emphasis">{errors.username}</p>}
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CFormLabel htmlFor="phone" className="col-sm-4 col-form-label">
-                Phone:
-              </CFormLabel>
-              <CCol sm={8}>
-                <CFormInput type="text" placeholder="0123456789" id="phone" name="phone"
-                            onChange={handleChange}
-                            required />
-                {touched.phone && errors.phone && <p className="text-warning-emphasis">{errors.phone}</p>}
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CFormLabel htmlFor="password" className="col-sm-4 col-form-label">
-                Password:
-              </CFormLabel>
-              <CCol sm={8}>
-                <CFormInput type="password" id="password" name="password" onChange={handleChange}
-                            required />
-                {touched.password && errors.password &&
-                  <p className="text-warning-emphasis">{errors.password}</p>}
-              </CCol>
-            </CRow>
-            <CRow className="mb-4">
-              <CFormLabel htmlFor="confirm_password" className="col-sm-4 col-form-label">
-                Confirm Password:
-              </CFormLabel>
-              <CCol sm={8}>
-                <CFormInput type="password" id="confirm_password" name="confirm_password"
-                            onChange={handleChange} required />
-                {touched.confirm_password && errors.confirm_password &&
-                  <p className="text-warning-emphasis">{errors.confirm_password}</p>}
-              </CCol>
-            </CRow>
-            <CRow className="mb-4">
-              <CCol sm={8}>
-                <CFormCheck
-                  id="isHost"
-                  name="isHost"
-                  label="Register as a Host"
-                  checked={values.isHost}
-                  onChange={handleChange}
-                />
-              </CCol>
-            </CRow>
-            <CButton color="primary" type="submit">
-              Register
-            </CButton>
-          </CForm>)
-        }
-      </Formik>
-    </>
+      <div className="container mt-0">
+        <CRow
+          xs={{ cols: 1 }} md={{ cols: 1 }} lg={{ cols: 2 }}
+          className="justify-content-center mt-0"
+        >
+          <CCol>
+            <CCard className="shadow border-0">
+              <CCardHeader className="text-center p-4">
+                <h3>Register New Account</h3>
+              </CCardHeader>
+              <CCardBody className="p-4">
+                <Formik initialValues={initialValues}
+                        validationSchema={validationSchema}
+                        onSubmit={handleSubmit}
+                        innerRef={formikRef}>
+                  {({ handleSubmit }) => (
+                    <CForm onSubmit={handleSubmit}>
+                      <FORMTextInput
+                        label="Username"
+                        name="username"
+                        placeholder="Enter username"
+                      />
+                      <FORMPasswordInput
+                        label="Password"
+                        name="password"
+                        placeholder="Enter password"
+                      />
+                      <FORMPasswordInput
+                        label="Confirm Password"
+                        name="confirm_password"
+                        placeholder="Enter confirm password"
+                      />
+                      <FORMTextInput
+                        label="Phone"
+                        name="phone"
+                        placeholder="0123456789"
+                        required
+                      />
+                      <CRow className="m-auto mb-4">
+                        <CFormCheck
+                          id="isHost"
+                          name="isHost"
+                          label="Register as a Host"
+                        />
+                      </CRow>
+                      <SubmitButton
+                        label="Register"
+                      />
+                    </CForm>)
+                  }
+                </Formik>
+              </CCardBody>
+            </CCard>
+          </CCol>
+        </CRow>
+      </div>
   )
 
 }
