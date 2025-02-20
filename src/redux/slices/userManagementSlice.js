@@ -10,15 +10,15 @@ export const initialState = {
 
 export const fetchUsers = createAsyncThunk(
   'userManagement/fetchUsers',
-  async (thunkAPI) => {
+  async (page, thunkAPI) => {
     const token = localStorage.getItem('token')
     try {
-      const response = await axios.get(`${BASE_URL}/api/admin/users`, {
+      const response = await axios.get(`${BASE_URL}/api/admin/users?page=${page}&size=10`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-      return response.data
+      return response.data.content
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving profile data!')
     }

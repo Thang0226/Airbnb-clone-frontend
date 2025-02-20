@@ -18,7 +18,6 @@ import RequireAuth from './components/auth/RequireAuth'
 import AdminLayout from './components/admin/AdminLayout'
 import Dashboard from './components/admin/Dashboard'
 import { UserList } from './components/admin/UserList'
-import AdminHostRequests from './components/admin/AdminHostRequests'
 import ChangePassword from './components/user-change-password/ChangePassword'
 
 export default function App() {

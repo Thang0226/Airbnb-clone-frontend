@@ -1,23 +1,18 @@
 import {
-  CButton,
   CForm,
-  CFormInput,
   CCol,
   CRow,
-  CFormLabel, CFormCheck, CInputGroup, CInputGroupText, CCard, CCardHeader, CCardBody,
+  CFormCheck, CCard, CCardHeader, CCardBody,
 } from '@coreui/react'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-import styles from './styles.module.css'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { setUsername, setPassword } from '../../redux/slices/accountSlice'
 import { BASE_URL_USER } from '../../constants/api'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import FORMTextInput from '../_fragments/FORMTextInput'
 import FORMPasswordInput from '../_fragments/FORMPasswordInput'
 import SubmitButton from '../_fragments/FORMSubmitButton'
@@ -25,8 +20,6 @@ import SubmitButton from '../_fragments/FORMSubmitButton'
 export default function Register() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const REGEX = {
     username: /^[a-zA-Z0-9_]{4,30}$/,
