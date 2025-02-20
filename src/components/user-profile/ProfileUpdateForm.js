@@ -13,8 +13,8 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUserProfile, updateUserProfile } from '../../redux/slices/userProfileSlice'
 import { toast } from 'react-toastify'
-import UPAvatarInput from './fragments/UPAvatarInput'
-import UPTextInput from './fragments/UPTextInput'
+import FORMAvatarInput from '../_fragments/FORMAvatarInput'
+import FORMTextInput from '../_fragments/FORMTextInput'
 
 const FILE_SIZE_LIMIT = 5 * 1024 * 1024 // 5MB
 const SUPPORTED_FORMATS = ['image/jpeg', 'image/png', 'image/jpg']
@@ -170,29 +170,29 @@ const ProfileUpdateForm = () => {
               >
                 {({ isSubmitting, setFieldValue, setFieldError }) => (
                   <Form>
-                    <UPTextInput label="Username" name="username" readOnly />
+                    <FORMTextInput label="Username" name="username" readOnly />
 
-                    <UPAvatarInput
+                    <FORMAvatarInput
                       avatarPreview={avatarPreview}
                       userProfile={userProfile}
                       handleAvatarChange={handleAvatarChange}
                       setFieldValue={setFieldValue}
                     />
 
-                    <UPTextInput
+                    <FORMTextInput
                       label="Full Name"
                       name="fullName"
                       placeholder="Enter your full name"
                       required
                     />
 
-                    <UPTextInput
+                    <FORMTextInput
                       label="Address"
                       name="address"
                       placeholder="Enter your address"
                     />
 
-                    <UPTextInput
+                    <FORMTextInput
                       label="Phone Number"
                       name="phone"
                       placeholder="Enter your phone number"
