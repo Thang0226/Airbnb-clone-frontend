@@ -8,7 +8,7 @@ import { AdminSideBar } from './AdminSideBar'
 const AdminLayout = () => {
   return (
     <div>
-      <ToastContainer position="top-right" pauseOnFocusLoss={false} />
+      <ToastContainer position="top-right" pauseOnFocusLoss={false} hideProgressBar={true} />
 
       {/* Sidebar */}
       <AdminSideBar/>
