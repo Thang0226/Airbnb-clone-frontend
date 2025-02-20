@@ -20,8 +20,6 @@ import Dashboard from './components/admin/Dashboard'
 import { UserList } from './components/admin/UserList'
 import ChangePassword from './components/user-change-password/ChangePassword'
 
-
-
 export default function App() {
   return (
     <Provider store={store}>
@@ -30,9 +28,6 @@ export default function App() {
           {/* Các route dùng layout cho user */}
           <Route element={<Layout />}>
             <Route path="/" element={<Homepage />} />
-            <Route path="/user/change-password" element={<ChangePassword/>} />
-            <Route path="/owner" element={isLoggedIn ? <HomeOwner /> : <Navigate to={'/'} />} />
-            <Route path="/create" element={isLoggedIn ? <CreateHouse /> : <Navigate to={'/'} />} />
             <Route path="/search" element={<MapSample />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
@@ -42,6 +37,7 @@ export default function App() {
               <Route path="/create" element={<CreateHouse />} />
               <Route path="/profile" element={<UserProfile />} />
               <Route path="/profile/edit" element={<ProfileUpdateForm />} />
+              <Route path="/user/change-password" element={<ChangePassword/>} />
             </Route>
           </Route>
 
