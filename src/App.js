@@ -13,30 +13,42 @@ import UserProfile from './components/user-profile/UserProfile'
 import ProfileUpdateForm from './components/user-profile/ProfileUpdateForm'
 import Layout from './components/Layout'
 import Homepage from './components/homepage/Homepage'
-import AdminHostRequests from './components/admin/AdminHostRequests'
-
-
+import HostRequests from './components/admin/HostRequests'
+import RequireAuth from './components/auth/RequireAuth'
+import AdminLayout from './components/admin/AdminLayout'
 
 export default function App() {
-  const isLoggedIn = JSON.parse(localStorage.getItem('loggedIn'))
   return (
     <Provider store={store}>
       <HashRouter>
-        <Layout>
-          <Routes>
+        <Routes>
+          {/* Các route dùng layout cho user */}
+          <Route element={<Layout />}>
             <Route path="/" element={<Homepage />} />
-            <Route path="/owner" element={isLoggedIn ? <HomeOwner /> : <Navigate to={'/'} />} />
-            <Route path="/create" element={isLoggedIn ? <CreateHouse /> : <Navigate to={'/'} />} />
             <Route path="/search" element={<MapSample />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={isLoggedIn ? <UserProfile /> : <Navigate to={'/'} />} />
-            <Route path="/profile/edit" element={isLoggedIn ? <ProfileUpdateForm /> : <Navigate to={'/'} />} />
-            <Route path="/admin" element={isLoggedIn ? <AdminHostRequests /> : <Navigate to={'/'} />} />
-          </Routes>
-        </Layout>
+
+            <Route element={<RequireAuth allowedRoles={['ROLE_USER', 'ROLE_ADMIN']} />}>
+              <Route path="/owner" element={<HomeOwner />} />
+              <Route path="/create" element={<CreateHouse />} />
+              <Route path="/profile" element={<UserProfile />} />
+              <Route path="/profile/edit" element={<ProfileUpdateForm />} />
+            </Route>
+          </Route>
+
+          {/* Các route dành riêng cho admin */}
+          <Route element={<RequireAuth allowedRoles={['ROLE_ADMIN']} />}>
+            <Route element={<AdminLayout />}>
+              <Route path="/admin" element={<HostRequests />} />
+              {/* Các route admin khác có thể thêm tại đây */}
+            </Route>
+          </Route>
+
+          {/* Route không khớp sẽ chuyển hướng về trang chủ */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </HashRouter>
     </Provider>
   )
 }
-

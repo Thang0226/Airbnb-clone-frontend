@@ -1,9 +1,10 @@
-import { CContainer, CFooter } from '@coreui/react'
-import MenuBar from './MenuBar'
 import { ToastContainer } from 'react-toastify'
+import MenuBar from '../MenuBar'
+import { CContainer, CFooter } from '@coreui/react'
 import { Outlet } from 'react-router-dom'
 
-export default function Layout() {
+
+const AdminLayout = ({ children }) => {
   return (
     <div className="d-flex flex-column min-h-screen min-vh-100">
       <ToastContainer position="top-right" pauseOnFocusLoss={false} />
@@ -22,3 +23,5 @@ export default function Layout() {
     </div>
   )
 }
+
+export default AdminLayout
