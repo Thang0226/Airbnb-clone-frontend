@@ -1,23 +1,18 @@
 import {
-  CButton,
   CForm,
-  CFormInput,
   CCol,
   CRow,
-  CFormLabel, CInputGroupText, CInputGroup, CCard, CCardHeader, CCardBody,
+  CCard, CCardHeader, CCardBody,
 } from '@coreui/react'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-import styles from './styles.module.css'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { setToken, setUsername, setPassword, deletePassword } from '../../redux/slices/accountSlice'
+import { setToken, setUsername, deletePassword } from '../../redux/slices/accountSlice'
 import { BASE_URL_USER } from '../../constants/api'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import FORMTextInput from '../_fragments/FORMTextInput'
 import FORMPasswordInput from '../_fragments/FORMPasswordInput'
 import SubmitButton from '../_fragments/FORMSubmitButton'
@@ -27,31 +22,19 @@ export default function Login() {
   const registeredUsername = useSelector(state => state.account.username)
   const registeredPassword = useSelector(state => state.account.password)
   const dispatch = useDispatch()
-  const [showPassword, setShowPassword] = useState(false);
   const REGEX = {
     username: /^[a-zA-Z0-9_]{4,30}$/,
     password: /^[a-zA-Z0-9!@#$^&)(+=._-]{6,32}$/,
   }
 
   const initialValues = {
-    username: '',
-    password: '',
+    username: registeredUsername,
+    password: registeredPassword,
   }
-  const formikRef = useRef(null)
 
   useEffect(() => {
     document.title = 'Airbnb | Login'
   }, [])
-
-
-  const handleFormChange = (e, formikHandleChange) => {
-    formikHandleChange(e)
-    if (e.target.name === 'username') {
-      dispatch(setUsername(e.target.value))
-    } else {
-      dispatch(setPassword(e.target.value))
-    }
-  }
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -64,11 +47,10 @@ export default function Login() {
       .matches(REGEX.password, 'Invalid password'),
   })
 
-  const handleSubmit = async () => {
-    const formValues = formikRef.current.values
+  const handleSubmit = async (values) => {
     await axios.post(`${BASE_URL_USER}/login`, {
-      username: formValues.username || registeredUsername,
-      password: formValues.password || registeredPassword,
+      username: values.username,
+      password: values.password,
     })
       .then((res) => {
         dispatch(setToken(res.data.token))
@@ -99,8 +81,7 @@ export default function Login() {
               <CCardBody className="p-4">
                 <Formik initialValues={initialValues}
                         validationSchema={validationSchema}
-                        onSubmit={handleSubmit}
-                        innerRef={formikRef}>
+                        onSubmit={handleSubmit}>
                   {({ handleSubmit }) => (
                     <CForm onSubmit={handleSubmit}>
                       <FORMTextInput

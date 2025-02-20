@@ -14,7 +14,7 @@ export default function Layout({ children }) {
 
       {/* Footer */}
 
-      <CFooter className=" fixed-bottom primary-bg-subtle p-4 mt-auto justify-content-center">
+      <CFooter className=" primary-bg-subtle p-4 mt-auto justify-content-center">
         © 2025 AirBnb Clone Application. Made by TTLD team. All rights reserved.
 
       </CFooter>

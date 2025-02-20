@@ -1,23 +1,18 @@
 import {
-  CButton,
   CForm,
-  CFormInput,
   CCol,
   CRow,
-  CFormLabel, CFormCheck, CInputGroup, CInputGroupText, CCard, CCardHeader, CCardBody,
+  CFormCheck, CCard, CCardHeader, CCardBody,
 } from '@coreui/react'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-import styles from './styles.module.css'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { setUsername, setPassword } from '../../redux/slices/accountSlice'
 import { BASE_URL_USER } from '../../constants/api'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import FORMTextInput from '../_fragments/FORMTextInput'
 import FORMPasswordInput from '../_fragments/FORMPasswordInput'
 import SubmitButton from '../_fragments/FORMSubmitButton'
@@ -25,12 +20,11 @@ import SubmitButton from '../_fragments/FORMSubmitButton'
 export default function Register() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const REGEX = {
     username: /^[a-zA-Z0-9_]{4,30}$/,
     password: /^[a-zA-Z0-9!@#$^&)(+=._-]{6,32}$/,
+    email: /^[a-z0-9._%+]+@[a-z0-9_]+.[a-z]{2,5}$/,
     phone: /^0[0-9]{9}$/,
   }
 
@@ -41,7 +35,6 @@ export default function Register() {
     confirm_password: '',
     isHost: false,
   }
-  const formikRef = useRef(null)
 
   useEffect(() => {
     document.title = 'Airbnb | Register'
@@ -80,7 +73,7 @@ export default function Register() {
             })
           return true
         } catch (error) {
-          // console.log(error)
+          console.log(error)
           return false
         }
       }),
@@ -96,25 +89,39 @@ export default function Register() {
           return this.parent.password === value
         },
       ),
-
-
+    email: Yup.string()
+      .matches(REGEX.password, 'Invalid email address')
+      .test('Duplicate email', 'Email already existed', async function(value) {
+        if (!value) return true
+        try {
+          await axios.post(`${BASE_URL_USER}/register/validate-email`, value,
+            {
+              headers: {
+                'Content-Type': 'text/plain',
+              },
+            })
+          return true
+        } catch (error) {
+          console.log(error)
+          return false
+        }
+      }),
     isHost: Yup.boolean(),
   })
 
-  const handleSubmit = async () => {
-    const formValues = formikRef.current.values
-    console.log('Form Values:', formValues)
+  const handleSubmit = async (values) => {
     try {
       await axios.post(`${BASE_URL_USER}/register`, {
-        username: formValues.username,
-        password: formValues.password,
-        phone: formValues.phone,
-        host: formValues.isHost,
+        username: values.username,
+        password: values.password,
+        phone: values.phone,
+        email: values.email,
+        host: values.isHost,
       })
-      dispatch(setUsername(formValues.username))
-      dispatch(setPassword(formValues.password))
+      dispatch(setUsername(values.username))
+      dispatch(setPassword(values.password))
 
-      if (formValues.isHost) {
+      if (values.isHost) {
         toast.info('Your host request has been submitted for review!', { hideProgressBar: true })
       } else {
         toast.success('Registered successfully!', { hideProgressBar: true })
@@ -141,8 +148,7 @@ export default function Register() {
               <CCardBody className="p-4">
                 <Formik initialValues={initialValues}
                         validationSchema={validationSchema}
-                        onSubmit={handleSubmit}
-                        innerRef={formikRef}>
+                        onSubmit={handleSubmit}>
                   {({ handleSubmit }) => (
                     <CForm onSubmit={handleSubmit}>
                       <FORMTextInput
@@ -164,6 +170,12 @@ export default function Register() {
                         label="Phone"
                         name="phone"
                         placeholder="0123456789"
+                        required
+                      />
+                      <FORMTextInput
+                        label="Email"
+                        name="email"
+                        placeholder="user@email.com"
                         required
                       />
                       <CRow className="m-auto mb-4">
