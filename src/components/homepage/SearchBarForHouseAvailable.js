@@ -17,7 +17,7 @@ import {
   CDropdownMenu,
   CDropdownItem,
 } from '@coreui/react'
-import { Search, Calendar, Users, BedDouble, Bath } from 'lucide-react'
+import { Search, Calendar, BedDouble, Bath } from 'lucide-react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { IMaskInput } from 'react-imask'

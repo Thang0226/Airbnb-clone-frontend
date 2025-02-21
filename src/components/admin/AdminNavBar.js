@@ -105,7 +105,7 @@ export default function AdminNavBar() {
             <CDropdownMenu>
               {token ? (
                 <>
-                  <CDropdownItem href="/#/profile">Profile</CDropdownItem>
+                  <CDropdownItem href="/#/admin/profile">Profile</CDropdownItem>
                   <CDropdownDivider />
                   <CDropdownItem onClick={handleLogout} style={{ cursor: 'pointer' }}>
                     Logout
