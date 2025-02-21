@@ -8,7 +8,7 @@ const HouseCarousel = ({ images, height = '300px' }) => {
         if (images && images.length > 0) {
             const timer = setInterval(() => {
                 setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length)
-            }, 7000) // thay đổi hình mỗi 3 giây
+            }, 3000)
             return () => clearInterval(timer)
         }
     }, [images])
