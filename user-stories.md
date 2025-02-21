@@ -1,8 +1,8 @@
-1. Là người dùng, tôi muốn có thể đăng ký một tài khoản vào hệ thống
-2. Là người dùng, tôi muốn có thể đăng nhập vào hệ thống
-3. Là người dùng, tôi muốn có thể cập nhật thông tin profile của mình
+1. Là người dùng, tôi muốn có thể đăng ký một tài khoản vào hệ thống ✅
+2. Là người dùng, tôi muốn có thể đăng nhập vào hệ thống ✅
+3. Là người dùng, tôi muốn có thể cập nhật thông tin profile của mình ✅
 4. Là người dùng, tôi muốn có thể thay đổi mật khẩu của mình
-5. Là người dùng, tôi muốn có thể đăng xuất khỏi hệ thống
+5. Là người dùng, tôi muốn có thể đăng xuất khỏi hệ thống ✅
 6. Là người dùng, tôi muốn có thể đăng nhập bằng tài khoản Mạng Xã Hội
 7. Là người dùng, tôi muốn có thể đăng ký một tài khoản để làm chủ nhà
 8. Là chủ nhà, tôi muốn có thể đăng nhập vào hệ thống
@@ -19,11 +19,11 @@
 19. Là Admin tôi muốn tạo trang chủ để khách hàng vào xem/thuê nhà
 20. Là Admin tôi muốn có menu top để lưu thông tin cá nhân của user
 21. Là Admin tôi muốn xem banner của trang chủ
-22. Là Admin, tôi muốn khung tìm kiếm nhà đang cho thuê ở trang chủ để người dùng sử dụng
+22. Là Admin, tôi muốn khung tìm kiếm nhà đang cho thuê ở trang chủ để người dùng sử dụng ✅
 23. Là Admin, tôi muốn có top 5 căn phòng có nhiều lượt thuê nhất ở trang chủ để người dùng nhìn thấy
-24. Là Admin, tôi muốn có danh sách các nhà đang cho thuê ở trong hệ thống trang chủ để người dùng nhìn thấy
+24. Là Admin, tôi muốn có danh sách các nhà đang cho thuê ở trong hệ thống trang chủ để người dùng nhìn thấy ✅
 25. Là Admin tôi muốn hiển thị footer với thông tin chính xác
-26. Là chủ nhà, tôi muốn có thể đăng nhà để cho thuê.
+26. Là chủ nhà, tôi muốn có thể đăng nhà để cho thuê. ✅
 27. Là chủ nhà, tôi muốn có thể cập nhật thông tin ngôi nhà để cho thuê.
 28. Là chủ nhà, tôi muốn có thể đăng nhiều ảnh của nhà mà mình muốn cho thuê
 29. Là chủ nhà, tôi muốn có thể cập nhật trạng thái nhà cho thuê cho từng giai đoạn thời gian

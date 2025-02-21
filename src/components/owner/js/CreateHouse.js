@@ -2,7 +2,6 @@ import MapSample from './MapSample'
 import { useNavigate } from 'react-router-dom'
 import React, { useRef, useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
-import styles from '../css/CreateHouse.module.css'
 import {
   CContainer,
   CForm,
@@ -20,6 +19,10 @@ export default function CreateHouse() {
   const navigate = useNavigate()
   const token = useSelector(state => state.account.token)
   const username = useSelector(state => state.account.username)
+
+  useEffect(() => {
+    document.title = 'Airbnb | Add House'
+  }, [])
 
   // Upload files
   const [selectedFiles, setSelectedFiles] = useState([])

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
-import { setHouses } from '../../redux/houseSlice'
+import { setHouses } from '../../redux/slices/houseSlice'
 import MapSample from './MapSampletoSearch'
 import './HouseList.css'
 import {
@@ -16,15 +16,12 @@ import {
   CDropdownToggle,
   CDropdownMenu,
   CDropdownItem,
-  CModal,
-  CModalHeader,
-  CModalBody,
-  CModalTitle,
 } from '@coreui/react'
-import { Search, Calendar, Users } from 'lucide-react'
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
+import { Search, Calendar, Users, BedDouble, Bath } from 'lucide-react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import { IMaskInput } from 'react-imask'
+import { BASE_URL_HOUSE } from '../../constants/api'
 
 // Fix Leaflet default icon issue
 delete L.Icon.Default.prototype._getIconUrl
@@ -37,114 +34,51 @@ L.Icon.Default.mergeOptions({
     'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 })
 
-// Component to change map view
-const ChangeView = ({ center, zoom }) => {
-  const map = useMap()
-  map.setView(center, zoom)
-  return null
-}
 
+const SearchBar = () => {
+  const today = new Date();
+  const tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
 
-const SearchBar = ({ onSearch }) => {
   const dispatch = useDispatch()
-  // const [location, setLocation] = useState('');
-  const [address, setAddress] = useState('')
-  const [checkIn, setCheckIn] = useState('2024-02-20')
-  const [checkOut, setCheckOut] = useState('2024-03-10')
-  const [sortOrder, setSortOrder] = useState('asc')
+  const [checkIn, setCheckIn] = useState(today.toISOString().split('T')[0])
+  const [checkOut, setCheckOut] = useState(tomorrow.toISOString().split('T')[0])
+  const [priceOrder, setPriceOrder] = useState('')
   const [minBedrooms, setMinBedrooms] = useState('')
   const [minBathrooms, setMinBathrooms] = useState('')
-  const [showMap, setShowMap] = useState(false)
-  const [selectedCity, setSelectedCity] = useState(null)
-  const [houses] = useState([])
-  const [mapCenter, setMapCenter] = useState([16.047079, 108.206230]) // Default address (Da Nang)
-  const [zoom, setZoom] = useState(5)
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
 
-  //mapData chứa thông tin định dạng của địa chỉ, gồm 2 trườn
-//selectedAddressData lưu toàn bộ dữ liệu địa chỉ được chọn (nếu cần dùng cho các xử lý khác).
   const [mapData, setMapData] = useState({
     name: '',
     address: '',
   })
-  const [selectedAddressData, setSelectedAddressData] = useState(null)
 
   const handleAddressSelect = (addressData) => {
     setMapData({
       name: addressData.formattedAddress,
       address: addressData.addressComponents,
     })
-    setSelectedAddressData(addressData)
   }
-
-
-  // Sample houses data
-  const sampleHouses = [
-    {
-      id: 1,
-      city: 'Ho Chi Minh City',
-      latitude: 10.7769,
-      longitude: 106.7009,
-      name: 'Mini condominium in District 1',
-      price: '$600/day',
-    },
-    {
-      id: 2,
-      city: 'Lao Cai',
-      latitude: 22.3364,
-      longitude: 103.8430,
-      name: 'Mountain view guesthouse in Sapa',
-      price: '$700/day',
-    },
-  ]
-
-  // List of major cities
-  const cities = [
-    { name: 'Ho Chi Minh City', lat: 10.7769, lng: 106.7009 },
-    { name: 'Hanoi', lat: 21.0285, lng: 105.8542 },
-    { name: 'Da Nang', lat: 16.0544, lng: 108.2022 },
-    { name: 'Lao Cai', lat: 22.3364, lng: 103.8430 },
-    { name: 'Nha Trang', lat: 12.2388, lng: 109.1967 },
-    { name: 'Can Tho', lat: 10.0452, lng: 105.7469 },
-  ]
-
-  // const handleCitySelect = (city) => {
-  //   setSelectedCity(city);
-  //   setLocation(city.name);
-  //   setMapCenter([city.lat, city.lng]);
-  //   setZoom(12);
-  //
-  //   // Filter houses by selected city
-  //   const filteredHouses = sampleHouses.filter(house =>
-  //     house.city === city.name
-  //   );
-  //   dispatch(setHouses(filteredHouses));
-  // };
 
   const handleSearchButtonClick = () => {
     const searchData = {
       address: mapData.name,
-      checkIn,
-      checkOut,
-      sortOrder,
-      minBedrooms,
-      minBathrooms,
-      // BỔ SUNG:
-      minPrice,
-      maxPrice,
+      checkIn: checkIn,
+      checkOut: checkOut,
+      minBedrooms: minBedrooms,
+      minBathrooms: minBathrooms,
+      minPrice: minPrice,
+      maxPrice: maxPrice,
+      priceOrder: priceOrder
     }
     console.log('Sending search data to backend:', searchData)
-
-    axios.post('http://localhost:8080/api/houses/search', searchData, {
+    axios.post(`${BASE_URL_HOUSE}`, searchData, {
       headers: { 'Content-Type': 'application/json' },
     })
       .then(response => {
         console.log('Backend response:', response.data)
         dispatch(setHouses(response.data))
-        if (onSearch) {
-          onSearch(searchData)
-        }
       })
       .catch(error => {
         console.error('Error sending search data to backend:', error)
@@ -153,11 +87,11 @@ const SearchBar = ({ onSearch }) => {
 
   return (
     <>
-      <CContainer fluid className="bg-light py-3 px-4 rounded-4 shadow-sm">
-        <CRow className="g-3 align-items-center">
+      <CContainer fluid className="bg-light px-4 pb-1 rounded-4 shadow-sm">
+        <CRow className="g-3 align-items-center mb-1">
           {/* Map Search Input */}
-          <CCol xs={12} md>
-            <label className="form-label fw-bold mb-1">Search Address</label>
+          <CCol sm={6} md>
+            <label className="fw-bolder mb-1">Search Address</label>
             <MapSample
               value={mapData.name}
               onChange={(newValue) =>
@@ -168,19 +102,19 @@ const SearchBar = ({ onSearch }) => {
           </CCol>
 
           {/* Check-In Date */}
-          <CCol xs={12} md>
+          <CCol sm={6} md>
             <div className="position-relative border-start">
               <CInputGroup className="border-0">
                 <CInputGroupText className="bg-transparent border-0">
-                  <Calendar className="text-primary" size={20} />
+                  <Calendar className="text-primary" size={30} />
                 </CInputGroupText>
                 <div className="d-flex flex-column flex-grow-1">
-                  <label className="small text-muted mb-0 ms-2">Check-In</label>
+                  <label className="fw-bolder">Check-In</label>
                   <CFormInput
                     type="date"
                     value={checkIn}
                     onChange={(e) => setCheckIn(e.target.value)}
-                    className="border-0 ps-2 pt-0"
+                    className="border-0 ps-2 pt-2"
                   />
                 </div>
               </CInputGroup>
@@ -188,153 +122,62 @@ const SearchBar = ({ onSearch }) => {
           </CCol>
 
           {/* Check-Out Date */}
-          <CCol xs={12} md>
+          <CCol sm={6} md>
             <div className="position-relative border-start">
               <CInputGroup className="border-0">
                 <CInputGroupText className="bg-transparent border-0">
-                  <Calendar className="text-primary" size={20} />
+                  <Calendar className="text-primary" size={30} />
                 </CInputGroupText>
                 <div className="d-flex flex-column flex-grow-1">
-                  <label className="small text-muted mb-0 ms-2">Check-Out</label>
+                  <label className="fw-bolder">Check-Out</label>
                   <CFormInput
                     type="date"
                     value={checkOut}
                     onChange={(e) => setCheckOut(e.target.value)}
-                    className="border-0 ps-2 pt-0"
+                    className="border-0 ps-2 pt-2"
                   />
                 </div>
               </CInputGroup>
             </div>
           </CCol>
 
-
-          {/* Search Button */}
-          <CCol xs={12} md="auto">
-            <CButton
-              color="danger"
-              onClick={handleSearchButtonClick}
-              className="w-100 d-flex align-items-center justify-content-center gap-2 rounded-3"
-            >
-              <Search size={20} />
-              Search
-            </CButton>
-          </CCol>
-        </CRow>
-
-        {/* Additional Filters */}
-        <CRow className="g-3 align-items-center mt-3">
           {/* Sort by Price */}
-          <CCol xs={12} md={4}>
+          <CCol sm={6} md={2} className="justify-content-center pt-3">
             <CDropdown>
-              <CDropdownToggle className="w-100 bg-transparent border-0 text-start ps-3">
-                Sort by Price: {sortOrder === 'asc' ? 'Low to High' : 'High to Low'}
+              <CDropdownToggle color="secondary">
+                {priceOrder ? ((priceOrder === 'ASC') ? "Price: Low to High" : "Price: High to Low") : "Sort by Price"}
               </CDropdownToggle>
               <CDropdownMenu>
-                <CDropdownItem onClick={() => setSortOrder('asc')}>
+                <CDropdownItem onClick={() => setPriceOrder('ASC')} style={{cursor: 'pointer'}}>
                   Low to High
                 </CDropdownItem>
-                <CDropdownItem onClick={() => setSortOrder('desc')}>
+                <CDropdownItem onClick={() => setPriceOrder('DESC')} style={{cursor: 'pointer'}}>
                   High to Low
                 </CDropdownItem>
               </CDropdownMenu>
             </CDropdown>
           </CCol>
+        </CRow>
 
-
-          {/* Price Range Dropdown */}
-          <CCol xs={12} md={4}>
-            <CDropdown>
-              {/* Toggle hiển thị giá đã chọn (hoặc “Select Range”) */}
-              <CDropdownToggle className="w-100 bg-transparent border-0 text-start ps-3">
-                Price Range (VND):{' '}
-                {minPrice && maxPrice
-                  ? `${minPrice} - ${maxPrice}`
-                  : 'Select Range'}
-              </CDropdownToggle>
-
-              <CDropdownMenu style={{ minWidth: '250px' }}>
-                {/* 1) Các mức gợi ý */}
-                <CDropdownItem
-                  onClick={() => {
-                    setMinPrice(100000)
-                    setMaxPrice(200000)
-                  }}
-                >
-                  100.000 - 200.000
-                </CDropdownItem>
-                <CDropdownItem
-                  onClick={() => {
-                    setMinPrice(200000)
-                    setMaxPrice(500000)
-                  }}
-                >
-                  200.000 - 500.000
-                </CDropdownItem>
-                <CDropdownItem
-                  onClick={() => {
-                    setMinPrice(500000)
-                    setMaxPrice(1000000)
-                  }}
-                >
-                  500.000 - 1.000.000
-                </CDropdownItem>
-                <CDropdownItem divider />
-
-                {/* 2) Cho phép nhập thủ công */}
-                <div className="px-3 py-2">
-                  <label className="form-label mb-1 fw-semibold">Custom Range</label>
-                  <div className="d-flex gap-2 mb-2">
-                    <CFormInput
-                      type="number"
-                      placeholder="Min"
-                      min={100000}
-                      max={1000000}
-                      value={minPrice}
-                      onChange={(e) => setMinPrice(e.target.value)}
-                    />
-                    <CFormInput
-                      type="number"
-                      placeholder="Max"
-                      min={100000}
-                      max={1000000}
-                      value={maxPrice}
-                      onChange={(e) => setMaxPrice(e.target.value)}
-                    />
-                  </div>
-                  <CButton
-                    color="primary"
-                    size="sm"
-                    onClick={() => {
-                      // Bấm "Apply" => đóng Dropdown (nếu muốn)
-                      // => Tự động filter khi Search
-                    }}
-                  >
-                    Apply
-                  </CButton>
-                </div>
-              </CDropdownMenu>
-            </CDropdown>
-          </CCol>
-
-
+        <CRow className="g-3 align-items-center mb-1">
           {/* Minimum Bedrooms */}
-          <CCol xs={12} md={4}>
+          <CCol sm={6} md={3}>
             <div className="position-relative">
               <CInputGroup className="border-0">
                 <CInputGroupText className="bg-transparent border-0">
-                  <Users className="text-primary" size={20} />
+                  <BedDouble className="text-primary" size={30} />
                 </CInputGroupText>
                 <div className="d-flex flex-column flex-grow-1">
-                  <label className="small text-muted mb-0 ms-2">
+                  <label className="fw-bolder">
                     Minimum Bedrooms
                   </label>
                   <CFormInput
                     type="number"
                     min="0"
-                    placeholder="Bedrooms"
+                    placeholder="Enter number"
                     value={minBedrooms}
                     onChange={(e) => setMinBedrooms(e.target.value)}
-                    className="border-0 ps-2 pt-0"
+                    className="border-0 ps-2 pt-2"
                   />
                 </div>
               </CInputGroup>
@@ -342,106 +185,73 @@ const SearchBar = ({ onSearch }) => {
           </CCol>
 
           {/* Minimum Bathrooms */}
-          <CCol xs={12} md={4}>
+          <CCol sm={6} md={3}>
             <div className="position-relative">
               <CInputGroup className="border-0">
                 <CInputGroupText className="bg-transparent border-0">
-                  <Calendar className="text-primary" size={20} />
+                  <Bath className="text-primary" size={30} />
                 </CInputGroupText>
                 <div className="d-flex flex-column flex-grow-1">
-                  <label className="small text-muted mb-0 ms-2">
+                  <label className="fw-bolder">
                     Minimum Bathrooms
                   </label>
                   <CFormInput
                     type="number"
                     min="0"
-                    placeholder="Bathrooms"
+                    placeholder="Enter number"
                     value={minBathrooms}
                     onChange={(e) => setMinBathrooms(e.target.value)}
-                    className="border-0 ps-2 pt-0"
+                    className="border-0 ps-2 pt-2"
                   />
                 </div>
               </CInputGroup>
             </div>
           </CCol>
+
+          {/* Price Range */}
+          <CCol sm={8} md={4}>
+            <div className="px-3 py-2">
+              <label className="form-label mb-1 fw-semibold">Price Range (VND)</label>
+              <div className="d-flex gap-2">
+                <IMaskInput
+                  mask={Number} // Numeric mask
+                  thousandsSeparator="."
+                  inputMode="numeric"
+                  className="form-control"
+                  style={{ textAlign: "right" }}
+                  id="minPrice"
+                  placeholder="Min"
+                  value={minPrice}
+                  onAccept={(val, mask) => setMinPrice(mask.unmaskedValue)}
+                />
+                <IMaskInput
+                  mask={Number} // Numeric mask
+                  thousandsSeparator="."
+                  inputMode="numeric"
+                  className="form-control"
+                  style={{ textAlign: "right" }}
+                  id="maxPrice"
+                  placeholder="Max"
+                  value={maxPrice}
+                  onAccept={(val, mask) => setMaxPrice(mask.unmaskedValue)}
+                />
+              </div>
+            </div>
+          </CCol>
+
+          {/* Search Button */}
+          <CCol sm={4} md={2} className="pt-4 justify-content-center">
+            <CButton
+              color="primary"
+              className="ms-4"
+              onClick={handleSearchButtonClick}
+            >
+              <Search size={20} />
+              Search
+            </CButton>
+          </CCol>
         </CRow>
       </CContainer>
-
-
-      {/* Map Modal */}
-      <CModal visible={showMap} onClose={() => setShowMap(false)} size="lg">
-        <CModalHeader>
-          <CModalTitle>Select a City on the Map</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <div className="p-3">
-            {/* City selection buttons */}
-            <div className="mb-4">
-              <h6 className="mb-3">Major Cities:</h6>
-              <div className="d-flex flex-wrap gap-2">
-                {cities.map((city) => (
-                  <CButton
-                    key={city.name}
-                    color="light"
-                    className="mb-2"
-                    // onClick={() => handleCitySelect(city)}
-                  >
-                    {city.name}
-                  </CButton>
-                ))}
-              </div>
-            </div>
-
-            {/* OpenStreetMap */}
-            <div style={{ height: '400px', width: '100%', marginBottom: '20px' }}>
-              <MapContainer
-                center={mapCenter}
-                zoom={zoom}
-                style={{ height: '100%', width: '100%' }}
-              >
-                <ChangeView center={mapCenter} zoom={zoom} />
-                <TileLayer
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                />
-                {houses.map((house) => (
-                  <Marker
-                    key={house.id}
-                    position={[house.latitude, house.longitude]}
-                  >
-                    <Popup>
-                      <div>
-                        <h6>{house.name}</h6>
-                        <p className="mb-0">{house.price}</p>
-                      </div>
-                    </Popup>
-                  </Marker>
-                ))}
-              </MapContainer>
-            </div>
-
-            {/* Available houses list */}
-            {selectedCity && houses.length > 0 && (
-              <div>
-                <h6 className="mb-3">Available Houses in {selectedCity.name}:</h6>
-                <div className="row">
-                  {houses.map((house) => (
-                    <div key={house.id} className="col-md-6 mb-3">
-                      <div className="p-3 border rounded">
-                        <h6 className="mb-2">{house.name}</h6>
-                        <p className="small text-muted mb-1">{house.price}</p>
-                        <p className="small text-muted mb-0">
-                          {/*Location: {house.latitude}, {house.longitude}*/}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </CModalBody>
-      </CModal>
     </>
   )
 }

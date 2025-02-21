@@ -1,11 +1,12 @@
 import {CCol, CFormFeedback, CFormFloating, CFormInput, CFormLabel, CRow} from "@coreui/react";
 import {ErrorMessage, Field} from "formik";
 
-const UPTextInput = ({
-                         label,
-                         name,
+const FORMTextInput = ({
+                         label = "",
+                         name = "",
                          required = false,
                          readOnly = false,
+                         disabled = false,
                          placeholder = ""
                      }) => (
     <CRow className="mb-3">
@@ -19,21 +20,22 @@ const UPTextInput = ({
                     placeholder={placeholder}
                     className="form-control"
                     readOnly={readOnly}
+                    disabled={disabled}
                     style={readOnly ? {cursor: "not-allowed"} : {}}
                 />
                 <CFormLabel htmlFor={name}>
                     {label} {required && <span style={{color: 'red'}}>*</span>}
                 </CFormLabel>
             </CFormFloating>
-            <div style={{minHeight: "20px"}}>
+            <div style={{minHeight: "20px"}} className="mt-1">
                 <ErrorMessage
                     name={name}
                     component={CFormFeedback}
-                    className="d-block text-danger mt-1 ps-2"
+                    className="d-block text-warning ps-2"
                 />
             </div>
         </CCol>
     </CRow>
 );
 
-export default UPTextInput;
+export default FORMTextInput;

@@ -1,30 +1,32 @@
 import {
-  CButton,
   CForm,
-  CFormInput,
   CCol,
   CRow,
-  CFormLabel,
+  CFormCheck, CCard, CCardHeader, CCardBody,
 } from '@coreui/react'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-import styles from './styles.module.css'
-import { useRef } from 'react'
+import { useEffect } from 'react'
+import {useForm} from 'react-hook-form'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { setUsername, setPassword } from '../../redux/slices/accountSlice'
-import Layout from '../Layout'
 import { BASE_URL_USER } from '../../constants/api'
+import FORMTextInput from '../_fragments/FORMTextInput'
+import FORMPasswordInput from '../_fragments/FORMPasswordInput'
+import SubmitButton from '../_fragments/FORMSubmitButton'
 
 export default function Register() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const { register } = useForm();
 
   const REGEX = {
     username: /^[a-zA-Z0-9_]{4,30}$/,
     password: /^[a-zA-Z0-9!@#$^&)(+=._-]{6,32}$/,
+    email: /^[a-z0-9._%+]+@[a-z0-9_]+\.[a-z]{2,5}$/,
     phone: /^0[0-9]{9}$/,
   }
 
@@ -33,8 +35,12 @@ export default function Register() {
     phone: '',
     password: '',
     confirm_password: '',
+    isHost: false,
   }
-  const formikRef = useRef(null)
+
+  useEffect(() => {
+    document.title = 'Airbnb | Register'
+  }, [])
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -69,7 +75,7 @@ export default function Register() {
             })
           return true
         } catch (error) {
-          // console.log(error)
+          console.log(error)
           return false
         }
       }),
@@ -85,85 +91,112 @@ export default function Register() {
           return this.parent.password === value
         },
       ),
+    email: Yup.string()
+      .matches(REGEX.email, 'Invalid email address')
+      .test('Duplicate email', 'Email already existed', async function(value) {
+        if (!value) return true
+        try {
+          await axios.post(`${BASE_URL_USER}/register/validate-email`, value,
+            {
+              headers: {
+                'Content-Type': 'text/plain',
+              },
+            })
+          return true
+        } catch (error) {
+          console.log(error)
+          return false
+        }
+      }),
   })
 
-  const handleSubmit = async () => {
-    const formValues = formikRef.current.values
+  const handleSubmit = async (values) => {
     try {
       await axios.post(`${BASE_URL_USER}/register`, {
-        username: formValues.username,
-        password: formValues.password,
-        phone: formValues.phone,
+        username: values.username,
+        password: values.password,
+        phone: values.phone,
+        email: values.email,
+        host: values.isHost,
       })
-      dispatch(setUsername(formValues.username))
-      dispatch(setPassword(formValues.password))
+      dispatch(setUsername(values.username))
+      dispatch(setPassword(values.password))
+      console.log(values)
+      if (values.isHost) {
+        toast.info('Your host request has been submitted for review!', { hideProgressBar: true })
+      } else {
+        toast.success('Registered user successfully!', { hideProgressBar: true })
+      }
+      navigate('/login')
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      toast.error('Registration failed!', { hideProgressBar: true })
     }
-    toast.success('register successfully!', { hideProgressBar: true })
-    navigate('/login')
   }
 
   return (
-    <>
-      <h2 className={styles.title}>Register New Account</h2>
-      <Formik initialValues={initialValues}
-              validationSchema={validationSchema}
-              onSubmit={handleSubmit}
-              innerRef={formikRef}>
-        {({ errors, touched, handleChange, handleSubmit }) => (
-          <CForm className={styles.formBox} onSubmit={handleSubmit}>
-            <CRow className="mb-3">
-              <CFormLabel htmlFor="username" className="col-sm-4 col-form-label">
-                Username:
-              </CFormLabel>
-              <CCol sm={8}>
-                <CFormInput type="text" placeholder="user_name123" id="username" name="username"
-                            onChange={handleChange} required />
-                {touched.username && errors.username &&
-                  <p className="text-warning-emphasis">{errors.username}</p>}
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CFormLabel htmlFor="phone" className="col-sm-4 col-form-label">
-                Phone:
-              </CFormLabel>
-              <CCol sm={8}>
-                <CFormInput type="text" placeholder="0123456789" id="phone" name="phone"
-                            onChange={handleChange}
-                            required />
-                {touched.phone && errors.phone && <p className="text-warning-emphasis">{errors.phone}</p>}
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CFormLabel htmlFor="password" className="col-sm-4 col-form-label">
-                Password:
-              </CFormLabel>
-              <CCol sm={8}>
-                <CFormInput type="password" id="password" name="password" onChange={handleChange}
-                            required />
-                {touched.password && errors.password &&
-                  <p className="text-warning-emphasis">{errors.password}</p>}
-              </CCol>
-            </CRow>
-            <CRow className="mb-4">
-              <CFormLabel htmlFor="confirm_password" className="col-sm-4 col-form-label">
-                Confirm Password:
-              </CFormLabel>
-              <CCol sm={8}>
-                <CFormInput type="password" id="confirm_password" name="confirm_password"
-                            onChange={handleChange} required />
-                {touched.confirm_password && errors.confirm_password &&
-                  <p className="text-warning-emphasis">{errors.confirm_password}</p>}
-              </CCol>
-            </CRow>
-            <CButton color="primary" type="submit">
-              Register
-            </CButton>
-          </CForm>)
-        }
-      </Formik>
-    </>
+      <div className="container mt-0">
+        <CRow
+          xs={{ cols: 1 }} md={{ cols: 1 }} lg={{ cols: 2 }}
+          className="justify-content-center mt-0"
+        >
+          <CCol>
+            <CCard className="shadow border-0">
+              <CCardHeader className="text-center p-4">
+                <h3>Register New Account</h3>
+              </CCardHeader>
+              <CCardBody className="p-4">
+                <Formik initialValues={initialValues}
+                        validationSchema={validationSchema}
+                        onSubmit={handleSubmit}>
+                  {({ values, handleChange, handleSubmit }) => (
+                    <CForm onSubmit={handleSubmit}>
+                      <FORMTextInput
+                        label="Username"
+                        name="username"
+                        placeholder="Enter username"
+                      />
+                      <FORMPasswordInput
+                        label="Password"
+                        name="password"
+                        placeholder="Enter password"
+                      />
+                      <FORMPasswordInput
+                        label="Confirm Password"
+                        name="confirm_password"
+                        placeholder="Enter confirm password"
+                      />
+                      <FORMTextInput
+                        label="Phone"
+                        name="phone"
+                        placeholder="0123456789"
+                        required
+                      />
+                      <FORMTextInput
+                        label="Email"
+                        name="email"
+                        placeholder="user@email.com"
+                        required
+                      />
+                      <CRow className="m-auto mb-4">
+                        <CFormCheck
+                          id="isHost"
+                          name="isHost"
+                          label="Register as a Host"
+                          checked={values.isHost}
+                          onChange={handleChange}
+                        />
+                      </CRow>
+                      <SubmitButton
+                        label="Register"
+                      />
+                    </CForm>)
+                  }
+                </Formik>
+              </CCardBody>
+            </CCard>
+          </CCol>
+        </CRow>
+      </div>
   )
-
 }
