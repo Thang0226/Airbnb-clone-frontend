@@ -16,11 +16,13 @@ import {
 } from '@coreui/react'
 import { toast } from 'react-toastify'
 import Pagination from 'react-bootstrap/Pagination';
+import { useNavigate } from 'react-router-dom'
 
 export const UserList = () => {
   const [page, setPage] = useState(0);
   const [size] = useState(10);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = 'Airbnb | User List';
@@ -68,10 +70,24 @@ export const UserList = () => {
     }
   };
 
+  const goToUserDetails = (userId) => {
+    navigate(`/admin/users/${userId}`);
+  };
+
   return (
-    <div className="container mt-4">
+    <div className="container">
+      <div className="d-flex align-items-center">
+        <span
+          style={{ cursor: 'pointer', textDecoration: 'underline', color: '#0d6efd' }}
+          onClick={() => navigate(-1)}
+        >
+          Dash Board
+        </span>
+        <span className="mx-1">{'/'}</span>
+        <span>User Details</span>
+      </div>
       <CRow
-        xs={{cols: 1}} md={{cols: 1}} lg={{cols: 1}}
+        xs={{ cols: 1 }} md={{ cols: 1 }} lg={{ cols: 1 }}
         className="justify-content-center mt-4"
       >
         <CCol>
@@ -100,7 +116,7 @@ export const UserList = () => {
                         <CBadge
                           color={user.status === 'ACTIVE' ? "success" : "secondary"}
                           className="py-2"
-                          style={{width: "90px"}}
+                          style={{ width: "90px" }}
                         >
                           {user.status}
                         </CBadge>
@@ -112,10 +128,19 @@ export const UserList = () => {
                           size="sm"
                           color={user.status === 'ACTIVE' ? "warning" : "success"}
                           className="text-white"
-                          style={{width: "90px"}}
+                          style={{ width: "90px" }}
                           onClick={() => handleApprove(user)}
                         >
                           {user.status === 'ACTIVE' ? "Lock" : "Unlock"}
+                        </CButton>
+                        <CButton
+                          size="sm"
+                          color="primary"
+                          className="text-white ms-2"
+                          style={{ width: "90px" }}
+                          onClick={() => goToUserDetails(user.id)}
+                        >
+                          Details
                         </CButton>
                       </CTableDataCell>
                     </CTableRow>
@@ -138,7 +163,6 @@ export const UserList = () => {
             </CCardBody>
           </CCard>
         </CCol>
-
       </CRow>
     </div>
   )

@@ -19,6 +19,7 @@ import AdminLayout from './components/admin/AdminLayout'
 import Dashboard from './components/admin/Dashboard'
 import { UserList } from './components/admin/UserList'
 import ChangePassword from './components/user-change-password/ChangePassword'
+import UserDetails from './components/admin/UserDetails'
 
 export default function App() {
   return (
@@ -45,6 +46,9 @@ export default function App() {
               <Route path="/admin" element={<Dashboard />} />
               <Route path="/admin/host/request" element={<HostRequests />} />
               <Route path="/admin/users" element={<UserList />} />
+              <Route path="/admin/users/:userID" element={<UserDetails />} />
+              <Route path="/admin/profile" element={<UserProfile />} />
+              <Route path="/admin/profile/edit" element={<ProfileUpdateForm />} />
               {/* Các route admin khác có thể thêm tại đây */}
             </Route>
           </Route>

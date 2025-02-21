@@ -122,7 +122,7 @@ const ProfileUpdateForm = () => {
     dispatch(updateUserProfile(formData))
       .then(() => {
         toast.success('Profile updated successfully!')
-        navigate('/profile')
+        navigate('/admin/profile')
       })
       .catch((err) => {
         toast.error('Error updating profile: ' + err.message)
@@ -212,7 +212,7 @@ const ProfileUpdateForm = () => {
                         type="button"
                         color="secondary"
                         className="ms-2"
-                        onClick={() => navigate(`/profile`)}
+                        onClick={() => navigate(`/admin/profile`)}
                       >
                         Cancel
                       </CButton>
