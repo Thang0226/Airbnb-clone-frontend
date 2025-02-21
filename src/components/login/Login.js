@@ -6,7 +6,7 @@ import {
 } from '@coreui/react'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
@@ -28,10 +28,9 @@ export default function Login() {
   }
 
   const initialValues = {
-    username: '',
-    password: '',
+    username: registeredUsername,
+    password: registeredPassword,
   }
-  const formikRef = useRef(null)
 
   useEffect(() => {
     document.title = 'Airbnb | Login'
@@ -48,11 +47,10 @@ export default function Login() {
       .matches(REGEX.password, 'Invalid password'),
   })
 
-  const handleSubmit = async () => {
-    const formValues = formikRef.current.values
+  const handleSubmit = async (values) => {
     await axios.post(`${BASE_URL_USER}/login`, {
-      username: formValues.username || registeredUsername,
-      password: formValues.password || registeredPassword,
+      username: values.username,
+      password: values.password,
     })
       .then((res) => {
         const user = res.data;
@@ -89,8 +87,7 @@ export default function Login() {
               <CCardBody className="p-4">
                 <Formik initialValues={initialValues}
                         validationSchema={validationSchema}
-                        onSubmit={handleSubmit}
-                        innerRef={formikRef}>
+                        onSubmit={handleSubmit}>
                   {({ handleSubmit }) => (
                     <CForm onSubmit={handleSubmit}>
                       <FORMTextInput

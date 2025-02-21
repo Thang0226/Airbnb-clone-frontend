@@ -7,22 +7,21 @@ export const initialState = {
   totalPages: 1,
   loading: false,
   error: null,
+  userD: null,
+  userRentalHistory: null,
+  userTotalPayment: 0
 }
 
 export const fetchUsers = createAsyncThunk(
   'userManagement/fetchUsers',
   async ({ page, size }, thunkAPI) => {
     const token = localStorage.getItem('token')
-    console.log(page)
-    console.log(size)
-
     try {
       const response = await axios.get(`${BASE_URL}/api/admin/users?page=${page}&size=${size}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-      console.log(response.data.content)
       return {
         users: response.data.content,
         totalPages: response.data.totalPages,
@@ -77,7 +76,7 @@ const UserManagementSlice = createSlice({
       state.loading = true
       state.error = null
     })
-      .addCase(updateUserStatus.fulfilled, (state, action) => {
+      .addCase(updateUserStatus.fulfilled, (state) => {
         state.loading = false
       })
       .addCase(updateUserStatus.rejected, (state, action) => {

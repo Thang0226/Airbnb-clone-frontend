@@ -52,8 +52,8 @@ export const AdminSideBar = () => {
         <CNavItem href="https://coreui.io">
           <CIcon customClassName="nav-icon" icon={cilCloudDownload} /> Download CoreUI
         </CNavItem>
-        <CNavItem href="https://coreui.io/pro/">
-          <CIcon customClassName="nav-icon" icon={cilLayers} /> Try CoreUI PRO
+        <CNavItem href="/#/admin/host/request">
+          Host Request
         </CNavItem>
       </CSidebarNav>
     </CSidebar>

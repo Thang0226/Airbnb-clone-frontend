@@ -25,6 +25,7 @@ export default function MenuBar() {
   const token = localStorage.getItem('token')
   const dispatch = useDispatch()
   const username = localStorage.getItem('username')
+  const role = localStorage.getItem('role')
 
   useEffect(() => {
     if (username) {
@@ -74,16 +75,12 @@ export default function MenuBar() {
                 Home
               </CNavLink>
             </CNavItem>
-            <CNavItem>
-              <CNavLink href="/#/owner">Airbnb Your Home</CNavLink>
-            </CNavItem>
+            {(role === 'ROLE_HOST') && (
+              <CNavItem>
+                <CNavLink href="/#/owner">Airbnb Your Home</CNavLink>
+              </CNavItem>
+            )}
           </CNavbarNav>
-          <CForm className="d-inline-flex">
-            <CFormInput type="search" className="me-2" placeholder="Search" />
-            <CButton type="submit" color="primary" variant="outline" className="me-5">
-              Search
-            </CButton>
-          </CForm>
           <CDropdown variant="dropdown" popper={true} className="bg-gradient rounded">
             <CDropdownToggle
               caret={false}
