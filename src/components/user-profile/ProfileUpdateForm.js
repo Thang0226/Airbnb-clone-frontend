@@ -20,7 +20,11 @@ const FILE_SIZE_LIMIT = 5 * 1024 * 1024 // 5MB
 const SUPPORTED_FORMATS = ['image/jpeg', 'image/png', 'image/jpg']
 
 const validationSchema = Yup.object({
-  fullName: Yup.string().required('Full Name is required'),
+  fullName: Yup.string()
+    .matches(/^[a-zA-ZÀ-ỹ\s]+$/, 'Full Name cannot contain special characters')
+    .required('Full Name is required'),
+  address: Yup.string()
+    .matches(/^[a-zA-Z0-9À-ỹ\s]+$/, 'Address cannot contain special characters'),
   phone: Yup.string()
     .matches(/^0[0-9]{9}$/, 'Phone number must start with 0 and have at least 10 digits')
     .required('Phone number is required'),
