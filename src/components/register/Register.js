@@ -7,6 +7,7 @@ import {
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
+import {useForm} from 'react-hook-form'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
@@ -20,11 +21,12 @@ import SubmitButton from '../_fragments/FORMSubmitButton'
 export default function Register() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const { register } = useForm();
 
   const REGEX = {
     username: /^[a-zA-Z0-9_]{4,30}$/,
     password: /^[a-zA-Z0-9!@#$^&)(+=._-]{6,32}$/,
-    email: /^[a-z0-9._%+]+@[a-z0-9_]+.[a-z]{2,5}$/,
+    email: /^[a-z0-9._%+]+@[a-z0-9_]+\.[a-z]{2,5}$/,
     phone: /^0[0-9]{9}$/,
   }
 
@@ -90,7 +92,7 @@ export default function Register() {
         },
       ),
     email: Yup.string()
-      .matches(REGEX.password, 'Invalid email address')
+      .matches(REGEX.email, 'Invalid email address')
       .test('Duplicate email', 'Email already existed', async function(value) {
         if (!value) return true
         try {
@@ -106,7 +108,6 @@ export default function Register() {
           return false
         }
       }),
-    isHost: Yup.boolean(),
   })
 
   const handleSubmit = async (values) => {
@@ -120,11 +121,11 @@ export default function Register() {
       })
       dispatch(setUsername(values.username))
       dispatch(setPassword(values.password))
-
+      console.log(values)
       if (values.isHost) {
         toast.info('Your host request has been submitted for review!', { hideProgressBar: true })
       } else {
-        toast.success('Registered successfully!', { hideProgressBar: true })
+        toast.success('Registered user successfully!', { hideProgressBar: true })
       }
       navigate('/login')
     } catch (error) {
@@ -148,7 +149,7 @@ export default function Register() {
                 <Formik initialValues={initialValues}
                         validationSchema={validationSchema}
                         onSubmit={handleSubmit}>
-                  {({ handleSubmit }) => (
+                  {({ values, handleChange, handleSubmit }) => (
                     <CForm onSubmit={handleSubmit}>
                       <FORMTextInput
                         label="Username"
@@ -182,6 +183,8 @@ export default function Register() {
                           id="isHost"
                           name="isHost"
                           label="Register as a Host"
+                          checked={values.isHost}
+                          onChange={handleChange}
                         />
                       </CRow>
                       <SubmitButton

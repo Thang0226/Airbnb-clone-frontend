@@ -25,6 +25,7 @@ export default function MenuBar() {
   const token = localStorage.getItem('token')
   const dispatch = useDispatch()
   const username = localStorage.getItem('username')
+  const role = localStorage.getItem('role')
 
   useEffect(() => {
     if (username) {
@@ -74,9 +75,11 @@ export default function MenuBar() {
                 Home
               </CNavLink>
             </CNavItem>
-            <CNavItem>
-              <CNavLink href="/#/owner">Airbnb Your Home</CNavLink>
-            </CNavItem>
+            {(role === 'ROLE_HOST') && (
+              <CNavItem>
+                <CNavLink href="/#/owner">Airbnb Your Home</CNavLink>
+              </CNavItem>
+            )}
           </CNavbarNav>
           <CDropdown variant="dropdown" popper={true} className="bg-gradient rounded">
             <CDropdownToggle

@@ -33,8 +33,6 @@ export default function App() {
             <Route path="/register" element={<Register />} />
 
             <Route element={<RequireAuth allowedRoles={['ROLE_USER', 'ROLE_ADMIN']} />}>
-              <Route path="/owner" element={<HomeOwner />} />
-              <Route path="/create" element={<CreateHouse />} />
               <Route path="/profile" element={<UserProfile />} />
               <Route path="/profile/edit" element={<ProfileUpdateForm />} />
               <Route path="/user/change-password" element={<ChangePassword/>} />
@@ -48,6 +46,13 @@ export default function App() {
               <Route path="/admin/host/request" element={<HostRequests />} />
               <Route path="/admin/users" element={<UserList />} />
               {/* Các route admin khác có thể thêm tại đây */}
+            </Route>
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={['ROLE_HOST']} />}>
+            <Route element={<Layout />}>
+              <Route path="/owner" element={<HomeOwner />} />
+              <Route path="/create" element={<CreateHouse />} />
             </Route>
           </Route>
 
