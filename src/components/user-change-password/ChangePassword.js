@@ -1,15 +1,13 @@
 import {
   CButton,
   CForm,
-  CFormInput,
   CCol,
   CRow,
-  CFormLabel, CInputGroupText, CInputGroup, CCard, CCardHeader, CCardBody,
+  CCard, CCardHeader, CCardBody,
 } from '@coreui/react'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-import styles from './styles.module.css'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'

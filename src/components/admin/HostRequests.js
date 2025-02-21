@@ -14,10 +14,11 @@ import {
   CTableRow,
 } from '@coreui/react'
 
-export default function AdminHostRequests(){
+export default function HostRequests(){
   const [requests, setRequests] = useState([]);
 
   useEffect(() => {
+    document.title = 'Admin | Host Requests';
     fetchHostRequests();
   }, []);
 

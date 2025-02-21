@@ -17,9 +17,11 @@ import {
   CDropdownMenu,
   CDropdownItem,
 } from '@coreui/react'
-import { Search, Calendar, Users } from 'lucide-react'
+import { Search, Calendar, Users, BedDouble, Bath } from 'lucide-react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import { IMaskInput } from 'react-imask'
+import { BASE_URL_HOUSE } from '../../constants/api'
 
 // Fix Leaflet default icon issue
 delete L.Icon.Default.prototype._getIconUrl
@@ -41,13 +43,12 @@ const SearchBar = () => {
   const dispatch = useDispatch()
   const [checkIn, setCheckIn] = useState(today.toISOString().split('T')[0])
   const [checkOut, setCheckOut] = useState(tomorrow.toISOString().split('T')[0])
-  const [sortOrder, setSortOrder] = useState('ASC')
+  const [priceOrder, setPriceOrder] = useState('')
   const [minBedrooms, setMinBedrooms] = useState('')
   const [minBathrooms, setMinBathrooms] = useState('')
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
-  //mapData chứa thông tin định dạng của địa chỉ, gồm 2 trường
-  //selectedAddressData lưu toàn bộ dữ liệu địa chỉ được chọn (nếu cần dùng cho các xử lý khác).
+
   const [mapData, setMapData] = useState({
     name: '',
     address: '',
@@ -63,17 +64,16 @@ const SearchBar = () => {
   const handleSearchButtonClick = () => {
     const searchData = {
       address: mapData.name,
-      checkIn,
-      checkOut,
-      sortOrder,
-      minBedrooms,
-      minBathrooms,
-      minPrice,
-      maxPrice,
+      checkIn: checkIn,
+      checkOut: checkOut,
+      minBedrooms: minBedrooms,
+      minBathrooms: minBathrooms,
+      minPrice: minPrice,
+      maxPrice: maxPrice,
+      priceOrder: priceOrder
     }
     console.log('Sending search data to backend:', searchData)
-
-    axios.post('http://localhost:8080/api/houses/search', searchData, {
+    axios.post(`${BASE_URL_HOUSE}`, searchData, {
       headers: { 'Content-Type': 'application/json' },
     })
       .then(response => {
@@ -87,11 +87,11 @@ const SearchBar = () => {
 
   return (
     <>
-      <CContainer fluid className="bg-light py-3 px-4 rounded-4 shadow-sm">
-        <CRow className="g-3 align-items-center">
+      <CContainer fluid className="bg-light px-4 pb-1 rounded-4 shadow-sm">
+        <CRow className="g-3 align-items-center mb-1">
           {/* Map Search Input */}
-          <CCol xs={12} md>
-            <label className="form-label fw-bold mb-1">Search Address</label>
+          <CCol sm={6} md>
+            <label className="fw-bolder mb-1">Search Address</label>
             <MapSample
               value={mapData.name}
               onChange={(newValue) =>
@@ -102,19 +102,19 @@ const SearchBar = () => {
           </CCol>
 
           {/* Check-In Date */}
-          <CCol xs={12} md>
+          <CCol sm={6} md>
             <div className="position-relative border-start">
               <CInputGroup className="border-0">
                 <CInputGroupText className="bg-transparent border-0">
-                  <Calendar className="text-primary" size={20} />
+                  <Calendar className="text-primary" size={30} />
                 </CInputGroupText>
                 <div className="d-flex flex-column flex-grow-1">
-                  <label className="small text-muted mb-0 ms-2">Check-In</label>
+                  <label className="fw-bolder">Check-In</label>
                   <CFormInput
                     type="date"
                     value={checkIn}
                     onChange={(e) => setCheckIn(e.target.value)}
-                    className="border-0 ps-2 pt-0"
+                    className="border-0 ps-2 pt-2"
                   />
                 </div>
               </CInputGroup>
@@ -122,153 +122,62 @@ const SearchBar = () => {
           </CCol>
 
           {/* Check-Out Date */}
-          <CCol xs={12} md>
+          <CCol sm={6} md>
             <div className="position-relative border-start">
               <CInputGroup className="border-0">
                 <CInputGroupText className="bg-transparent border-0">
-                  <Calendar className="text-primary" size={20} />
+                  <Calendar className="text-primary" size={30} />
                 </CInputGroupText>
                 <div className="d-flex flex-column flex-grow-1">
-                  <label className="small text-muted mb-0 ms-2">Check-Out</label>
+                  <label className="fw-bolder">Check-Out</label>
                   <CFormInput
                     type="date"
                     value={checkOut}
                     onChange={(e) => setCheckOut(e.target.value)}
-                    className="border-0 ps-2 pt-0"
+                    className="border-0 ps-2 pt-2"
                   />
                 </div>
               </CInputGroup>
             </div>
           </CCol>
 
-
-          {/* Search Button */}
-          <CCol xs={12} md="auto">
-            <CButton
-              color="danger"
-              onClick={handleSearchButtonClick}
-              className="w-100 d-flex align-items-center justify-content-center gap-2 rounded-3"
-            >
-              <Search size={20} />
-              Search
-            </CButton>
-          </CCol>
-        </CRow>
-
-        {/* Additional Filters */}
-        <CRow className="g-3 align-items-center mt-3">
           {/* Sort by Price */}
-          <CCol xs={12} md={4}>
+          <CCol sm={6} md={2} className="justify-content-center pt-3">
             <CDropdown>
-              <CDropdownToggle className="w-100 bg-transparent border-0 text-start ps-3">
-                Sort by Price: {sortOrder === 'ASC' ? 'Low to High' : 'High to Low'}
+              <CDropdownToggle color="secondary">
+                {priceOrder ? ((priceOrder === 'ASC') ? "Price: Low to High" : "Price: High to Low") : "Sort by Price"}
               </CDropdownToggle>
               <CDropdownMenu>
-                <CDropdownItem onClick={() => setSortOrder('ASC')}>
+                <CDropdownItem onClick={() => setPriceOrder('ASC')} style={{cursor: 'pointer'}}>
                   Low to High
                 </CDropdownItem>
-                <CDropdownItem onClick={() => setSortOrder('DESC')}>
+                <CDropdownItem onClick={() => setPriceOrder('DESC')} style={{cursor: 'pointer'}}>
                   High to Low
                 </CDropdownItem>
               </CDropdownMenu>
             </CDropdown>
           </CCol>
+        </CRow>
 
-
-          {/* Price Range Dropdown */}
-          <CCol xs={12} md={4}>
-            <CDropdown>
-              {/* Toggle hiển thị giá đã chọn (hoặc “Select Range”) */}
-              <CDropdownToggle className="w-100 bg-transparent border-0 text-start ps-3">
-                Price Range (VND):{' '}
-                {minPrice && maxPrice
-                  ? `${minPrice} - ${maxPrice}`
-                  : 'Select Range'}
-              </CDropdownToggle>
-
-              <CDropdownMenu style={{ minWidth: '250px' }}>
-                {/* 1) Các mức gợi ý */}
-                <CDropdownItem
-                  onClick={() => {
-                    setMinPrice(100000)
-                    setMaxPrice(200000)
-                  }}
-                >
-                  100.000 - 200.000
-                </CDropdownItem>
-                <CDropdownItem
-                  onClick={() => {
-                    setMinPrice(200000)
-                    setMaxPrice(500000)
-                  }}
-                >
-                  200.000 - 500.000
-                </CDropdownItem>
-                <CDropdownItem
-                  onClick={() => {
-                    setMinPrice(500000)
-                    setMaxPrice(1000000)
-                  }}
-                >
-                  500.000 - 1.000.000
-                </CDropdownItem>
-                <CDropdownItem divider="true" />
-
-                {/* 2) Cho phép nhập thủ công */}
-                <div className="px-3 py-2">
-                  <label className="form-label mb-1 fw-semibold">Custom Range</label>
-                  <div className="d-flex gap-2 mb-2">
-                    <CFormInput
-                      type="number"
-                      placeholder="Min"
-                      min={100000}
-                      max={1000000}
-                      value={minPrice}
-                      onChange={(e) => setMinPrice(e.target.value)}
-                    />
-                    <CFormInput
-                      type="number"
-                      placeholder="Max"
-                      min={100000}
-                      max={1000000}
-                      value={maxPrice}
-                      onChange={(e) => setMaxPrice(e.target.value)}
-                    />
-                  </div>
-                  <CButton
-                    color="primary"
-                    size="sm"
-                    onClick={() => {
-                      // Bấm "Apply" => đóng Dropdown (nếu muốn)
-                      // => Tự động filter khi Search
-                    }}
-                  >
-                    Apply
-                  </CButton>
-                </div>
-              </CDropdownMenu>
-            </CDropdown>
-          </CCol>
-
-
+        <CRow className="g-3 align-items-center mb-1">
           {/* Minimum Bedrooms */}
-          <CCol xs={12} md={4}>
+          <CCol sm={6} md={3}>
             <div className="position-relative">
               <CInputGroup className="border-0">
                 <CInputGroupText className="bg-transparent border-0">
-                  <Users className="text-primary" size={20} />
+                  <BedDouble className="text-primary" size={30} />
                 </CInputGroupText>
                 <div className="d-flex flex-column flex-grow-1">
-                  <label className="small text-muted mb-0 ms-2">
+                  <label className="fw-bolder">
                     Minimum Bedrooms
                   </label>
                   <CFormInput
                     type="number"
                     min="0"
-                    placeholder="Bedrooms"
+                    placeholder="Enter number"
                     value={minBedrooms}
                     onChange={(e) => setMinBedrooms(e.target.value)}
-                    className="border-0 ps-2 pt-0"
+                    className="border-0 ps-2 pt-2"
                   />
                 </div>
               </CInputGroup>
@@ -276,27 +185,113 @@ const SearchBar = () => {
           </CCol>
 
           {/* Minimum Bathrooms */}
-          <CCol xs={12} md={4}>
+          <CCol sm={6} md={3}>
             <div className="position-relative">
               <CInputGroup className="border-0">
                 <CInputGroupText className="bg-transparent border-0">
-                  <Calendar className="text-primary" size={20} />
+                  <Bath className="text-primary" size={30} />
                 </CInputGroupText>
                 <div className="d-flex flex-column flex-grow-1">
-                  <label className="small text-muted mb-0 ms-2">
+                  <label className="fw-bolder">
                     Minimum Bathrooms
                   </label>
                   <CFormInput
                     type="number"
                     min="0"
-                    placeholder="Bathrooms"
+                    placeholder="Enter number"
                     value={minBathrooms}
                     onChange={(e) => setMinBathrooms(e.target.value)}
-                    className="border-0 ps-2 pt-0"
+                    className="border-0 ps-2 pt-2"
                   />
                 </div>
               </CInputGroup>
             </div>
+          </CCol>
+
+          {/* Price Range */}
+          <CCol sm={8} md={4}>
+            <div className="px-3 py-2">
+              <label className="form-label mb-1 fw-semibold">Price Range (VND)</label>
+              <div className="d-flex gap-2">
+                <IMaskInput
+                  mask={Number} // Numeric mask
+                  thousandsSeparator="."
+                  inputMode="numeric"
+                  className="form-control"
+                  style={{ textAlign: "right" }}
+                  id="minPrice"
+                  placeholder="Min"
+                  value={minPrice}
+                  onAccept={(val, mask) => setMinPrice(mask.unmaskedValue)}
+                />
+                <IMaskInput
+                  mask={Number} // Numeric mask
+                  thousandsSeparator="."
+                  inputMode="numeric"
+                  className="form-control"
+                  style={{ textAlign: "right" }}
+                  id="maxPrice"
+                  placeholder="Max"
+                  value={maxPrice}
+                  onAccept={(val, mask) => setMaxPrice(mask.unmaskedValue)}
+                />
+              </div>
+            </div>
+          </CCol>
+
+          {/* Search Button */}
+          <CCol sm={4} md={2} className="pt-4 justify-content-center">
+            <CButton
+              color="primary"
+              className="ms-4"
+              onClick={handleSearchButtonClick}
+            >
+              <Search size={20} />
+              Search
+            </CButton>
+          </CCol>
+
+          {/* Price Range */}
+          <CCol sm={8} md={4}>
+            <div className="px-3 py-2">
+              <label className="form-label mb-1 fw-semibold">Price Range (VND)</label>
+              <div className="d-flex gap-2">
+                <IMaskInput
+                  mask={Number} // Numeric mask
+                  thousandsSeparator="."
+                  inputMode="numeric"
+                  className="form-control"
+                  style={{ textAlign: "right" }}
+                  id="minPrice"
+                  placeholder="Min"
+                  value={minPrice}
+                  onAccept={(val, mask) => setMinPrice(mask.unmaskedValue)}
+                />
+                <IMaskInput
+                  mask={Number} // Numeric mask
+                  thousandsSeparator="."
+                  inputMode="numeric"
+                  className="form-control"
+                  style={{ textAlign: "right" }}
+                  id="maxPrice"
+                  placeholder="Max"
+                  value={maxPrice}
+                  onAccept={(val, mask) => setMaxPrice(mask.unmaskedValue)}
+                />
+              </div>
+            </div>
+          </CCol>
+
+          {/* Search Button */}
+          <CCol sm={4} md={2} className="pt-4 justify-content-center">
+            <CButton
+              color="primary"
+              className="ms-4 w-75"
+              onClick={handleSearchButtonClick}
+            >
+              <Search size={20} />
+              Search
+            </CButton>
           </CCol>
         </CRow>
       </CContainer>

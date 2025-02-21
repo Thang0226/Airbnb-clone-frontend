@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import HouseCarousel from './HouseCarousel'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   CCardBody,
   CRow,
@@ -11,35 +11,36 @@ import {
   CBadge,
 } from '@coreui/react'
 import './HouseList.css'
-import { BASE_URL, API_ENDPOINTS } from '../../constants/api'
+import { BASE_URL_HOUSE } from '../../constants/api'
 import { setHouses } from '../../redux/slices/houseSlice'
 
 const HouseList = () => {
   const houseList = useSelector(state => state.houses.list)
   const [loading, setLoading] = useState(true)
+  const dispatch = useDispatch()
 
-  useEffect(() => {
+  useEffect( () => {
     axios
-      .get(`${BASE_URL}${API_ENDPOINTS.GET_HOUSES_FOR_RENT}`)
+      .get(`${BASE_URL_HOUSE}`)
       .then((response) => {
-        setHouses(response.data)
+        console.log(response.data)
+        dispatch(setHouses(response.data))
         setLoading(false)
       })
       .catch((error) => {
         console.error('There was an error fetching the data!', error)
-        setLoading(false)
       })
   }, [])
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('vi-VN', {
       style: 'decimal',
       maximumFractionDigits: 0,
     }).format(price)
-  }
-
-  if (loading) {
-    return <div>Loading...</div>
   }
 
   return (
@@ -63,20 +64,6 @@ const HouseList = () => {
               <div className="position-relative">
                 {/* Sử dụng HouseCarousel để hiển thị danh sách hình */}
                 <HouseCarousel images={house.houseImages} height="150px" />
-                <CBadge
-                  color="warning"
-                  className="position-absolute top-0 start-0 m-2"
-                  style={{ fontSize: '0.8rem' }}
-                >
-                  VIP
-                </CBadge>
-                <CBadge
-                  color="danger" // Bạn có thể thay đổi màu theo status nếu cần.
-                  className="position-absolute top-0 end-0 m-2"
-                  style={{ fontSize: '0.8rem' }}
-                >
-                  {house.status}
-                </CBadge>
                 <div
                   className="position-absolute bottom-0 end-0 m-2 bg-dark bg-opacity-75 rounded px-2 py-1 text-white d-flex align-items-center"
                   style={{ fontSize: '0.8rem' }}

@@ -53,13 +53,19 @@ export default function Login() {
       password: values.password,
     })
       .then((res) => {
-        dispatch(setToken(res.data.token))
-        dispatch(setUsername(res.data.username))
+        const user = res.data;
+        const role = user.authorities[0].authority;
+        dispatch(setToken(user.token))
+        dispatch(setUsername(user.username))
         dispatch(deletePassword())
-        localStorage.setItem('token', res.data.token)
+        localStorage.setItem('token', user.token)
         localStorage.setItem('loggedIn', JSON.stringify(true))
-        localStorage.setItem('username', res.data.username)
+        localStorage.setItem('username', user.username)
+        localStorage.setItem('role', role)
         toast.success('login successful', { hideProgressBar: true })
+        if (role === 'ROLE_ADMIN') {
+          return navigate('/admin');
+        }
         navigate('/')
       })
       .catch((err) => {
