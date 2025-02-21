@@ -31,7 +31,7 @@ const UserProfile = () => {
   )
 
   const goToProfileEdit = () => {
-    navigate('/admin/profile/edit', { state: { username: userProfile.username } })
+    navigate('/profile/edit', { state: { username: userProfile.username } })
   }
 
   return (
