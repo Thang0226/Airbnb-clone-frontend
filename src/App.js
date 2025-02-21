@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { HashRouter , Routes , Route , Navigate } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './redux/store'
 import './scss/custom.scss'
@@ -32,10 +32,10 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
 
-            <Route element={<RequireAuth allowedRoles={['ROLE_USER', 'ROLE_ADMIN']} />}>
+            <Route element={<RequireAuth allowedRoles={['ROLE_USER' , 'ROLE_ADMIN' , 'ROLE_HOST']} />}>
               <Route path="/profile" element={<UserProfile />} />
               <Route path="/profile/edit" element={<ProfileUpdateForm />} />
-              <Route path="/user/change-password" element={<ChangePassword/>} />
+              <Route path="/user/change-password" element={<ChangePassword />} />
             </Route>
           </Route>
 
