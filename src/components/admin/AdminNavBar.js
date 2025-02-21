@@ -69,12 +69,6 @@ export default function AdminNavBar() {
               </CNavLink>
             </CNavItem>
           </CNavbarNav>
-          <CForm className="d-inline-flex">
-            <CFormInput type="search" className="me-2" placeholder="Search" />
-            <CButton type="submit" color="primary" variant="outline" className="me-5">
-              Search
-            </CButton>
-          </CForm>
           <CDropdown variant="dropdown" popper={true} className="bg-gradient rounded">
             <CDropdownToggle
               caret={false}

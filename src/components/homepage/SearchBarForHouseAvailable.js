@@ -250,49 +250,6 @@ const SearchBar = () => {
               Search
             </CButton>
           </CCol>
-
-          {/* Price Range */}
-          <CCol sm={8} md={4}>
-            <div className="px-3 py-2">
-              <label className="form-label mb-1 fw-semibold">Price Range (VND)</label>
-              <div className="d-flex gap-2">
-                <IMaskInput
-                  mask={Number} // Numeric mask
-                  thousandsSeparator="."
-                  inputMode="numeric"
-                  className="form-control"
-                  style={{ textAlign: "right" }}
-                  id="minPrice"
-                  placeholder="Min"
-                  value={minPrice}
-                  onAccept={(val, mask) => setMinPrice(mask.unmaskedValue)}
-                />
-                <IMaskInput
-                  mask={Number} // Numeric mask
-                  thousandsSeparator="."
-                  inputMode="numeric"
-                  className="form-control"
-                  style={{ textAlign: "right" }}
-                  id="maxPrice"
-                  placeholder="Max"
-                  value={maxPrice}
-                  onAccept={(val, mask) => setMaxPrice(mask.unmaskedValue)}
-                />
-              </div>
-            </div>
-          </CCol>
-
-          {/* Search Button */}
-          <CCol sm={4} md={2} className="pt-4 justify-content-center">
-            <CButton
-              color="primary"
-              className="ms-4 w-75"
-              onClick={handleSearchButtonClick}
-            >
-              <Search size={20} />
-              Search
-            </CButton>
-          </CCol>
         </CRow>
       </CContainer>
     </>
