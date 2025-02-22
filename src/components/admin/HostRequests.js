@@ -13,35 +13,41 @@ import {
   CTableDataCell, CTableHead, CTableHeaderCell,
   CTableRow,
 } from '@coreui/react'
+import ConfirmWindow from '../ConfirmWindow'
 
 export default function HostRequests(){
   const [requests, setRequests] = useState([]);
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [approveVisible, setApproveVisible] = useState(false);
+  const [declineVisible, setDeclineVisible] = useState(false);
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     document.title = 'Admin | Host Requests';
-    fetchHostRequests();
-  }, []);
-
-  const token = localStorage.getItem('token');
-
-  const fetchHostRequests = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL_USER}/host-requests`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setRequests(response.data);
-    } catch (error) {
-      console.error('Error fetching requests:', error);
-      toast.error('Failed to load host requests');
+    const getRequests = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL_USER}/host-requests`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setRequests(response.data);
+      } catch (error) {
+        console.error('Error fetching requests:', error);
+        toast.error('Failed to load host requests');
+      }
     }
+    getRequests();
+  }, [approveVisible, declineVisible]);
+
+  const handleApprove = (request) => {
+    setSelectedRequest(request);
+    setApproveVisible(true);
   };
 
-  const handleApprove = async (requestId) => {
-    let response;
+  const handleAfterConfirmApprove = async () => {
     try {
-      response = await axios.post(`${BASE_URL_USER}/host-requests/${requestId}/approve`,
+      await axios.post(`${BASE_URL_USER}/host-requests/${selectedRequest.id}/approve`,
         {}, // empty body
         {
           headers: {
@@ -56,10 +62,9 @@ export default function HostRequests(){
           "service_p6wbmae", // Service ID
           "template_piwv2fk", // Template ID
           {
-            from_name: "Airbnb-clone App",
-            to_email: "thang.nd0226@gmail.com",
-            to_name: "Admin",
-            message: "Accepted new host registration: \n\tUsername: " + response.data,
+            from_name: "Admin",
+            to_email: selectedRequest.user.email,
+            to_name: selectedRequest.user.fullName
           },
           "1N9KYwqlDUuHvGQMW" // Public Key
         )
@@ -72,19 +77,22 @@ export default function HostRequests(){
           }
         );
 
-      await fetchHostRequests(); // Refresh the list
-
+      setApproveVisible(false);
     } catch (error) {
       console.error('Error approving request:', error);
       toast.error('Failed to approve request');
     }
+  }
+
+  const handleDecline = (request) => {
+    setSelectedRequest(request);
+    setDeclineVisible(true);
   };
 
-  const handleDecline = async (requestId) => {
-    let response;
+  const handleAfterConfirmDecline = async (message) => {
     try {
-      response = await axios.post(`${BASE_URL_USER}/host-requests/${requestId}/decline`,
-        {}, // empty body
+      await axios.post(`${BASE_URL_USER}/host-requests/${selectedRequest.id}/decline`,
+        {},
         {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -96,12 +104,12 @@ export default function HostRequests(){
       emailjs
         .send(
           "service_p6wbmae",
-          "template_piwv2fk",
+          "template_4082lmo",
           {
-            from_name: "Airbnb-clone App",
-            to_email: "thang.nd0226@gmail.com",
-            to_name: "Admin",
-            message: "Declined new host registration. \n\tUsername: " + response.data + "\nUser account is still created.",
+            from_name: "Admin",
+            to_email: selectedRequest.user.email,
+            to_name: selectedRequest.user.fullName,
+            message: message,
           },
           "1N9KYwqlDUuHvGQMW"
         )
@@ -114,58 +122,73 @@ export default function HostRequests(){
           }
         );
 
-      await fetchHostRequests();
-
+      setDeclineVisible(false);
     } catch (error) {
-      console.error('Error approving request:', error);
-      toast.error('Failed to approve request');
+      console.error('Error declining request:', error);
+      toast.error('Failed to decline request');
     }
   };
 
   return (
-    <CCard>
-      <CCardHeader className="text-center p-4">
-        <h3>Host Requests</h3>
-      </CCardHeader>
-      <CCardBody>
-        <CTable hover responsive>
-          <CTableHead className="fs-5">
-            <CTableRow>
-              <CTableHeaderCell>Username</CTableHeaderCell>
-              <CTableHeaderCell className="text-center">Phone</CTableHeaderCell>
-              <CTableHeaderCell className="text-center">Request Date</CTableHeaderCell>
-              <CTableHeaderCell className="text-center">Actions</CTableHeaderCell>
-            </CTableRow>
-          </CTableHead>
-          <CTableBody>
-            {requests.map((request) => (
-              <CTableRow key={request.id} className="align-middle fs-5">
-                <CTableDataCell>{request.user.username}</CTableDataCell>
-                <CTableDataCell className="text-center">{request.user.phone}</CTableDataCell>
-                <CTableDataCell className="text-center">
-                  {new Date(request.requestDate).toLocaleDateString()}
-                </CTableDataCell>
-                <CTableDataCell className="text-center">
-                  <CButton
-                    color="success"
-                    className="fs-5 cursor-pointer text-white me-3"
-                    onClick={() => handleApprove(request.id)}
-                  >
-                    Approve
-                  </CButton>
-                  <CButton
-                    color="secondary"
-                    className="fs-5 cursor-pointer text-white"
-                    onClick={() => handleDecline(request.id)}
-                  >
-                    Decline
-                  </CButton>
-                </CTableDataCell>
+    <>
+      <CCard>
+        <CCardHeader className="text-center p-4">
+          <h3>Host Requests</h3>
+        </CCardHeader>
+        <CCardBody>
+          <CTable hover responsive>
+            <CTableHead className="fs-5">
+              <CTableRow>
+                <CTableHeaderCell>Username</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Phone</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Request Date</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Actions</CTableHeaderCell>
               </CTableRow>
-            ))}
-          </CTableBody>
-        </CTable>
-      </CCardBody>
-    </CCard>
+            </CTableHead>
+            <CTableBody>
+              {requests.map((request) => (
+                <CTableRow key={request.id} className="align-middle fs-5">
+                  <CTableDataCell>{request.user.username}</CTableDataCell>
+                  <CTableDataCell className="text-center">{request.user.phone}</CTableDataCell>
+                  <CTableDataCell className="text-center">
+                    {new Date(request.requestDate).toLocaleDateString()}
+                  </CTableDataCell>
+                  <CTableDataCell className="text-center">
+                    <CButton
+                      color="success"
+                      className="fs-5 cursor-pointer text-white me-3"
+                      onClick={() => handleApprove(request)}
+                    >
+                      Approve
+                    </CButton>
+                    <CButton
+                      color="secondary"
+                      className="fs-5 cursor-pointer text-white"
+                      onClick={() => handleDecline(request)}
+                    >
+                      Decline
+                    </CButton>
+                  </CTableDataCell>
+                </CTableRow>
+              ))}
+            </CTableBody>
+          </CTable>
+        </CCardBody>
+      </CCard>
+      <ConfirmWindow
+        title={`Confirm Approve host registration from ${selectedRequest && (selectedRequest.user.username || '')}`}
+        label="Message:"
+        visible={approveVisible}
+        setVisible={setApproveVisible}
+        handleAfterConfirm={handleAfterConfirmApprove}
+      />
+      <ConfirmWindow
+        title={`Confirm Decline host registration from ${selectedRequest && (selectedRequest.user.username || '')}`}
+        label="Reason:"
+        visible={declineVisible}
+        setVisible={setDeclineVisible}
+        handleAfterConfirm={(message) => handleAfterConfirmDecline(message)}
+      />
+    </>
   );
 }
