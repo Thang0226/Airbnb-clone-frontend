@@ -1,6 +1,8 @@
 import { LoginSocialGoogle, LoginSocialFacebook } from 'reactjs-social-login';
 
 import { CCard, CCardBody, CContainer, CRow, CCol, CButton, CImage } from '@coreui/react';
+import { FaFacebookSquare } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 
 const SocialLoginComponent = () => {
   const onLoginSuccess = (response) => {
@@ -13,50 +15,44 @@ const SocialLoginComponent = () => {
 
   return (
     <CContainer>
-      <CRow className="justify-content-center">
+      <CRow className="justify-content-center my-0">
         <CCol md={6}>
-          <CCard>
-            <CCardBody>
+          <CCard className="border-0">
+            <CCardBody className="py-0">
               {/* Google Login */}
               <LoginSocialGoogle
-                client_id="YOUR_GOOGLE_CLIENT_ID"
+                client_id="475971060076-mpnvdf9jjj60ciku491an66j8ue9rl47.apps.googleusercontent.com"
                 scope="openid profile email"
                 onResolve={onLoginSuccess}
                 onReject={onLoginFailure}
+                className="d-flex justify-content-center"
               >
                 <CButton
                   color="light"
-                  className="mb-3 w-100 d-flex align-items-center justify-content-center"
+                  className="d-flex align-items-center"
+                  style={{width: '90%'}}
                 >
-                  <CImage
-                    src="google-icon.png"
-                    className="me-2"
-                    width={20}
-                    height={20}
-                  />
+                  <FcGoogle size={25} className="me-2"/>
                   Sign in with Google
                 </CButton>
               </LoginSocialGoogle>
 
-              {/* Facebook Login */}
-              <LoginSocialFacebook
-                appId="YOUR_FACEBOOK_APP_ID"
-                onResolve={onLoginSuccess}
-                onReject={onLoginFailure}
-              >
-                <CButton
-                  color="facebook"
-                  className="w-100 d-flex align-items-center justify-content-center"
-                >
-                  <CImage
-                    src="facebook-icon.png"
-                    className="me-2"
-                    width={20}
-                    height={20}
-                  />
-                  Sign in with Facebook
-                </CButton>
-              </LoginSocialFacebook>
+              {/*/!* Facebook Login *!/*/}
+              {/*<LoginSocialFacebook*/}
+              {/*  appId="YOUR_FACEBOOK_APP_ID"*/}
+              {/*  onResolve={onLoginSuccess}*/}
+              {/*  onReject={onLoginFailure}*/}
+              {/*  className="d-flex justify-content-center"*/}
+              {/*>*/}
+              {/*  <CButton*/}
+              {/*    color="light"*/}
+              {/*    className="d-flex align-items-center"*/}
+              {/*    style={{width: '100%'}}*/}
+              {/*  >*/}
+              {/*    <FaFacebookSquare size={25} color="#335AA6" className="me-2"/>*/}
+              {/*    Sign in with Facebook*/}
+              {/*  </CButton>*/}
+              {/*</LoginSocialFacebook>*/}
             </CCardBody>
           </CCard>
         </CCol>
