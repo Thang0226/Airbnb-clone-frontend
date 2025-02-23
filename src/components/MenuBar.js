@@ -17,6 +17,7 @@ import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { resetAccount } from '../redux/slices/accountSlice'
 import { fetchUserProfile } from '../redux/slices/userProfileSlice'
+import { logout } from './auth/authService'
 
 export default function MenuBar() {
   const [visible, setVisible] = useState(false)
@@ -30,32 +31,21 @@ export default function MenuBar() {
     if (username) {
       dispatch(fetchUserProfile(username))
     }
-
   }, [dispatch, username])
 
   const { userProfile } = useSelector((state) => state.userProfile)
 
   const handleLogout = async () => {
-    await axios.post(
-      `${BASE_URL_USER}/logout`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    )
-      .then(res => {
-        toast.success(res.data, { hideProgressBar: true })
-        dispatch(resetAccount())
-        localStorage.clear()
-        navigate('/login')
-      })
-      .catch(err => {
-        console.log(err)
-        toast.error(err.response.data || err.message, { hideProgressBar: true })
-        navigate('/')
-      })
+    try {
+      const message = await logout();
+      toast.success(message, { hideProgressBar: true });
+      dispatch(resetAccount());
+      localStorage.clear();
+      navigate('/login');
+    } catch (err) {
+      console.log(err)
+      toast.error(err.response.data || err.message, { hideProgressBar: true })
+    }
   }
 
   const handleChangePassword = () => {

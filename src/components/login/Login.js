@@ -34,7 +34,10 @@ export default function Login() {
   }
 
   useEffect(() => {
-    document.title = 'Airbnb | Login'
+    document.title = 'Airbnb | Login';
+    if (localStorage.getItem('loggedIn')) {
+      navigate('/')
+    }
   }, [])
 
   const validationSchema = Yup.object().shape({

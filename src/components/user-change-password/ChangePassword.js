@@ -10,10 +10,9 @@ import { useNavigate } from 'react-router-dom'
 import { useEffect, useRef } from 'react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
-import axios from 'axios'
+import axiosInstance from '../auth/axiosConfig';
 import { useDispatch, useSelector } from 'react-redux'
-import { setPassword, deletePassword } from '../../redux/slices/accountSlice'
-import { BASE_URL_USER } from '../../constants/api'
+import { setPassword, deletePassword, deleteToken } from '../../redux/slices/accountSlice'
 import FORMPasswordInput from '../_fragments/FORMPasswordInput'
 import FORMTextInput from '../_fragments/FORMTextInput'
 
@@ -37,7 +36,6 @@ export default function ChangePassword() {
     new_password: '',
     confirm_password: ''
   }
-  const formikRef = useRef(null)
 
   const validationSchema = Yup.object().shape({
     old_password: Yup.string()
@@ -60,26 +58,25 @@ export default function ChangePassword() {
       }),
   })
 
-  const handleSubmit = async () => {
-    const formValues = formikRef.current.values
-    await axios.post(`${BASE_URL_USER}/change_password`, {
-      username: username,
-      oldPassword: formValues.old_password,
-      newPassword: formValues.new_password
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }
-    }).then(res => {
-      toast.success(res.data)
-      dispatch(setPassword(formValues.new_password))
+  const handleSubmit = async (values) => {
+    try {
+      const res = await axiosInstance.post('/users/change_password', {
+        username: username,
+        oldPassword: values.old_password,
+        newPassword: values.new_password
+      });
+      toast.success(res.data);
+
+      dispatch(setPassword(values.new_password))
+      deleteToken()
+      localStorage.clear()
       navigate('/login')
-    }).catch(err => {
+
+    } catch (err) {
       console.log(err)
       toast.error(err.response.data)
       dispatch(deletePassword())
-    })
+    }
   }
 
   return (
@@ -97,7 +94,7 @@ export default function ChangePassword() {
               <Formik initialValues={initialValues}
                       validationSchema={validationSchema}
                       onSubmit={handleSubmit}
-                      innerRef={formikRef}>
+                      >
                 {({ handleSubmit }) => (
                   <CForm onSubmit={handleSubmit}>
                     <FORMTextInput
