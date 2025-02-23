@@ -62,7 +62,7 @@ const UserDetails = () => {
           style={{ cursor: 'pointer', textDecoration: 'underline', color: '#0d6efd' }}
           onClick={() => navigate(-2)}
         >
-          Dash Board
+          Dashboard
         </span>
         <span className="mx-1">{'/'}</span>
         <span

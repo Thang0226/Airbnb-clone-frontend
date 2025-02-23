@@ -81,7 +81,7 @@ export const UserList = () => {
           style={{ cursor: 'pointer', textDecoration: 'underline', color: '#0d6efd' }}
           onClick={() => navigate(-1)}
         >
-          Dash Board
+          Dashboard
         </span>
         <span className="mx-1">{'/'}</span>
         <span>User Details</span>

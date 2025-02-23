@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  CBadge,
   CSidebar,
   CSidebarBrand,
   CSidebarHeader,
@@ -11,7 +10,7 @@ import {
 } from '@coreui/react'
 
 import CIcon from '@coreui/icons-react'
-import { cilCloudDownload, cilLayers, cilPuzzle, cilSpeedometer, cilUser } from '@coreui/icons'
+import { cilCloudDownload, cilList, cilUser } from '@coreui/icons'
 import { TbBrandAirbnb } from 'react-icons/tb'
 
 export const AdminSideBar = () => {
@@ -25,35 +24,26 @@ export const AdminSideBar = () => {
         <CNavItem href="#/admin/users">
           <CIcon customClassName="nav-icon" icon={cilUser} /> User List
         </CNavItem>
-        <CNavItem href="#">
-          <CIcon customClassName="nav-icon" icon={cilSpeedometer} /> With badge{' '}
-          <CBadge color="primary ms-auto">NEW</CBadge>
-        </CNavItem>
         <CNavGroup
           toggler={
             <>
-              <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Nav dropdown
+              <CIcon customClassName="nav-icon" icon={cilList} /> Host
             </>
           }
         >
           <CNavItem href="#">
-            <span className="nav-icon">
-              <span className="nav-icon-bullet"></span>
-            </span>{' '}
-            Nav dropdown item
+            <CIcon customClassName="nav-icon" icon={cilUser} />
+            Host List
           </CNavItem>
-          <CNavItem href="#">
+          <CNavItem href="/#/admin/host/request">
             <span className="nav-icon">
-              <span className="nav-icon-bullet"></span>
+              <i className="bi bi-card-checklist"></i>
             </span>{' '}
-            Nav dropdown item
+            Host Request
           </CNavItem>
         </CNavGroup>
         <CNavItem href="https://coreui.io">
           <CIcon customClassName="nav-icon" icon={cilCloudDownload} /> Download CoreUI
-        </CNavItem>
-        <CNavItem href="/#/admin/host/request">
-          Host Request
         </CNavItem>
       </CSidebarNav>
     </CSidebar>
