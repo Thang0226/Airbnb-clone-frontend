@@ -4,13 +4,12 @@ import {
   CSidebarBrand,
   CSidebarHeader,
   CSidebarNav,
-  CNavGroup,
   CNavItem,
   CNavTitle,
 } from '@coreui/react'
 
 import CIcon from '@coreui/icons-react'
-import { cilCloudDownload, cilList, cilUser } from '@coreui/icons'
+import { cilCloudDownload, cilHouse, cilUser } from '@coreui/icons'
 import { TbBrandAirbnb } from 'react-icons/tb'
 
 export const AdminSideBar = () => {
@@ -24,24 +23,10 @@ export const AdminSideBar = () => {
         <CNavItem href="#/admin/users">
           <CIcon customClassName="nav-icon" icon={cilUser} /> User List
         </CNavItem>
-        <CNavGroup
-          toggler={
-            <>
-              <CIcon customClassName="nav-icon" icon={cilList} /> Host
-            </>
-          }
-        >
-          <CNavItem href="#">
-            <CIcon customClassName="nav-icon" icon={cilUser} />
-            Host List
-          </CNavItem>
-          <CNavItem href="/#/admin/host/request">
-            <span className="nav-icon">
-              <i className="bi bi-card-checklist"></i>
-            </span>{' '}
-            Host Request
-          </CNavItem>
-        </CNavGroup>
+        <CNavItem href="#/admin/hosts">
+          <CIcon customClassName="nav-icon" icon={cilHouse} />
+          Host List
+        </CNavItem>
         <CNavItem href="https://coreui.io">
           <CIcon customClassName="nav-icon" icon={cilCloudDownload} /> Download CoreUI
         </CNavItem>
