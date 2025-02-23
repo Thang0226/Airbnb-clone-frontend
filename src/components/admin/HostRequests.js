@@ -131,44 +131,44 @@ export default function HostRequests(){
 
   return (
     <>
-      <CCard>
-        <CCardHeader className="text-center p-4">
-          <h3>Host Requests</h3>
-        </CCardHeader>
-        <CCardBody>
-          <CTable hover responsive>
-            <CTableHead className="fs-5">
-              <CTableRow>
-                <CTableHeaderCell>Username</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Phone</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Request Date</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Actions</CTableHeaderCell>
-              </CTableRow>
-            </CTableHead>
-            <CTableBody>
-              {requests.map((request) => (
-                <CTableRow key={request.id} className="align-middle fs-5">
-                  <CTableDataCell>{request.user.username}</CTableDataCell>
-                  <CTableDataCell className="text-center">{request.user.phone}</CTableDataCell>
-                  <CTableDataCell className="text-center">
-                    {new Date(request.requestDate).toLocaleDateString()}
-                  </CTableDataCell>
-                  <CTableDataCell className="text-center">
-                    <CButton
-                      color="success"
-                      className="fs-5 cursor-pointer text-white me-3"
-                      onClick={() => handleApprove(request)}
-                    >
-                      Approve
-                    </CButton>
-                    <CButton
-                      color="secondary"
-                      className="fs-5 cursor-pointer text-white"
-                      onClick={() => handleDecline(request)}
-                    >
-                      Decline
-                    </CButton>
-                  </CTableDataCell>
+    <CCard>
+      <CCardHeader className="text-center p-4">
+        <h3>Host Requests</h3>
+      </CCardHeader>
+      <CCardBody>
+        <CTable hover responsive>
+          <CTableHead className="fs-5">
+            <CTableRow>
+              <CTableHeaderCell>Username</CTableHeaderCell>
+              <CTableHeaderCell className="text-center">Phone</CTableHeaderCell>
+              <CTableHeaderCell className="text-center">Request Date</CTableHeaderCell>
+              <CTableHeaderCell className="text-center">Actions</CTableHeaderCell>
+            </CTableRow>
+          </CTableHead>
+          <CTableBody>
+            {requests.map((request) => (
+              <CTableRow key={request.id} className="align-middle fs-5">
+                <CTableDataCell>{request.user.username}</CTableDataCell>
+                <CTableDataCell className="text-center">{request.user.phone}</CTableDataCell>
+                <CTableDataCell className="text-center">
+                  {new Intl.DateTimeFormat("en-GB").format(new Date(request.requestDate))}
+                </CTableDataCell>
+                <CTableDataCell className="text-center">
+                  <CButton
+                    color="success"
+                    className="fs-5 cursor-pointer text-white me-3"
+                    onClick={() => handleApprove(request.id)}
+                  >
+                    Approve
+                  </CButton>
+                  <CButton
+                    color="secondary"
+                    className="fs-5 cursor-pointer text-white"
+                    onClick={() => handleDecline(request.id)}
+                  >
+                    Decline
+                  </CButton>
+                </CTableDataCell>
                 </CTableRow>
               ))}
             </CTableBody>
