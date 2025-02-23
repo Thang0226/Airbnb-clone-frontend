@@ -3,10 +3,44 @@ import { LoginSocialGoogle, LoginSocialFacebook } from 'reactjs-social-login';
 import { CCard, CCardBody, CContainer, CRow, CCol, CButton, CImage } from '@coreui/react';
 import { FaFacebookSquare } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { toast } from 'react-toastify'
+import axios from 'axios'
+import { BASE_URL_USER } from '../../constants/api'
+import { deletePassword, setToken, setUsername } from '../../redux/slices/accountSlice'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
 const SocialLoginComponent = () => {
-  const onLoginSuccess = (response) => {
-    console.log('Login Success:', response);
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const onLoginSuccess = async (response) => {
+    console.log('Login Success:', response)
+    let data = response.data;
+    let ggData = {
+      email: data.email,
+      username: data.name,
+      fullName: data.name
+    }
+    await axios.post(`${BASE_URL_USER}/login-gg`, ggData)
+      .then(res => {
+        console.log(res);
+        toast.success("Login successful", {hideProgressBar: true});
+        const user = res.data;
+        const role = user.authorities[0].authority;
+        dispatch(setToken(user.token))
+        dispatch(setUsername(user.username))
+        dispatch(deletePassword())
+        localStorage.setItem('username', user.username)
+        localStorage.setItem('role', role)
+        localStorage.setItem('token', user.token)
+        localStorage.setItem('loggedIn', JSON.stringify(true))
+        if (role === 'ROLE_ADMIN') {
+          return navigate('/admin');
+        }
+        navigate('/')
+      }).catch(err => toast.error(err.response.data, { hideProgressBar: true }))
   };
 
   const onLoginFailure = (error) => {
@@ -28,12 +62,11 @@ const SocialLoginComponent = () => {
                 className="d-flex justify-content-center"
               >
                 <CButton
-                  color="light"
-                  className="d-flex align-items-center"
-                  style={{width: '90%'}}
+                  color="secondary"
+                  className="d-flex align-items-center justify-content-center"
                 >
                   <FcGoogle size={25} className="me-2"/>
-                  Sign in with Google
+                  Login with Google
                 </CButton>
               </LoginSocialGoogle>
 

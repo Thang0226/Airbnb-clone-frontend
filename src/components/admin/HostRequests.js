@@ -143,7 +143,7 @@ export default function HostRequests(){
                 <CTableDataCell>{request.user.username}</CTableDataCell>
                 <CTableDataCell className="text-center">{request.user.phone}</CTableDataCell>
                 <CTableDataCell className="text-center">
-                  {new Date(request.requestDate).toLocaleDateString()}
+                  {new Intl.DateTimeFormat("en-GB").format(new Date(request.requestDate))}
                 </CTableDataCell>
                 <CTableDataCell className="text-center">
                   <CButton
