@@ -22,7 +22,7 @@ const HouseList = () => {
     axios
       .get(`${BASE_URL_HOUSE}`)
       .then((response) => {
-        console.log(response.data)
+        // console.log(response.data)
         dispatch(setHouses(response.data))
         setLoading(false)
       })

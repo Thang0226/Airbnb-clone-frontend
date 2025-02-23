@@ -16,7 +16,7 @@ const SocialLoginComponent = () => {
   const dispatch = useDispatch()
 
   const onLoginSuccess = async (response) => {
-    console.log('Login Success:', response)
+    // console.log('Login Success:', response)
     let data = response.data;
     let ggData = {
       email: data.email,
@@ -25,7 +25,7 @@ const SocialLoginComponent = () => {
     }
     await axios.post(`${BASE_URL_USER}/login-gg`, ggData)
       .then(res => {
-        console.log(res);
+        // console.log(res);
         toast.success("Login successful", {hideProgressBar: true});
         const user = res.data;
         const role = user.authorities[0].authority;
