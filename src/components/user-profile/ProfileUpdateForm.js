@@ -24,7 +24,7 @@ const validationSchema = Yup.object({
     .matches(/^[a-zA-ZÀ-ỹ\s]+$/, 'Full Name cannot contain special characters')
     .required('Full Name is required'),
   address: Yup.string()
-    .matches(/^[a-zA-Z0-9À-ỹ\s]+$/, 'Address cannot contain special characters')
+    .matches(/^[a-zA-Z0-9À-ỹ\s,]+$/, 'Address cannot contain special characters')
     .required('Address is required'),
   phone: Yup.string()
     .matches(/^0[0-9]{9}$/, 'Phone number must start with 0 and have at least 10 digits')
