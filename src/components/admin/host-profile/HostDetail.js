@@ -17,8 +17,11 @@ import {
   CTableRow,
   CTableHeaderCell,
   CTableBody,
-  CTableDataCell,
+  CTableDataCell, CButton,
 } from '@coreui/react'
+import { BASE_URL } from '../../../constants/api'
+import UserInfoRow from '../../_fragments/FORMInfoRow'
+import CurrencyFormat from '../../_fragments/format/CurrencyFormat'
 
 const HostDetail = () => {
   const { id } = useParams()
@@ -33,7 +36,7 @@ const HostDetail = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/admin/host/${id}`, {
+      .get(`http://localhost:8080/api/admin/hosts/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       })
       .then((response) => {
@@ -69,14 +72,14 @@ const HostDetail = () => {
       <div className="d-flex align-items-center mb-4">
         <span
           style={{ cursor: 'pointer', textDecoration: 'underline', color: '#0d6efd' }}
-          onClick={() => navigate(-2)}
+          onClick={() => navigate('/admin')}
         >
           Dashboard
         </span>
         <span className="mx-1">/</span>
         <span
           style={{ cursor: 'pointer', textDecoration: 'underline', color: '#0d6efd' }}
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/admin/hosts')}
         >
           Host List
         </span>
@@ -90,15 +93,18 @@ const HostDetail = () => {
           <CCard className="shadow border-0">
             <CCardHeader className="text-center p-4 bg-primary text-white">
               <CImage
-                src={host.avatar || '/images/default-avatar.png'}
+                src={
+                  host.avatar
+                    ? `${BASE_URL}/images/${host.avatar}`
+                    : `${BASE_URL}/images/default.jpg`
+                }
                 alt={host.username}
                 className="rounded-circle border border-white border-4"
                 width="150"
                 height="150"
                 style={{ objectFit: 'cover' }}
               />
-              <h3 className="mt-3">{host.fullName}</h3>
-              <p className="mb-0">@{host.username}</p>
+              <h3 className="mt-3">{host.username}</h3>
               <CBadge
                 color={host.status === 'ACTIVE' ? 'success' : 'secondary'}
                 className="py-2 mt-2"
@@ -107,13 +113,10 @@ const HostDetail = () => {
                 {host.status}
               </CBadge>
             </CCardHeader>
-            <CCardBody className="p-4">
-              <p className="fs-5">
-                <strong>Phone:</strong> {host.phone}
-              </p>
-              <p className="fs-5">
-                <strong>Address:</strong> {host.address}
-              </p>
+            <CCardBody className="p-4 row">
+              <UserInfoRow label="Full Name" value={host.fullName} />
+              <UserInfoRow label="Phone number" value={host.phone} />
+              <UserInfoRow label="Address" value={host.address} />
             </CCardBody>
           </CCard>
         </CCol>
@@ -123,67 +126,23 @@ const HostDetail = () => {
             <CCardHeader className="text-center p-4 bg-secondary text-white">
               <h3>Host Statistics</h3>
             </CCardHeader>
-            <CCardBody className="p-4">
-              <p className="fs-5">
-                <strong>Houses Listed:</strong> {host.houses ? host.houses.length : 0}
-              </p>
-              <p className="fs-5">
-                <strong>Total Revenue:</strong>{' '}
-                {host.totalRevenue ? host.totalRevenue.toLocaleString() : '0'} VNĐ
-              </p>
-            </CCardBody>
-          </CCard>
-        </CCol>
-      </CRow>
-
-      {/* House Listings Table */}
-      <CRow className="mt-5">
-        <CCol>
-          <CCard className="shadow">
-            <CCardHeader>
-              <h4 className="my-3">🏠 House Listings 🏠</h4>
-            </CCardHeader>
-            <CCardBody>
-              {host.houses && host.houses.length > 0 ? (
-                <CTable hover responsive>
-                  <CTableHead>
-                    <CTableRow>
-                      <CTableHeaderCell>House Name</CTableHeaderCell>
-                      <CTableHeaderCell className="text-center">Address</CTableHeaderCell>
-                      <CTableHeaderCell className="text-center">Bedrooms</CTableHeaderCell>
-                      <CTableHeaderCell className="text-center">Bathrooms</CTableHeaderCell>
-                      <CTableHeaderCell className="text-center">Price</CTableHeaderCell>
-                      <CTableHeaderCell className="text-center">Action</CTableHeaderCell>
-                    </CTableRow>
-                  </CTableHead>
-                  <CTableBody>
-                    {host.houses.map((house) => (
-                      <CTableRow key={house.id}>
-                        <CTableDataCell>{house.houseName}</CTableDataCell>
-                        <CTableDataCell className="text-center">{house.address}</CTableDataCell>
-                        <CTableDataCell className="text-center">{house.bedrooms}</CTableDataCell>
-                        <CTableDataCell className="text-center">{house.bathrooms}</CTableDataCell>
-                        <CTableDataCell className="text-center">
-                          {house.price ? house.price.toLocaleString() : ''} VNĐ
-                        </CTableDataCell>
-                        <CTableDataCell className="text-center">
-                          <CLink
-                            as={Link}
-                            to={`/houses?hostId=${host.id}&houseId=${house.id}`}
-                            className="btn btn-outline-primary"
-                          >
-                            View Details
-                          </CLink>
-                        </CTableDataCell>
-                      </CTableRow>
-                    ))}
-                  </CTableBody>
-                </CTable>
-              ) : (
-                <div className="text-center">
-                  <h4 className="m-0">There are no houses listed by this host.</h4>
-                </div>
-              )}
+            <CCardBody className="p-4 row">
+              <UserInfoRow label="Houses Listed" value={host.housesForRent ? host.housesForRent : '0'} />
+              <UserInfoRow label="Total Income" value={<CurrencyFormat value={host.totalIncome} />} />
+              <div className="d-flex align-items-center fw-bold">
+                Danh sách nhà
+                <CButton
+                  size="sm"
+                  className="ms-2 border"
+                  style={{
+                    backgroundColor: "#f8f9fa",
+                  }}
+                  // onClick={}
+                >
+                  <i className="bi bi-box-arrow-up-right"></i>
+                </CButton>
+              </div>
+              <div>(bổ sung onclick navigate đến danh sách house của host trong sprint 3)</div>
             </CCardBody>
           </CCard>
         </CCol>
