@@ -3,6 +3,8 @@ import { accountSlice } from './slices/accountSlice'
 import userProfileReducer from "./slices/userProfileSlice";
 import houseReducer from "./slices/houseSlice"; // Import reducer
 import userManagementReducer from "./slices/userManagementSlice"; // Import reducer
+import userDetailsReducer from "./slices/userDetailsSlice"; // Import reducer
+import hostManagementReducer from "./slices/hostManagementSlice";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +12,8 @@ const store = configureStore({
     account: accountSlice.reducer,
     userProfile: userProfileReducer,
     userManagement: userManagementReducer,
+    userDetails: userDetailsReducer,
+    hostManagement: hostManagementReducer
   },
 })
 

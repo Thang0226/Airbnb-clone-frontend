@@ -13,12 +13,13 @@ import UserProfile from './components/user-profile/UserProfile'
 import ProfileUpdateForm from './components/user-profile/ProfileUpdateForm'
 import Layout from './components/Layout'
 import Homepage from './components/homepage/Homepage'
-import HostRequests from './components/admin/HostRequests'
+import HostList from './components/admin/HostList'
 import RequireAuth from './components/auth/RequireAuth'
 import AdminLayout from './components/admin/AdminLayout'
 import Dashboard from './components/admin/Dashboard'
 import { UserList } from './components/admin/UserList'
 import ChangePassword from './components/user-change-password/ChangePassword'
+import UserDetails from './components/admin/UserDetails'
 
 export default function App() {
   return (
@@ -43,8 +44,12 @@ export default function App() {
           <Route element={<RequireAuth allowedRoles={['ROLE_ADMIN']} />}>
             <Route element={<AdminLayout />}>
               <Route path="/admin" element={<Dashboard />} />
-              <Route path="/admin/host/request" element={<HostRequests />} />
+              <Route path="/admin/host/request" element={<HostList />} />
               <Route path="/admin/users" element={<UserList />} />
+              <Route path="/admin/users/:userID" element={<UserDetails />} />
+              <Route path="/admin/hosts" element={<HostList />} />
+              <Route path="/admin/profile" element={<UserProfile />} />
+              <Route path="/admin/profile/edit" element={<ProfileUpdateForm />} />
               {/* Các route admin khác có thể thêm tại đây */}
             </Route>
           </Route>

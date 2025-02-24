@@ -9,7 +9,6 @@ import {
   CNavItem,
   CNavLink,
 } from '@coreui/react'
-import { TbBrandAirbnb } from 'react-icons/tb'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
@@ -18,6 +17,7 @@ import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { resetAccount } from '../../redux/slices/accountSlice'
 import { fetchUserProfile } from '../../redux/slices/userProfileSlice'
+import { logout } from '../auth/authService'
 
 export default function AdminNavBar() {
   const [visible, setVisible] = useState(false)
@@ -30,30 +30,25 @@ export default function AdminNavBar() {
     if (username) {
       dispatch(fetchUserProfile(username))
     }
-
   }, [dispatch, username])
 
   const { userProfile } = useSelector((state) => state.userProfile)
 
+  const handleChangePassword = () => {
+    navigate('/user/change-password')
+  }
+
   const handleLogout = async () => {
-    await axios.post(
-      `${BASE_URL_USER}/logout`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    )
-      .then(res => {
-        toast.success(res.data, { hideProgressBar: true })
-        dispatch(resetAccount())
-        localStorage.clear()
-        navigate('/login')
-      })
-      .catch(err => {
-        toast.error(err.response.data, { hideProgressBar: true })
-      })
+    try {
+      const message = await logout();
+      toast.success(message, { hideProgressBar: true });
+      dispatch(resetAccount());
+      localStorage.clear();
+      navigate('/login');
+    } catch (err) {
+      console.log(err)
+      toast.error(err.response.data || err.message, { hideProgressBar: true })
+    }
   }
 
   return (
@@ -99,8 +94,11 @@ export default function AdminNavBar() {
             <CDropdownMenu>
               {token ? (
                 <>
-                  <CDropdownItem href="/#/profile">Profile</CDropdownItem>
+                  <CDropdownItem href="/#/admin/profile">Profile</CDropdownItem>
                   <CDropdownDivider />
+                  <CDropdownItem onClick={handleChangePassword} style={{ cursor: 'pointer' }}>
+                    Change Password
+                  </CDropdownItem>
                   <CDropdownItem onClick={handleLogout} style={{ cursor: 'pointer' }}>
                     Logout
                   </CDropdownItem>

@@ -7,12 +7,11 @@ import {
   CRow,
   CCol,
   CContainer,
-  CButton,
-  CBadge,
 } from '@coreui/react'
 import './HouseList.css'
 import { BASE_URL_HOUSE } from '../../constants/api'
 import { setHouses } from '../../redux/slices/houseSlice'
+import { FaMapMarkerAlt } from 'react-icons/fa'
 
 const HouseList = () => {
   const houseList = useSelector(state => state.houses.list)
@@ -23,7 +22,7 @@ const HouseList = () => {
     axios
       .get(`${BASE_URL_HOUSE}`)
       .then((response) => {
-        console.log(response.data)
+        // console.log(response.data)
         dispatch(setHouses(response.data))
         setLoading(false)
       })
@@ -94,21 +93,11 @@ const HouseList = () => {
                   <span>{house.bedrooms}{(house.bedrooms > 1) ? " bedrooms" : " bedroom"}</span>
                 </div>
 
-                <div className="d-flex align-items-center text-muted mb-3">
-                  <i className="fas fa-map-marker-alt me-2"></i>
+                <div className="d-flex align-items-center text-muted" style={{minHeight: '3rem'}}>
+                  <FaMapMarkerAlt className="me-2" />
                   <small>
                     {house.address}
                   </small>
-                </div>
-
-                <div className="d-flex justify-content-between align-items-center mt-auto">
-                  <small className="text-muted">
-                    Post by:
-                    {/*{house.status === "RENTED" ? "hôm nay" : "2 ngày trước"}*/}
-                  </small>
-                  <CButton color="light" variant="ghost" className="border-0 p-0">
-                    {/* <Heart className="text-muted" size={18} /> */}
-                  </CButton>
                 </div>
               </CCardBody>
             </div>

@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { setHouses } from '../../redux/slices/houseSlice'
-import MapSample from './MapSampletoSearch'
 import './HouseList.css'
 import {
   CContainer,
@@ -12,12 +11,8 @@ import {
   CInputGroup,
   CInputGroupText,
   CButton,
-  CDropdown,
-  CDropdownToggle,
-  CDropdownMenu,
-  CDropdownItem,
 } from '@coreui/react'
-import { Search, Calendar, Users, BedDouble, Bath } from 'lucide-react'
+import { Search, Calendar, MapPinHouse, BedDouble, Bath } from 'lucide-react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { IMaskInput } from 'react-imask'
@@ -41,29 +36,18 @@ const SearchBar = () => {
   tomorrow.setDate(today.getDate() + 1);
 
   const dispatch = useDispatch()
+  const [address, setAddress] = useState('')
   const [checkIn, setCheckIn] = useState(today.toISOString().split('T')[0])
   const [checkOut, setCheckOut] = useState(tomorrow.toISOString().split('T')[0])
-  const [priceOrder, setPriceOrder] = useState('')
+  const [priceOrder, setPriceOrder] = useState('ASC')
   const [minBedrooms, setMinBedrooms] = useState('')
   const [minBathrooms, setMinBathrooms] = useState('')
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
 
-  const [mapData, setMapData] = useState({
-    name: '',
-    address: '',
-  })
-
-  const handleAddressSelect = (addressData) => {
-    setMapData({
-      name: addressData.formattedAddress,
-      address: addressData.addressComponents,
-    })
-  }
-
   const handleSearchButtonClick = () => {
     const searchData = {
-      address: mapData.name,
+      address: address,
       checkIn: checkIn,
       checkOut: checkOut,
       minBedrooms: minBedrooms,
@@ -89,16 +73,24 @@ const SearchBar = () => {
     <>
       <CContainer fluid className="bg-light px-4 pb-1 rounded-4 shadow-sm">
         <CRow className="g-3 align-items-center mb-1">
-          {/* Map Search Input */}
+          {/* Search Input */}
           <CCol sm={6} md>
-            <label className="fw-bolder mb-1">Search Address</label>
-            <MapSample
-              value={mapData.name}
-              onChange={(newValue) =>
-                setMapData((prev) => ({ ...prev, name: newValue }))
-              }
-              onAddressSelect={handleAddressSelect}
-            />
+            <div className="position-relative">
+              <CInputGroup className="border-0">
+                <CInputGroupText className="bg-transparent border-0">
+                  <MapPinHouse className="text-primary" size={30} />
+                </CInputGroupText>
+                <div className="d-flex flex-column flex-grow-1">
+                  <label className="fw-bolder">Address</label>
+                  <CFormInput
+                    type="text"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    className="border-0 ps-2 pt-2"
+                  />
+                </div>
+              </CInputGroup>
+            </div>
           </CCol>
 
           {/* Check-In Date */}
@@ -140,23 +132,6 @@ const SearchBar = () => {
               </CInputGroup>
             </div>
           </CCol>
-
-          {/* Sort by Price */}
-          <CCol sm={6} md={2} className="justify-content-center pt-3">
-            <CDropdown>
-              <CDropdownToggle color="secondary">
-                {priceOrder ? ((priceOrder === 'ASC') ? "Price: Low to High" : "Price: High to Low") : "Sort by Price"}
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem onClick={() => setPriceOrder('ASC')} style={{cursor: 'pointer'}}>
-                  Low to High
-                </CDropdownItem>
-                <CDropdownItem onClick={() => setPriceOrder('DESC')} style={{cursor: 'pointer'}}>
-                  High to Low
-                </CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-          </CCol>
         </CRow>
 
         <CRow className="g-3 align-items-center mb-1">
@@ -186,7 +161,7 @@ const SearchBar = () => {
 
           {/* Minimum Bathrooms */}
           <CCol sm={6} md={3}>
-            <div className="position-relative">
+            <div className="position-relative border-start">
               <CInputGroup className="border-0">
                 <CInputGroupText className="bg-transparent border-0">
                   <Bath className="text-primary" size={30} />
@@ -209,8 +184,8 @@ const SearchBar = () => {
           </CCol>
 
           {/* Price Range */}
-          <CCol sm={8} md={4}>
-            <div className="px-3 py-2">
+          <CCol sm={8} md={5}>
+            <div className="px-3 py-2 border-start">
               <label className="form-label mb-1 fw-semibold">Price Range (VND)</label>
               <div className="d-flex gap-2">
                 <IMaskInput
@@ -240,13 +215,12 @@ const SearchBar = () => {
           </CCol>
 
           {/* Search Button */}
-          <CCol sm={4} md={2} className="pt-4 justify-content-center">
+          <CCol sm={4} md={1} className="pt-4 justify-content-center">
             <CButton
               color="primary"
-              className="ms-4"
+              className="w-100"
               onClick={handleSearchButtonClick}
             >
-              <Search size={20} />
               Search
             </CButton>
           </CCol>
