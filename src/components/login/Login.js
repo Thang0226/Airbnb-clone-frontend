@@ -2,7 +2,7 @@ import {
   CForm,
   CCol,
   CRow,
-  CCard, CCardHeader, CCardBody, CButton, CImage,
+  CCard, CCardHeader, CCardBody
 } from '@coreui/react'
 import { toast } from 'react-toastify'
 import { useNavigate, Link } from 'react-router-dom'

@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
-import { BASE_URL } from '../../constants/api'
+import api from '../../components/auth/axiosConfig';
 
 export const initialState = {
   userDetails: null,
@@ -13,13 +12,8 @@ export const initialState = {
 export const getUserDetails = createAsyncThunk(
   'userDetails/getUserDetails',
   async (userId, thunkAPI) => {
-    const token = localStorage.getItem('token')
     try {
-      const response = await axios.get(`${BASE_URL}/api/admin/user-details/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const response = await api.get(`/admin/user-details/${userId}`)
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving profile data!')
@@ -30,13 +24,8 @@ export const getUserDetails = createAsyncThunk(
 export const getUserRentalHistory = createAsyncThunk(
   'userDetails/getUserRentalHistory',
   async (userId, thunkAPI) => {
-    const token = localStorage.getItem('token')
     try {
-      const response = await axios.get(`${BASE_URL}/api/admin/user-rental-history/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const response = await api.get(`/admin/user-rental-history/${userId}`)
       console.log(response.data.content)
       return response.data.content;
     } catch (error) {
@@ -48,13 +37,8 @@ export const getUserRentalHistory = createAsyncThunk(
 export const getUserTotalPayment = createAsyncThunk(
   'userDetails/getUserTotalPayment',
   async (userId, thunkAPI) => {
-    const token = localStorage.getItem('token')
     try {
-      const response = await axios.get(`${BASE_URL}/api/admin/user-payment/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const response = await api.get(`/admin/user-payment/${userId}`)
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving profile data!')

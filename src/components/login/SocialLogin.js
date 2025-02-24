@@ -1,7 +1,6 @@
-import { LoginSocialGoogle, LoginSocialFacebook } from 'reactjs-social-login';
+import { LoginSocialGoogle } from 'reactjs-social-login';
 
-import { CCard, CCardBody, CContainer, CRow, CCol, CButton, CImage } from '@coreui/react';
-import { FaFacebookSquare } from "react-icons/fa";
+import { CCard, CCardBody, CContainer, CRow, CCol, CButton } from '@coreui/react';
 import { FcGoogle } from "react-icons/fc";
 import { toast } from 'react-toastify'
 import axios from 'axios'

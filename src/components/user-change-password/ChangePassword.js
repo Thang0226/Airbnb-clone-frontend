@@ -7,7 +7,7 @@ import {
 } from '@coreui/react'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import axiosInstance from '../auth/axiosConfig';
@@ -19,7 +19,6 @@ import FORMTextInput from '../_fragments/FORMTextInput'
 export default function ChangePassword() {
   const navigate = useNavigate()
   const username = useSelector(state => state.account.username)
-  const token = useSelector(state => state.account.token)
   const dispatch = useDispatch()
 
   const REGEX = {

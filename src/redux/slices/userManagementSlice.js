@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
-import { BASE_URL } from '../../constants/api'
+import api from '../../components/auth/axiosConfig';
 
 export const initialState = {
   users: [],
@@ -12,13 +11,8 @@ export const initialState = {
 export const fetchUsers = createAsyncThunk(
   'userManagement/fetchUsers',
   async ({ page, size }, thunkAPI) => {
-    const token = localStorage.getItem('token')
     try {
-      const response = await axios.get(`${BASE_URL}/api/admin/users?page=${page}&size=${size}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const response = await api.get(`/admin/users?page=${page}&size=${size}`)
       return {
         users: response.data.content,
         totalPages: response.data.totalPages,
@@ -32,15 +26,9 @@ export const fetchUsers = createAsyncThunk(
 export const updateUserStatus = createAsyncThunk(
   'userManagement/updateUserStatus',
   async (userId, thunkAPI) => {
-    const token = localStorage.getItem('token')
     try {
-      const response = await axios.post(`${BASE_URL}/api/admin/update-status/${userId}`,
-        null,
-        {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const response = await api.post(`/admin/update-status/${userId}`,
+        null,)
       console.log(response.data)
 
       return response.data
