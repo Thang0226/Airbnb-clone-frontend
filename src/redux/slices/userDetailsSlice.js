@@ -13,7 +13,7 @@ export const getUserDetails = createAsyncThunk(
   'userDetails/getUserDetails',
   async (userId, thunkAPI) => {
     try {
-      const response = await api.get(`/admin/user-details/${userId}`)
+      const response = await api.get(`/admin/users/${userId}`)
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving profile data!')

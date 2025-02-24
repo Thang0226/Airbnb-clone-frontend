@@ -23,12 +23,12 @@ import Pagination from 'react-bootstrap/Pagination'
 import { useNavigate } from 'react-router-dom'
 import CurrencyFormat from '../_fragments/format/CurrencyFormat'
 
-export default function HostList(){
-  const [requests, setRequests] = useState([]);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [page, setPage] = useState(0);
-  const [size] = useState(10);
+export default function HostList() {
+  const [requests, setRequests] = useState([])
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const [page, setPage] = useState(0)
+  const [size] = useState(10)
 
   const fetchHostRequests = async () => {
     try {
@@ -36,32 +36,32 @@ export default function HostList(){
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });
-      setRequests(response.data);
+      })
+      setRequests(response.data)
     } catch (error) {
-      console.error('Error fetching requests:', error);
-      toast.error('Failed to load host requests');
+      console.error('Error fetching requests:', error)
+      toast.error('Failed to load host requests')
     }
-  };
+  }
 
   useEffect(() => {
-    document.title = 'Admin | Host List';
-  }, []);
+    document.title = 'Admin | Host List'
+  }, [])
 
-  const token = localStorage.getItem('token');
-
-  useEffect(() => {
-    fetchHostRequests();
-  }, []);
+  const token = localStorage.getItem('token')
 
   useEffect(() => {
-    dispatch(fetchHosts({page, size}));
-  }, [dispatch,page,size]);
+    fetchHostRequests()
+  }, [])
 
-  const { hosts, error, loading, totalPages } = useSelector((state) => state.hostManagement);
+  useEffect(() => {
+    dispatch(fetchHosts({ page, size }))
+  }, [dispatch, page, size])
+
+  const { hosts, error, loading, totalPages } = useSelector((state) => state.hostManagement)
 
   if (loading || !hosts) return (
-    <DisplayLoading/>
+    <DisplayLoading />
   )
   if (error) return (
     <DisplayError error={error} />
@@ -74,111 +74,111 @@ export default function HostList(){
           toast.success(
             <div>
               Locked user <span style={{ fontWeight: 'bold' }}>{host.username}</span>!
-            </div>
-          );
+            </div>,
+          )
         } else {
           toast.success(
             <div>
               Unlocked user <span style={{ fontWeight: 'bold' }}>{host.username}</span>!
-            </div>
-          );
+            </div>,
+          )
         }
-        dispatch(fetchUsers(page, size));
+        dispatch(fetchUsers(page, size))
       })
       .catch((error) => {
-        toast.error("Error updating user status:", error);
-      });
+        toast.error('Error updating user status:', error)
+      })
   }
 
   const handlePageChange = (newPage) => {
     if (newPage >= 0 && newPage < totalPages) {
-      setPage(newPage);
+      setPage(newPage)
     }
-  };
+  }
 
   const handleApprove = async (requestId) => {
-    let response;
+    let response
     try {
       response = await axios.post(`${BASE_URL_USER}/host-requests/${requestId}/approve`,
         {}, // empty body
         {
           headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      );
-      toast.success('Host request approved');
+            'Authorization': `Bearer ${token}`,
+          },
+        },
+      )
+      toast.success('Host request approved')
 
       emailjs
         .send(
-          "service_p6wbmae", // Service ID
-          "template_piwv2fk", // Template ID
+          'service_p6wbmae', // Service ID
+          'template_piwv2fk', // Template ID
           {
-            from_name: "Airbnb-clone App",
-            to_email: "thang.nd0226@gmail.com",
-            to_name: "Admin",
-            message: "Accepted new host registration: \n\tUsername: " + response.data,
+            from_name: 'Airbnb-clone App',
+            to_email: 'thang.nd0226@gmail.com',
+            to_name: 'Admin',
+            message: 'Accepted new host registration: \n\tUsername: ' + response.data,
           },
-          "1N9KYwqlDUuHvGQMW" // Public Key
+          '1N9KYwqlDUuHvGQMW', // Public Key
         )
         .then(
           (response) => {
-            console.log("Email sent successfully:", response);
+            console.log('Email sent successfully:', response)
           },
           (error) => {
-            console.error("Failed to send email:", error);
-          }
-        );
+            console.error('Failed to send email:', error)
+          },
+        )
 
-      await fetchHostRequests(); // Refresh the list
+      await fetchHostRequests() // Refresh the list
 
     } catch (error) {
-      console.error('Error approving request:', error);
-      toast.error('Failed to approve request');
+      console.error('Error approving request:', error)
+      toast.error('Failed to approve request')
     }
-  };
+  }
 
   const handleDecline = async (requestId) => {
-    let response;
+    let response
     try {
       response = await axios.post(`${BASE_URL_USER}/host-requests/${requestId}/decline`,
         {}, // empty body
         {
           headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      );
-      toast.success('Host request declined');
+            'Authorization': `Bearer ${token}`,
+          },
+        },
+      )
+      toast.success('Host request declined')
 
       emailjs
         .send(
-          "service_p6wbmae",
-          "template_piwv2fk",
+          'service_p6wbmae',
+          'template_piwv2fk',
           {
-            from_name: "Airbnb-clone App",
-            to_email: "thang.nd0226@gmail.com",
-            to_name: "Admin",
-            message: "Declined new host registration. \n\tUsername: " + response.data + "\nUser account is still created.",
+            from_name: 'Airbnb-clone App',
+            to_email: 'thang.nd0226@gmail.com',
+            to_name: 'Admin',
+            message: 'Declined new host registration. \n\tUsername: ' + response.data + '\nUser account is still created.',
           },
-          "1N9KYwqlDUuHvGQMW"
+          '1N9KYwqlDUuHvGQMW',
         )
         .then(
           (response) => {
-            console.log("Email sent successfully:", response);
+            console.log('Email sent successfully:', response)
           },
           (error) => {
-            console.error("Failed to send email:", error);
-          }
-        );
+            console.error('Failed to send email:', error)
+          },
+        )
 
-      await fetchHostRequests();
+      await fetchHostRequests()
 
     } catch (error) {
-      console.error('Error approving request:', error);
-      toast.error('Failed to approve request');
+      console.error('Error approving request:', error)
+      toast.error('Failed to approve request')
     }
-  };
+  }
 
   return (
 
@@ -217,7 +217,7 @@ export default function HostList(){
                   </CTableHead>
                   <CTableBody>
                     {hosts.map((host) => (
-                      <CTableRow key={host.id} className='align-middle'>
+                      <CTableRow key={host.id} className="align-middle">
                         <CTableDataCell>{host.fullName}</CTableDataCell>
                         <CTableDataCell>{host.phone}</CTableDataCell>
                         <CTableDataCell>{<CurrencyFormat value={host.totalIncome} />}</CTableDataCell>
@@ -226,9 +226,9 @@ export default function HostList(){
                           className="text-center"
                         >
                           <CBadge
-                            color={host.status === 'ACTIVE' ? "success" : "secondary"}
+                            color={host.status === 'ACTIVE' ? 'success' : 'secondary'}
                             className="py-2"
-                            style={{ width: "80px" }}
+                            style={{ width: '80px' }}
                           >
                             {host.status}
                           </CBadge>
@@ -238,19 +238,19 @@ export default function HostList(){
                         >
                           <CButton
                             size="sm"
-                            color={host.status === 'ACTIVE' ? "warning" : "success"}
+                            color={host.status === 'ACTIVE' ? 'warning' : 'success'}
                             className="text-white"
-                            style={{ width: "70px" }}
+                            style={{ width: '70px' }}
                             onClick={() => handleStatusChange(host)}
                           >
-                            {host.status === 'ACTIVE' ? "Lock" : "Unlock"}
+                            {host.status === 'ACTIVE' ? 'Lock' : 'Unlock'}
                           </CButton>
                           <CButton
                             size="sm"
                             color="primary"
                             className="text-white ms-2"
-                            style={{ width: "70px" }}
-                            // onClick={() => goToUserDetails(host.id)}
+                            style={{ width: '70px' }}
+                            onClick={() => navigate(`/admin/host/${host.id}`)}
                           >
                             Details
                           </CButton>
@@ -258,7 +258,7 @@ export default function HostList(){
                             size="sm"
                             color="success"
                             className="text-white ms-2"
-                            style={{ width: "70px" }}
+                            style={{ width: '70px' }}
                             // onClick={() => handleApprove(request.id)}
                           >
                             Approve
@@ -267,7 +267,7 @@ export default function HostList(){
                             size="sm"
                             color="secondary"
                             className="text-white ms-2"
-                            style={{ width: "70px" }}
+                            style={{ width: '70px' }}
                             // onClick={() => handleDecline(request.id)}
                           >
                             Decline
@@ -344,5 +344,5 @@ export default function HostList(){
       </div>
     </div>
 
-  );
+  )
 }
