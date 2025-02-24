@@ -20,6 +20,7 @@ import Dashboard from './components/admin/Dashboard'
 import { UserList } from './components/admin/UserList'
 import ChangePassword from './components/user-change-password/ChangePassword'
 import UserDetails from './components/admin/UserDetails'
+import HouseRent from './components/house/HouseRent'
 
 import House from './components/house/House'
 
@@ -71,6 +72,7 @@ export default function App() {
           </Route>
 
           {/* Route không khớp sẽ chuyển hướng về trang chủ */}
+          <Route path="/test" element={<HouseRent/>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </HashRouter>

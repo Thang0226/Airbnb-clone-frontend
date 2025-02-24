@@ -9,7 +9,6 @@ import {
   CNavLink,
 } from '@coreui/react'
 import { TbBrandAirbnb } from 'react-icons/tb'
-import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { BASE_URL, BASE_URL_USER } from '../constants/api'
@@ -17,7 +16,7 @@ import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { resetAccount } from '../redux/slices/accountSlice'
 import { fetchUserProfile } from '../redux/slices/userProfileSlice'
-import { logout } from './auth/authService'
+import { logout } from '../services/authService'
 
 export default function MenuBar() {
   const [visible, setVisible] = useState(false)
