@@ -12,7 +12,7 @@
 12. Là chủ nhà, tôi muốn có thể đăng nhập bằng tài khoản Mạng Xã Hội
 13. Là Admin tôi muốn xem danh sách user có trong hệ thống
 14. Là Admin tôi muốn xem thông tin chi tiết người dùng trong hệ thống
-15. Là Admin tôi muốn xem dánh sách chủ nhà
+15. Là Admin tôi muốn xem danh sách chủ nhà
 16. Là Admin tôi muốn xem thông tin chi tiết chủ nhà
 17. Là Admin tôi muốn khóa/mở khóa chủ nhà
 18. Là Admin tôi muốn duyệt/Từ chối đăng ký là chủ nhà

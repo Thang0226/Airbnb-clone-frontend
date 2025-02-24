@@ -20,7 +20,11 @@ import Dashboard from './components/admin/Dashboard'
 import { UserList } from './components/admin/UserList'
 import ChangePassword from './components/user-change-password/ChangePassword'
 import UserDetails from './components/admin/UserDetails'
+
+import House from './components/house/House'
+
 import HostDetails from './components/admin/host-profile/HostDetail'
+
 
 
 export default function App() {
@@ -35,7 +39,9 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
 
-            <Route element={<RequireAuth allowedRoles={['ROLE_USER', 'ROLE_ADMIN', 'ROLE_HOST']} />}>
+            <Route path="/houses/:id" element={<House />} />
+            <Route element={<RequireAuth allowedRoles={['ROLE_USER' , 'ROLE_ADMIN' , 'ROLE_HOST']} />}>
+
               <Route path="/profile" element={<UserProfile />} />
               <Route path="/profile/edit" element={<ProfileUpdateForm />} />
               <Route path="/user/change-password" element={<ChangePassword />} />
