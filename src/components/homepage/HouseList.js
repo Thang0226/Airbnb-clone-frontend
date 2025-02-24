@@ -3,10 +3,10 @@ import axios from 'axios'
 import HouseCarousel from './HouseCarousel'
 import { useDispatch , useSelector } from 'react-redux'
 import {
-  CCardBody ,
-  CRow ,
-  CCol ,
-  CContainer ,
+  CCardBody,
+  CRow,
+  CCol,
+  CContainer, CNavLink,
 } from '@coreui/react'
 import './HouseList.css'
 import { BASE_URL_HOUSE } from '../../constants/api'
@@ -49,13 +49,13 @@ const HouseList = () => {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="h4 mb-0 fw-bold">Houses for you</h2>
         <div className="d-flex gap-3">
-          <a href="#" className="text-decoration-none text-primary">
+          <CNavLink href="#" className="text-decoration-none text-primary">
             Top 5 Most Rented Rooms
-          </a>
+          </CNavLink>
           <span className="text-muted">|</span>
-          <a href="#" className="text-decoration-none text-primary">
+          <CNavLink href="#" className="text-decoration-none text-primary">
             View Full List.
-          </a>
+          </CNavLink>
         </div>
       </div>
       <CRow xs={{ cols: 1 }} md={{ cols: 2 }} lg={{ cols: 4 }} className="g-4">

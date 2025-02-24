@@ -24,7 +24,6 @@ export default function HostNavBar() {
   const token = localStorage.getItem('token')
   const dispatch = useDispatch()
   const username = localStorage.getItem('username')
-  const role = localStorage.getItem('role')
 
   useEffect(() => {
     if (username) {

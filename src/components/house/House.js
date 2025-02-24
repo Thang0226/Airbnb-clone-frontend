@@ -1,6 +1,6 @@
 import { useDispatch , useSelector } from 'react-redux'
 import { setHouse } from '../../redux/slices/houseSlice'
-import { useNavigate , useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useEffect , useState } from 'react'
 import axios from 'axios'
 import { BASE_URL_HOUSE } from '../../constants/api'
@@ -13,17 +13,14 @@ import {
   CSpinner ,
   CCarousel ,
   CCarouselItem ,
-  CImage , CButton , CFormInput , CLink ,
+  CImage , CFormInput , CLink ,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import {
   cilBath ,
   cilBed ,
   cilExternalLink ,
-  cilJustifyLeft ,
   cilLocationPin ,
-  cilMinus ,
-  cilPlus ,
 } from '@coreui/icons'
 import CurrencyFormat from '../_fragments/format/CurrencyFormat'
 import SubmitButton from '../_fragments/FORMSubmitButton'
