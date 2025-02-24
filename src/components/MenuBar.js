@@ -9,10 +9,9 @@ import {
   CNavLink,
 } from '@coreui/react'
 import { TbBrandAirbnb } from 'react-icons/tb'
-import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-import { BASE_URL, BASE_URL_USER } from '../constants/api'
+import { BASE_URL} from '../constants/api'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { resetAccount } from '../redux/slices/accountSlice'
@@ -66,7 +65,7 @@ export default function MenuBar() {
             </CNavItem>
             {(role === 'ROLE_HOST') && (
               <CNavItem>
-                <CNavLink href="/#/owner">Airbnb Your Home</CNavLink>
+                <CNavLink href="/#/host">Airbnb Your Home</CNavLink>
               </CNavItem>
             )}
           </CNavbarNav>

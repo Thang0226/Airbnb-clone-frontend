@@ -35,6 +35,9 @@ const UserProfile = () => {
     if (role === "ROLE_ADMIN") {
       return navigate('/admin/profile/edit', { state: { username: userProfile.username } })
     }
+    if (role === "ROLE_HOST") {
+      return navigate('/host/profile/edit', { state: { username: userProfile.username } })
+    }
     navigate('/profile/edit', { state: { username: userProfile.username } })
   }
 

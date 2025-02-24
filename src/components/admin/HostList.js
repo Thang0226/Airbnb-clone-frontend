@@ -19,9 +19,9 @@ import { fetchHosts } from '../../redux/slices/hostManagementSlice'
 import { DisplayLoading } from '../DisplayLoading'
 import { DisplayError } from '../DisplayError'
 import { fetchUsers, updateUserStatus } from '../../redux/slices/userManagementSlice'
-import Pagination from 'react-bootstrap/Pagination'
 import { useNavigate } from 'react-router-dom'
 import CurrencyFormat from '../_fragments/format/CurrencyFormat'
+import { UserPagination } from '../_fragments/CustomerPagination'
 
 export default function HostList() {
   const [requests, setRequests] = useState([])
@@ -88,12 +88,6 @@ export default function HostList() {
       .catch((error) => {
         toast.error('Error updating user status:', error)
       })
-  }
-
-  const handlePageChange = (newPage) => {
-    if (newPage >= 0 && newPage < totalPages) {
-      setPage(newPage)
-    }
   }
 
   const handleApprove = async (requestId) => {
@@ -277,20 +271,7 @@ export default function HostList() {
                     ))}
                   </CTableBody>
                 </CTable>
-                <Pagination className="mt-3 justify-content-center">
-                  <Pagination.First onClick={() => handlePageChange(0)} disabled={page === 0} />
-                  <Pagination.Prev onClick={() => handlePageChange(page - 1)} disabled={page === 0} />
-
-                  {[...Array(totalPages)].map((_, index) => (
-                    <Pagination.Item key={index} active={index === page} onClick={() => handlePageChange(index)}>
-                      {index + 1}
-                    </Pagination.Item>
-                  ))}
-
-                  <Pagination.Next onClick={() => handlePageChange(page + 1)} disabled={page === totalPages - 1} />
-                  <Pagination.Last onClick={() => handlePageChange(totalPages - 1)}
-                                   disabled={page === totalPages - 1} />
-                </Pagination>
+                <UserPagination page={page} totalPages={totalPages} setPage={setPage} />
               </CCardBody>
             </CCard>
           </CCol>

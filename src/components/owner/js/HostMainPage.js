@@ -7,11 +7,16 @@ import {
 } from '@coreui/react';
 import { useNavigate } from "react-router-dom";
 import styles from "../css/CreateHouse.module.css";
+import { useEffect } from 'react'
 
 
 
-export default function BodyOwner() {
+export default function HostMainPage() {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        document.title = 'Airbnb | Host Main Page'
+    }, [])
     return (
         <div>
             <CContainer className="py-lg-5 py-3">

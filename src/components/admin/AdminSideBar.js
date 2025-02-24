@@ -9,7 +9,7 @@ import {
 } from '@coreui/react'
 
 import CIcon from '@coreui/icons-react'
-import { cilCloudDownload, cilHouse, cilUser } from '@coreui/icons'
+import { cilHouse, cilUser } from '@coreui/icons'
 import { TbBrandAirbnb } from 'react-icons/tb'
 
 export const AdminSideBar = () => {
@@ -26,9 +26,6 @@ export const AdminSideBar = () => {
         <CNavItem href="#/admin/hosts">
           <CIcon customClassName="nav-icon" icon={cilHouse} />
           Host List
-        </CNavItem>
-        <CNavItem href="https://coreui.io">
-          <CIcon customClassName="nav-icon" icon={cilCloudDownload} /> Download CoreUI
         </CNavItem>
       </CSidebarNav>
     </CSidebar>
