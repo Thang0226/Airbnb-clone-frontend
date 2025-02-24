@@ -2,10 +2,10 @@ import {
   CForm,
   CCol,
   CRow,
-  CCard, CCardHeader, CCardBody,
+  CCard, CCardHeader, CCardBody, CButton, CImage,
 } from '@coreui/react'
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useEffect } from 'react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
@@ -16,6 +16,7 @@ import { BASE_URL_USER } from '../../constants/api'
 import FORMTextInput from '../_fragments/FORMTextInput'
 import FORMPasswordInput from '../_fragments/FORMPasswordInput'
 import SubmitButton from '../_fragments/FORMSubmitButton'
+import SocialLoginComponent from './SocialLogin'
 
 export default function Login() {
   const navigate = useNavigate()
@@ -33,7 +34,10 @@ export default function Login() {
   }
 
   useEffect(() => {
-    document.title = 'Airbnb | Login'
+    document.title = 'Airbnb | Login';
+    if (localStorage.getItem('loggedIn')) {
+      navigate('/')
+    }
   }, [])
 
   const validationSchema = Yup.object().shape({
@@ -103,7 +107,20 @@ export default function Login() {
                       <SubmitButton
                         label="Login"
                       />
-                    </CForm>)
+                      <CRow className="mb-3 mt-3">
+                        <CCol className="d-flex justify-content-center fs-6">
+                          Don't have an account?
+                          <Link to="/register" style={{textDecoration: "none"}}> Register</Link>
+                        </CCol>
+                      </CRow>
+                      <hr/>
+                      <CRow>
+                        <CCol className="d-flex justify-content-center">
+                          <SocialLoginComponent/>
+                        </CCol>
+                      </CRow>
+                    </CForm>
+                  )
                   }
                 </Formik>
               </CCardBody>
