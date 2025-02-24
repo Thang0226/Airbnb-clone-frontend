@@ -13,8 +13,20 @@ import {
   CSpinner ,
   CCarousel ,
   CCarouselItem ,
-  CImage ,
+  CImage , CButton , CFormInput , CLink ,
 } from '@coreui/react'
+import CIcon from '@coreui/icons-react'
+import {
+  cilBath ,
+  cilBed ,
+  cilExternalLink ,
+  cilJustifyLeft ,
+  cilLocationPin ,
+  cilMinus ,
+  cilPlus ,
+} from '@coreui/icons'
+import CurrencyFormat from '../_fragments/format/CurrencyFormat'
+import SubmitButton from '../_fragments/FORMSubmitButton'
 
 export default function House() {
   const selectedHouse = useSelector ( state => state.houses.house )
@@ -44,8 +56,8 @@ export default function House() {
     getHouseById ()
 
     return () => {
-      dispatch(setHouse(null));
-    }; // cleanup state
+      dispatch ( setHouse ( null ) )
+    } // cleanup state
   } , [id , dispatch] )
 
 
@@ -80,20 +92,21 @@ export default function House() {
   return (
     <CRow className="justify-content-center">
       <CCol xs={12} md={8}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <h2>{selectedHouse.houseName}</h2>
+        <CCard className="mb-4" style={{ border: 'none' }}>
+          <CCardHeader className="bg-white" style={{ border: 'none' }}>
+            <h2>🏡 {selectedHouse.houseName}</h2>
           </CCardHeader>
           <CCardBody>
-            {/* House Images Carousel */}
+            {/* Images */}
             {selectedHouse.houseImages && selectedHouse.houseImages.length > 0 && (
-              <CCarousel controls indicators>
+              <CCarousel controls indicators style={{ borderRadius: '16px' , overflow: 'hidden' }}>
                 {selectedHouse.houseImages.map ( (image) => (
                   <CCarouselItem key={image.id}>
                     <CImage
                       className="d-block w-100"
                       src={`/images/${image.fileName}`}
                       alt={image.fileName}
+                      style={{ height: '400px' , objectFit: 'cover' }}
                     />
                   </CCarouselItem>
                 ) )}
@@ -101,13 +114,72 @@ export default function House() {
             )}
 
             {/* House Details */}
-            <div className="mt-3">
-              <p><strong>Address:</strong> {selectedHouse.address}</p>
-              <p><strong>Bedrooms:</strong> {selectedHouse.bedrooms}</p>
-              <p><strong>Bathrooms:</strong> {selectedHouse.bathrooms}</p>
-              <p><strong>Description:</strong> {selectedHouse.description}</p>
-              <p><strong>Price:</strong> {selectedHouse.price.toLocaleString ()} VND/day</p>
-            </div>
+            <CRow className="mt-5">
+              {/* Left column */}
+              <CCol xs={12} md={7}>
+                <div>
+                  <CRow className="mb-3 align-items-center">
+                    <CCol xs={2} className="text-center">
+                      <CIcon icon={cilBed} size={'xxl'} className="text-warning" />
+                    </CCol>
+                    <CCol xs={8}>
+                      <strong>{selectedHouse.bedrooms} Bedrooms</strong>
+                    </CCol>
+                  </CRow>
+
+                  <CRow className="mb-3 align-items-center">
+                    <CCol xs={2} className="text-center">
+                      <CIcon icon={cilBath} size={'xxl'} className="text-warning" />
+                    </CCol>
+                    <CCol xs={8}>
+                      <strong>{selectedHouse.bathrooms} Bathrooms</strong>
+                    </CCol>
+                  </CRow>
+
+                  <CRow className="mb-3 align-items-center">
+                    <CCol xs={2} className="text-center">
+                      <CIcon icon={cilLocationPin} size={'xxl'} className="text-warning" />
+                    </CCol>
+                    <CCol xs={8}>
+                      <CLink
+                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent ( selectedHouse.address )}`}
+                        className="text-decoration-none text-black" target="_blank">
+                        <strong>{selectedHouse.address} <CIcon icon={cilExternalLink} /></strong>
+                      </CLink>
+                    </CCol>
+                  </CRow>
+
+                  <div className="p-3">
+                    <h5>About this space</h5>
+                    <span>{selectedHouse.description}</span>
+                  </div>
+
+                </div>
+              </CCol>
+
+              {/* Right column */}
+              <CCol xs={12} md={5}>
+                <CCard className="p-3"
+                       style={{ borderRadius: '16px' , boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' , border: 'none' }}>
+                  <CCardBody>
+                    <h4 className="mb-5 text-center"><CurrencyFormat value={selectedHouse.price} />/day</h4>
+
+                    <CRow className="mb-3">
+                      <CCol xs={6}>
+                        <span>Check-in</span>
+                        <CFormInput type="date" className="mt-1" />
+                      </CCol>
+                      <CCol xs={6}>
+                        <span>Check-out</span>
+                        <CFormInput type="date" className="mt-1" />
+                      </CCol>
+                    </CRow>
+
+                    <SubmitButton label={'Reserve'} />
+                  </CCardBody>
+                </CCard>
+              </CCol>
+            </CRow>
           </CCardBody>
         </CCard>
       </CCol>
