@@ -3,7 +3,6 @@ import React, { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
   CBadge,
-  CButton,
   CCard,
   CCardBody,
   CCardHeader,
@@ -18,7 +17,6 @@ import UserInfoRow from '../_fragments/FORMInfoRow'
 import { getUserDetails, getUserRentalHistory, getUserTotalPayment } from '../../redux/slices/userDetailsSlice'
 import { DisplayLoading } from '../DisplayLoading'
 import { DisplayError } from '../DisplayError'
-import Pagination from 'react-bootstrap/Pagination'
 import CurrencyFormat from '../_fragments/format/CurrencyFormat'
 
 const UserDetails = () => {
@@ -62,7 +60,7 @@ const UserDetails = () => {
           style={{ cursor: 'pointer', textDecoration: 'underline', color: '#0d6efd' }}
           onClick={() => navigate(-2)}
         >
-          Dash Board
+          Dashboard
         </span>
         <span className="mx-1">{'/'}</span>
         <span
@@ -149,8 +147,12 @@ const UserDetails = () => {
                         <CTableDataCell className="text-end">
                           <CurrencyFormat value={house.rentalPrice} />
                         </CTableDataCell>
-                        <CTableDataCell className="text-center">{house.startDate}</CTableDataCell>
-                        <CTableDataCell className="text-center">{house.endDate}</CTableDataCell>
+                        <CTableDataCell className="text-center">
+                          {new Date(house.startDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                        </CTableDataCell>
+                        <CTableDataCell className="text-center">
+                          {new Date(house.endDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                        </CTableDataCell>
                         <CTableDataCell className="text-center">{house.rentalDay}</CTableDataCell>
                         <CTableDataCell className="text-end">
                           <CurrencyFormat value={house.rentPaid} />

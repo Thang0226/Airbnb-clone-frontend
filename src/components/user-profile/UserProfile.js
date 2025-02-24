@@ -12,6 +12,7 @@ const UserProfile = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const username = localStorage.getItem('username')
+  const role = localStorage.getItem('role')
 
   useEffect(() => {
     document.title = 'Airbnb | Profile'
@@ -31,6 +32,9 @@ const UserProfile = () => {
   )
 
   const goToProfileEdit = () => {
+    if (role === "ROLE_ADMIN") {
+      return navigate('/admin/profile/edit', { state: { username: userProfile.username } })
+    }
     navigate('/profile/edit', { state: { username: userProfile.username } })
   }
 

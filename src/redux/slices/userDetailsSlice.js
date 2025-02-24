@@ -6,6 +6,8 @@ export const initialState = {
   userDetails: null,
   userRentalHistory: null,
   userTotalPayment: 0,
+  loading: false,
+  error: null,
 }
 
 export const getUserDetails = createAsyncThunk(

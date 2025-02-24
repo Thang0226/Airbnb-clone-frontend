@@ -41,7 +41,7 @@ export const UserList = () => {
     <DisplayError error={error} />
   )
 
-  const handleApprove = (user) => {
+  const handleStatusChange = (user) => {
     dispatch(updateUserStatus(user.id))
       .then(() => {
         if (user.status === 'ACTIVE') {
@@ -81,7 +81,7 @@ export const UserList = () => {
           style={{ cursor: 'pointer', textDecoration: 'underline', color: '#0d6efd' }}
           onClick={() => navigate(-1)}
         >
-          Dash Board
+          Dashboard
         </span>
         <span className="mx-1">{'/'}</span>
         <span>User Details</span>
@@ -107,7 +107,7 @@ export const UserList = () => {
                 </CTableHead>
                 <CTableBody>
                   {users.map((user) => (
-                    <CTableRow key={user.id}>
+                    <CTableRow key={user.id} className='align-middle'>
                       <CTableDataCell>{user.username}</CTableDataCell>
                       <CTableDataCell>{user.phone}</CTableDataCell>
                       <CTableDataCell
@@ -129,7 +129,7 @@ export const UserList = () => {
                           color={user.status === 'ACTIVE' ? "warning" : "success"}
                           className="text-white"
                           style={{ width: "90px" }}
-                          onClick={() => handleApprove(user)}
+                          onClick={() => handleStatusChange(user)}
                         >
                           {user.status === 'ACTIVE' ? "Lock" : "Unlock"}
                         </CButton>

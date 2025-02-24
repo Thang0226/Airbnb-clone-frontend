@@ -7,9 +7,6 @@ export const initialState = {
   totalPages: 1,
   loading: false,
   error: null,
-  userD: null,
-  userRentalHistory: null,
-  userTotalPayment: 0
 }
 
 export const fetchUsers = createAsyncThunk(

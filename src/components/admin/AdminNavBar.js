@@ -9,7 +9,6 @@ import {
   CNavItem,
   CNavLink,
 } from '@coreui/react'
-import { TbBrandAirbnb } from 'react-icons/tb'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'

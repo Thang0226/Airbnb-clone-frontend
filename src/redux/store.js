@@ -4,6 +4,7 @@ import userProfileReducer from "./slices/userProfileSlice";
 import houseReducer from "./slices/houseSlice"; // Import reducer
 import userManagementReducer from "./slices/userManagementSlice"; // Import reducer
 import userDetailsReducer from "./slices/userDetailsSlice"; // Import reducer
+import hostManagementReducer from "./slices/hostManagementSlice";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     userProfile: userProfileReducer,
     userManagement: userManagementReducer,
     userDetails: userDetailsReducer,
+    hostManagement: hostManagementReducer
   },
 })
 
