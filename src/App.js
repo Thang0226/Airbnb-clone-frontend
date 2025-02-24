@@ -4,7 +4,7 @@ import store from './redux/store'
 import './scss/custom.scss'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import './App.css'
-import HomeOwner from './components/owner/js/HomeOwner'
+import HostLayout from './components/owner/js/HostLayout'
 import CreateHouse from './components/owner/js/CreateHouse'
 import MapSample from './components/owner/js/MapSample'
 import Register from './components/register/Register'
@@ -21,7 +21,7 @@ import { UserList } from './components/admin/UserList'
 import ChangePassword from './components/user-change-password/ChangePassword'
 import UserDetails from './components/admin/UserDetails'
 import HostDetails from './components/admin/host-profile/HostDetail'
-
+import HostMainPage from './components/owner/js/HostMainPage'
 
 export default function App() {
   return (
@@ -58,9 +58,11 @@ export default function App() {
           </Route>
 
           <Route element={<RequireAuth allowedRoles={['ROLE_HOST']} />}>
-            <Route element={<Layout />}>
-              <Route path="/owner" element={<HomeOwner />} />
+            <Route element={<HostLayout />}>
+              <Route path="/host" element={<HostMainPage />} />
               <Route path="/create" element={<CreateHouse />} />
+              <Route path="/host/profile" element={<UserProfile />} />
+              <Route path="/host/profile/edit" element={<ProfileUpdateForm />} />
             </Route>
           </Route>
 

@@ -41,7 +41,7 @@ const HouseCarousel = ({ images, height = '300px' }) => {
                     <img
                         key={image.id}
                         src={`${BASE_URL}/images/${image.fileName}`}
-                        alt="Image"
+                        alt="house"
                         style={{
                             width: '100%',
                             flexShrink: 0,

@@ -12,7 +12,7 @@ import {
   CInputGroupText,
   CButton,
 } from '@coreui/react'
-import { Search, Calendar, MapPinHouse, BedDouble, Bath } from 'lucide-react'
+import { Calendar, MapPinHouse, BedDouble, Bath } from 'lucide-react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { IMaskInput } from 'react-imask'
@@ -39,7 +39,7 @@ const SearchBar = () => {
   const [address, setAddress] = useState('')
   const [checkIn, setCheckIn] = useState(today.toISOString().split('T')[0])
   const [checkOut, setCheckOut] = useState(tomorrow.toISOString().split('T')[0])
-  const [priceOrder, setPriceOrder] = useState('ASC')
+  const [priceOrder] = useState('ASC')
   const [minBedrooms, setMinBedrooms] = useState('')
   const [minBathrooms, setMinBathrooms] = useState('')
   const [minPrice, setMinPrice] = useState('')

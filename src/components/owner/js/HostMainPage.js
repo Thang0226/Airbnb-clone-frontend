@@ -10,7 +10,7 @@ import styles from "../css/CreateHouse.module.css";
 
 
 
-export default function BodyOwner() {
+export default function HostMainPage() {
     const navigate = useNavigate();
     return (
         <div>

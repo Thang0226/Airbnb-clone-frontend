@@ -70,6 +70,9 @@ export default function Login() {
         if (role === 'ROLE_ADMIN') {
           return navigate('/admin');
         }
+        if (role === 'ROLE_HOST') {
+          return navigate('/admin');
+        }
         navigate('/')
       })
       .catch((err) => {
