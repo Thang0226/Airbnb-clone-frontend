@@ -13,7 +13,7 @@ import {
   CTableDataCell, CTableHead, CTableHeaderCell,
   CTableRow,
 } from '@coreui/react'
-import ConfirmWindow from '../ConfirmWindow'
+import ConfirmWindow from '../modals/ConfirmWindow'
 
 export default function HostRequests(){
   const [requests, setRequests] = useState([]);

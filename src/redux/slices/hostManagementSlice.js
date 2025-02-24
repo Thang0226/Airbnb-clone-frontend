@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
-import { BASE_URL } from '../../constants/api'
+import api from '../../components/auth/axiosConfig';
+
 
 export const initialState = {
   hosts: null,
@@ -13,13 +13,8 @@ export const initialState = {
 export const fetchHosts = createAsyncThunk(
   'hostManagement/fetchHosts',
   async ({ page, size }, thunkAPI) => {
-    const token = localStorage.getItem('token')
     try {
-      const response = await axios.get(`${BASE_URL}/api/admin/hosts?page=${page}&size=${size}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const response = await api.get(`/admin/hosts?page=${page}&size=${size}`, )
       return {
         hosts: response.data.content,
         totalPages: response.data.totalPages,
