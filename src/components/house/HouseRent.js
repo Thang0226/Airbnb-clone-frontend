@@ -26,27 +26,41 @@ export default function HouseRent({houseId}) {
   const [checkOut, setCheckOut] = useState(dayjs().toDate())
   const [totalDays, setTotalDays] = useState(1)
   const [totalCost, setTotalCost] = useState(selectedHouse.price)
-
-  const disabledDates = ["2025-02-26", "2025-02-27"].map(date => new Date(date)) // NOT RIGHT YET!
-  // const disabledDates = [
-  //   {start: new Date("2025-02-26"), end: new Date("2025-02-27")},
-  //   {start: new Date("2025-02-26"), end: new Date("2025-02-27")},
-  // ]
+  const [bookedDates, setBookedDates] = useState([])
+  const [nextAvailableDate, setNextAvailableDate] = useState(dayjs().toDate())
 
   useEffect(() => {
-    console.log(selectedHouse)
-    let totalDays = Math.round((checkOut - checkIn) / (60 * 60 * 24 * 1000))
+    console.log(selectedHouse);
+    let totalDays = Math.round((checkOut - checkIn) / (60 * 60 * 24 * 1000));
     if (totalDays <= 0) {
-      totalDays = 0
+      totalDays = 0;
     }
-    setTotalDays(totalDays)
-    let totalCost = selectedHouse.price * totalDays
-    setTotalCost(totalCost)
-  }, [checkIn, checkOut, selectedHouse])
+    setTotalDays(totalDays);
+    let totalCost = selectedHouse.price * totalDays;
+    setTotalCost(totalCost);
 
-  const getNextDisabledDate = (date) => {
-    return disabledDates.find(disabledDate => disabledDate > date); // NOT RIGHT YET!
-  };
+    const getBookedDates = async () => {
+      let res = await axiosInstance.get(`/houses/${houseId}/booked-dates`);
+      let bookedDateList = res.data.map(bookingDTO => {
+        return {
+          start: dayjs(new Date(bookingDTO.startDate)).subtract(1, 'day').toDate(),
+          end: new Date(bookingDTO.endDate),
+        }
+      });
+      setBookedDates(bookedDateList);
+    }
+    getBookedDates().catch(err => console.log(err));
+
+    const getNextAvailableDate = async (date) => {
+      const res = await axiosInstance.post(`/houses/house-date`, {
+        houseId: houseId,
+        date: date,
+      });
+      setNextAvailableDate(res.data);
+    };
+    getNextAvailableDate(checkIn).catch(err => console.log(err));
+
+  }, [checkIn, checkOut, houseId, selectedHouse])
 
   const handleRentHouse = async () => {
     try {
@@ -77,9 +91,9 @@ export default function HouseRent({houseId}) {
                       selected={new Date(checkIn)}
                       onChange={(date) => {setCheckIn(date); setCheckOut(date)}}
                       className="form-control border-0 text-center"
-                      minDate={new Date()} // Disable past dates
-                      excludeDates={disabledDates} // Disable specific dates
-                      placeholderText="Check-In Date"
+                      minDate={new Date()}
+                      dateFormat="dd/MM/yyyy"
+                      excludeDateIntervals={bookedDates}
                     />
                 </CInputGroup>
             </CCol>
@@ -92,9 +106,9 @@ export default function HouseRent({houseId}) {
                       onChange={(date) => setCheckOut(date)}
                       className="form-control border-0 text-center"
                       minDate={checkIn ? checkIn : null}
-                      maxDate={checkIn ? dayjs(getNextDisabledDate(checkIn)).subtract(1, "day").toDate() : null}
-                      excludeDates={disabledDates} // Disable specific dates
-                      placeholderText="Check-Out Date"
+                      maxDate={checkIn ? dayjs(nextAvailableDate).toDate() : null}
+                      dateFormat="dd/MM/yyyy"
+                      excludeDateIntervals={bookedDates}
                      />
                 </CInputGroup>
             </CCol>
