@@ -40,9 +40,11 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
 
-            <Route path="/houses/:id" element={<House />} />
-            <Route element={<RequireAuth allowedRoles={['ROLE_USER' , 'ROLE_ADMIN' , 'ROLE_HOST']} />}>
+            <Route element={<RequireAuth allowedRoles={['ROLE_USER', 'ROLE_HOST']} />}>
+              <Route path="/houses/:id" element={<House />} />
+            </Route>
 
+            <Route element={<RequireAuth allowedRoles={['ROLE_USER' , 'ROLE_ADMIN' , 'ROLE_HOST']} />}>
               <Route path="/profile" element={<UserProfile />} />
               <Route path="/profile/edit" element={<ProfileUpdateForm />} />
               <Route path="/user/change-password" element={<ChangePassword />} />
