@@ -22,6 +22,7 @@ import ChangePassword from './components/user-change-password/ChangePassword'
 import UserDetails from './components/admin/UserDetails'
 import HostDetails from './components/admin/host-profile/HostDetail'
 import HostMainPage from './components/owner/js/HostMainPage'
+import BookingList from './components/owner/js/BookingList'
 
 export default function App() {
   return (
@@ -61,6 +62,7 @@ export default function App() {
             <Route element={<HostLayout />}>
               <Route path="/host" element={<HostMainPage />} />
               <Route path="/create" element={<CreateHouse />} />
+              <Route path="/host/bookings" element={<BookingList />} />
               <Route path="/host/profile" element={<UserProfile />} />
               <Route path="/host/profile/edit" element={<ProfileUpdateForm />} />
             </Route>

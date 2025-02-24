@@ -15,9 +15,9 @@ import {
   CTableRow,
 } from '@coreui/react'
 import { toast } from 'react-toastify'
-import Pagination from 'react-bootstrap/Pagination';
 import { useNavigate } from 'react-router-dom'
 import { ConfirmModal } from '../modals/StatusChangeConfirm';
+import { UserPagination } from '../_fragments/CustomerPagination'
 
 export const UserList = () => {
   const [page, setPage] = useState(0);
@@ -68,12 +68,6 @@ export const UserList = () => {
         setSelectedUser(null);
       });
   }
-
-  const handlePageChange = (newPage) => {
-    if (newPage >= 0 && newPage < totalPages) {
-      setPage(newPage);
-    }
-  };
 
   const goToUserDetails = (userId) => {
     navigate(`/admin/users/${userId}`);
@@ -158,19 +152,7 @@ export const UserList = () => {
                   ))}
                 </CTableBody>
               </CTable>
-              <Pagination className="mt-3 justify-content-center">
-                <Pagination.First onClick={() => handlePageChange(0)} disabled={page === 0} />
-                <Pagination.Prev onClick={() => handlePageChange(page - 1)} disabled={page === 0} />
-
-                {[...Array(totalPages)].map((_, index) => (
-                  <Pagination.Item key={index} active={index === page} onClick={() => handlePageChange(index)}>
-                    {index + 1}
-                  </Pagination.Item>
-                ))}
-
-                <Pagination.Next onClick={() => handlePageChange(page + 1)} disabled={page === totalPages - 1} />
-                <Pagination.Last onClick={() => handlePageChange(totalPages - 1)} disabled={page === totalPages - 1} />
-              </Pagination>
+              <UserPagination page={page} totalPages={totalPages} setPage={setPage} />
             </CCardBody>
           </CCard>
         </CCol>

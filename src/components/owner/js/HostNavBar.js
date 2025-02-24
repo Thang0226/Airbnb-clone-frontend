@@ -70,7 +70,7 @@ export default function HostNavBar() {
               <CNavLink href="/#/houses">Houses</CNavLink>
             </CNavItem>
             <CNavItem>
-              <CNavLink href="/#/bookings">Booking</CNavLink>
+              <CNavLink href="/#/host/bookings">Booking</CNavLink>
             </CNavItem>
           </CNavbarNav>
           <CDropdown variant="dropdown" popper={true} className="bg-gradient rounded">

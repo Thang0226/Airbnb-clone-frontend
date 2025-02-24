@@ -71,7 +71,7 @@ export default function Login() {
           return navigate('/admin');
         }
         if (role === 'ROLE_HOST') {
-          return navigate('/admin');
+          return navigate('/host');
         }
         navigate('/')
       })
