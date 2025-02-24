@@ -1,3 +1,7 @@
 body {
     font-family: "Helvetica", serif;
 }
+
+.modal-backdrop {
+    background: rgba(0, 0, 0, 0.3) !important; /* Semi-transparent black */
+}

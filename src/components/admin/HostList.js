@@ -187,7 +187,7 @@ export default function HostList(){
         <div className="d-flex align-items-center">
         <span
           style={{ cursor: 'pointer', textDecoration: 'underline', color: '#0d6efd' }}
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/admin")}
         >
           Dashboard
         </span>

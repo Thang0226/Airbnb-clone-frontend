@@ -17,12 +17,15 @@ import {
 import { toast } from 'react-toastify'
 import Pagination from 'react-bootstrap/Pagination';
 import { useNavigate } from 'react-router-dom'
+import { ConfirmModal } from '../modals/StatusChangeConfirm';
 
 export const UserList = () => {
   const [page, setPage] = useState(0);
   const [size] = useState(10);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     document.title = 'Airbnb | User List';
@@ -41,26 +44,28 @@ export const UserList = () => {
     <DisplayError error={error} />
   )
 
-  const handleStatusChange = (user) => {
-    dispatch(updateUserStatus(user.id))
+  const confirmStatusChange = (user) => {
+    setSelectedUser(user);
+    setShowModal(true);
+  };
+
+  const handleStatusChange = () => {
+    if (!selectedUser) return;
+    dispatch(updateUserStatus(selectedUser.id))
       .then(() => {
-        if (user.status === 'ACTIVE') {
-          toast.success(
-            <div>
-             Locked user <span style={{ fontWeight: 'bold' }}>{user.username}</span>!
-            </div>
-          );
-        } else {
-          toast.success(
-            <div>
-              Unlocked user <span style={{ fontWeight: 'bold' }}>{user.username}</span>!
-            </div>
-          );
-        }
-        dispatch(fetchUsers(page, size));
+        toast.success(
+          <div>
+            {selectedUser.status === 'ACTIVE' ? "Locked" : "Unlocked"} user <span style={{ fontWeight: 'bold' }}>{selectedUser.username}</span>!
+          </div>
+        );
+        dispatch(fetchUsers({ page, size }));
       })
       .catch((error) => {
         toast.error("Error updating user status:", error);
+      })
+      .finally(() => {
+        setShowModal(false);
+        setSelectedUser(null);
       });
   }
 
@@ -79,12 +84,12 @@ export const UserList = () => {
       <div className="d-flex align-items-center">
         <span
           style={{ cursor: 'pointer', textDecoration: 'underline', color: '#0d6efd' }}
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/admin")}
         >
           Dashboard
         </span>
         <span className="mx-1">{'/'}</span>
-        <span>User Details</span>
+        <span>User List</span>
       </div>
       <CRow
         xs={{ cols: 1 }} md={{ cols: 1 }} lg={{ cols: 1 }}
@@ -129,10 +134,16 @@ export const UserList = () => {
                           color={user.status === 'ACTIVE' ? "warning" : "success"}
                           className="text-white"
                           style={{ width: "90px" }}
-                          onClick={() => handleStatusChange(user)}
+                          onClick={() => confirmStatusChange(user)}
                         >
                           {user.status === 'ACTIVE' ? "Lock" : "Unlock"}
                         </CButton>
+                        <ConfirmModal
+                          visible={showModal}
+                          onClose={() => setShowModal(false)}
+                          onConfirm={handleStatusChange}
+                          user={selectedUser}
+                        />
                         <CButton
                           size="sm"
                           color="primary"

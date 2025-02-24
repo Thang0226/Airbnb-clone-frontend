@@ -1,6 +1,5 @@
 import {
   CButton,
-  CFormInput,
   CFormTextarea,
   CModal,
   CModalBody,
