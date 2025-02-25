@@ -28,6 +28,7 @@ import HostDetails from './components/admin/host-profile/HostDetail'
 import HostMainPage from './components/host/js/HostMainPage'
 import BookingList from './components/host/js/BookingList'
 import { ROLE_ADMIN, ROLE_HOST, ROLE_USER } from './constants/roles'
+import UserBookingList from './components/user/UserBookingList'
 
 
 export default function App() {
@@ -41,6 +42,10 @@ export default function App() {
             <Route path="/search" element={<MapSample />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+
+            <Route element={<RequireAuth allowedRoles={[ROLE_USER]} />}>
+              <Route path="/user/bookings" element={<UserBookingList />} />
+            </Route>
 
             <Route element={<RequireAuth allowedRoles={[ROLE_USER, ROLE_HOST]} />}>
               <Route path="/houses/:id" element={<House />} />
@@ -78,8 +83,6 @@ export default function App() {
             </Route>
           </Route>
 
-          {/* Route không khớp sẽ chuyển hướng về trang chủ */}
-          <Route path="/test" element={<HouseRent/>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </HashRouter>

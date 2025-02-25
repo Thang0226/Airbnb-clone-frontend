@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { DisplayLoading } from '../../DisplayLoading'
-import { DisplayError } from '../../DisplayError'
+import { DisplayLoading } from '../DisplayLoading'
 import {
   CButton,
   CCard,
@@ -17,46 +14,37 @@ import {
 } from '@coreui/react'
 import CurrencyFormat from '../_fragments/format/CurrencyFormat'
 import axiosInstance from '../../services/axiosConfig'
+import dayjs from 'dayjs'
 
 const UserBookingList = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const [bookings, setBookings] = useState([]);
 
+  const now = new Date();
   const username = localStorage.getItem("username")
+
+  const isOneDayBeforeStartDate = (startDate) => {
+    let startTime = dayjs(startDate).hour(12).minute(0).second(0).toDate();
+    let timeDifference = (startTime - now) / (1000 * 60 * 60);
+    return timeDifference >= 24;
+  }
 
   useEffect(() => {
     document.title = 'Airbnb | User Booking History';
-
-  }, [])
-
-  useEffect(() => {
     axiosInstance.get(`/bookings/user/${username}`)
       .then(res => {
-        setBookings(res.data)
+        setBookings(res.data);
+        setLoading(false);
       })
       .catch(err => {console.log(err)});
-  }, []);
+  }, [])
 
   if (loading || !bookings) return (
     <DisplayLoading/>
   )
-  if (error) return (
-    <DisplayError error={error} />
-  )
 
   return (
     <div className="container">
-      <div className="d-flex align-items-center">
-        <span
-          style={{ cursor: 'pointer', textDecoration: 'underline', color: '#0d6efd' }}
-          onClick={() => navigate("/admin")}
-        >
-          Dashboard
-        </span>
-        <span className="mx-1">{'/'}</span>
-        <span>User List</span>
-      </div>
       <CRow
         xs={{ cols: 1 }} md={{ cols: 1 }} lg={{ cols: 1 }}
         className="justify-content-center mt-4"
@@ -64,18 +52,17 @@ const UserBookingList = () => {
         <CCol>
           <CCard>
             <CCardHeader>
-              <h4 className="my-3">Booking List</h4>
+              <h4 className="my-3 text-center">Booking List</h4>
             </CCardHeader>
             <CCardBody>
               <CTable hover responsive>
                 <CTableHead>
                   <CTableRow>
                     <CTableHeaderCell>House Name</CTableHeaderCell>
+                    <CTableHeaderCell>Address</CTableHeaderCell>
                     <CTableHeaderCell className="text-center">Start Date</CTableHeaderCell>
                     <CTableHeaderCell className="text-center">End Date</CTableHeaderCell>
-                    <CTableHeaderCell className="text-center">Rental Days</CTableHeaderCell>
-                    <CTableHeaderCell>Customer Name</CTableHeaderCell>
-                    <CTableHeaderCell className="text-center">Total cost</CTableHeaderCell>
+                    <CTableHeaderCell className="text-center">Total Cost</CTableHeaderCell>
                     <CTableHeaderCell className="text-center">Status</CTableHeaderCell>
                     <CTableHeaderCell className="text-center">Action</CTableHeaderCell>
                   </CTableRow>
@@ -84,62 +71,41 @@ const UserBookingList = () => {
                   {bookings.map((booking) => (
                     <CTableRow key={booking.id} className='align-middle'>
                       <CTableDataCell
-                        className={styles["house-name"]}
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         title={booking.houseName}
                       >
                         {booking.houseName}
                       </CTableDataCell>
+                      <CTableDataCell>{booking.address}</CTableDataCell>
                       <CTableDataCell className="text-center">
                         {new Date(booking.startDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}
                       </CTableDataCell>
                       <CTableDataCell className="text-center">
                         {new Date(booking.endDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}
                       </CTableDataCell>
-                      <CTableDataCell className="text-center">{booking.rentalDay}</CTableDataCell>
-                      <CTableDataCell>{booking.customerName}</CTableDataCell>
                       <CTableDataCell className="text-end">
                         <CurrencyFormat value={booking.totalCost} />
                       </CTableDataCell>
-                      <CTableDataCell
-                        className="text-center"
-                      >
-                        <CTableDataCell className="text-center"> {booking.status.replace("_", " ")}</CTableDataCell>
-                        {/*<CBadge*/}
-                        {/*  color={"success"}*/}
-                        {/*  className="py-2"*/}
-                        {/*  style={{ width: "90px" }}*/}
-                        {/*>*/}
-                        {/*</CBadge>*/}
+                      <CTableDataCell className="text-center">
+                        {booking.bookingStatus.replace("_", " ")}
                       </CTableDataCell>
-                      <CTableDataCell
-                        className="text-center"
-                      >
-                        <CButton
+                      <CTableDataCell className="text-center">
+                        {(isOneDayBeforeStartDate(booking.startDate)) && (
+                          <CButton
                           size="sm"
-                          color={"success"}
+                          color={"warning"}
                           className="text-white"
                           style={{ width: "90px" }}
                           // onClick={() =>}
                         >
-                          Check In
-                        </CButton>
-                        <CButton
-                          size="sm"
-                          color="primary"
-                          className="text-white ms-2"
-                          style={{ width: "90px" }}
-                          // onClick={() => }
-                        >
-                          Check Out
-                        </CButton>
+                          Cancel
+                        </CButton>)}
                       </CTableDataCell>
                     </CTableRow>
                   ))}
                 </CTableBody>
               </CTable>
-              <UserPagination page={page} totalPages={totalPages} setPage={setPage} />
             </CCardBody>
           </CCard>
         </CCol>
