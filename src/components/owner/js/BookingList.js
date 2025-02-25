@@ -53,10 +53,10 @@ const BookingList = () => {
           style={{ cursor: 'pointer', textDecoration: 'underline', color: '#0d6efd' }}
           onClick={() => navigate("/admin")}
         >
-          Dashboard
+          Home
         </span>
         <span className="mx-1">{'/'}</span>
-        <span>User List</span>
+        <span>Booking List</span>
       </div>
       <CRow
         xs={{ cols: 1 }} md={{ cols: 1 }} lg={{ cols: 1 }}

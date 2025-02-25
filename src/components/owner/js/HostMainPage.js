@@ -8,6 +8,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import styles from "../css/CreateHouse.module.css";
 import { useEffect } from 'react'
+import HostHouseList from './HostHouseList'
 
 
 
@@ -25,20 +26,15 @@ export default function HostMainPage() {
                         <h2>Welcome, Huy!</h2>
                     </CCol>
                     <CCol className="text-end">
-                        <CButton color="dark" variant="outline" className={styles["btn-add-house"]} onClick={() => navigate("/create")}>
+                        <CButton color="dark" variant="outline" className={styles["btn-add-house"]} onClick={() => navigate("/host/create")}>
                             List a House
                         </CButton>
                     </CCol>
                 </CRow>
                 <CRow className={"justify-content-between align-items-center mb-4"}>
-                    <h4>Your Reservations</h4>
-
+                    <h4>All House Listings</h4>
                 </CRow>
-                <CCard className="mt-4" style={{ background: "#f8f9fa", borderRadius: "12px" }}>
-                    <CCardBody className="text-center p-4">
-                        <p className="mt-3">You don’t have any guests checking out today or tomorrow.</p>
-                    </CCardBody>
-                </CCard>
+                <HostHouseList />
             </CContainer>
         </div>
     )

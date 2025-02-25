@@ -66,7 +66,8 @@ export default function Login() {
         localStorage.setItem('loggedIn', JSON.stringify(true))
         localStorage.setItem('username', user.username)
         localStorage.setItem('role', role)
-        toast.success('login successful', { hideProgressBar: true })
+        localStorage.setItem('userId', user.id)
+        toast.success('Login successful', { hideProgressBar: true })
         if (role === 'ROLE_ADMIN') {
           return navigate('/admin');
         }
