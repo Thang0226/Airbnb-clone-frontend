@@ -33,7 +33,7 @@ export default function App() {
     <Provider store={store}>
       <HashRouter>
         <Routes>
-          {/* Các route dùng layout cho user */}
+          {/* Route cho User */}
           <Route element={<Layout />}>
             <Route path="/" element={<Homepage />} />
             <Route path="/search" element={<MapSample />} />
@@ -49,7 +49,7 @@ export default function App() {
             </Route>
           </Route>
 
-          {/* Các route dành riêng cho admin */}
+          {/* Route cho Admin */}
           <Route element={<RequireAuth allowedRoles={['ROLE_ADMIN']} />}>
             <Route element={<AdminLayout />}>
               <Route path="/admin" element={<Dashboard />} />
@@ -64,6 +64,7 @@ export default function App() {
             </Route>
           </Route>
 
+          {/* Route cho Host */}
           <Route element={<RequireAuth allowedRoles={['ROLE_HOST']} />}>
             <Route element={<HostLayout />}>
               <Route path="/host" element={<HostMainPage />} />
