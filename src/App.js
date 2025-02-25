@@ -69,7 +69,7 @@ export default function App() {
             <Route element={<HostLayout />}>
               <Route path="/host" element={<HostMainPage />} />
               <Route path="/host/create" element={<CreateHouse />} />
-              <Route path="/host/update/:houseID" element={<UpdateHouse />} />
+              <Route path="/host/update/:houseId" element={<UpdateHouse />} />
               <Route path="/host/bookings" element={<BookingList />} />
               <Route path="/host/profile" element={<UserProfile />} />
               <Route path="/host/profile/edit" element={<ProfileUpdateForm />} />
