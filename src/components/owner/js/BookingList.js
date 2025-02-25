@@ -103,17 +103,7 @@ const BookingList = () => {
                       <CTableDataCell className="text-end">
                         <CurrencyFormat value={booking.totalCost} />
                       </CTableDataCell>
-                      <CTableDataCell
-                        className="text-center"
-                      >
-                        <CTableDataCell className="text-center"> {booking.status.replace("_", " ")}</CTableDataCell>
-                        {/*<CBadge*/}
-                        {/*  color={"success"}*/}
-                        {/*  className="py-2"*/}
-                        {/*  style={{ width: "90px" }}*/}
-                        {/*>*/}
-                        {/*</CBadge>*/}
-                      </CTableDataCell>
+                      <CTableDataCell className="text-center"> {booking.status.replace("_", " ")}</CTableDataCell>
                       <CTableDataCell
                         className="text-center"
                       >
