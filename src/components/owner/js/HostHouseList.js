@@ -51,7 +51,6 @@ export default function HostHouseList() {
       </CCard>
     )
   }
-
   if (error) {
     return (
       <CCard className="mt-4 bg-warning justify-content-center rounded-3">
@@ -61,7 +60,6 @@ export default function HostHouseList() {
       </CCard>
     )
   }
-
   if (!houseList) {
     return (
       <CCard className="mt-4 rounded-3 bg-primary-subtle">
@@ -108,8 +106,8 @@ export default function HostHouseList() {
                   {house.bathrooms} Bathrooms
                 </p>
                 <p className="text-muted mb-2" style={{ fontSize: '0.9rem' }}>
-                  {house.description.length > 100
-                    ? `${house.description.substring ( 0 , 100 )}...`
+                  {house.description.length > 50
+                    ? `${house.description.substring ( 0 , 50 )}...`
                     : house.description}
                 </p>
                 <p className="fw-bold mb-0">{house.price.toLocaleString ()} VND/day</p>
