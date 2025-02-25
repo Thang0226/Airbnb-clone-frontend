@@ -8,6 +8,7 @@ import { BASE_URL_USER } from '../../constants/api'
 import { deletePassword, setToken, setUsername } from '../../redux/slices/accountSlice'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+import { ROLE_ADMIN } from '../../constants/roles'
 
 const SocialLoginComponent = () => {
 
@@ -31,11 +32,12 @@ const SocialLoginComponent = () => {
         dispatch(setToken(user.token))
         dispatch(setUsername(user.username))
         dispatch(deletePassword())
+        localStorage.setItem('userId', user.id)
         localStorage.setItem('username', user.username)
         localStorage.setItem('role', role)
         localStorage.setItem('token', user.token)
         localStorage.setItem('loggedIn', JSON.stringify(true))
-        if (role === 'ROLE_ADMIN') {
+        if (role === ROLE_ADMIN) {
           return navigate('/admin');
         }
         navigate('/')
