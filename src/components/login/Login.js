@@ -17,6 +17,7 @@ import FORMTextInput from '../_fragments/FORMTextInput'
 import FORMPasswordInput from '../_fragments/FORMPasswordInput'
 import SubmitButton from '../_fragments/FORMSubmitButton'
 import SocialLoginComponent from './SocialLogin'
+import { ROLE_ADMIN, ROLE_HOST } from '../../constants/roles'
 
 export default function Login() {
   const navigate = useNavigate()
@@ -68,10 +69,10 @@ export default function Login() {
         localStorage.setItem('username', user.username)
         localStorage.setItem('role', role)
         toast.success('login successful', { hideProgressBar: true })
-        if (role === 'ROLE_ADMIN') {
+        if (role === ROLE_ADMIN) {
           return navigate('/admin');
         }
-        if (role === 'ROLE_HOST') {
+        if (role === ROLE_HOST) {
           return navigate('/host');
         }
         navigate('/')
