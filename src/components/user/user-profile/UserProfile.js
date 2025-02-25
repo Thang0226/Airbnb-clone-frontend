@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
-import { fetchUserProfile } from '../../redux/slices/userProfileSlice'
+import { fetchUserProfile } from '../../../redux/slices/userProfileSlice'
 import { CButton, CCard, CCardBody, CCardHeader, CCol, CRow } from '@coreui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { BASE_URL } from '../../constants/api'
-import { DisplayLoading } from '../DisplayLoading'
-import { DisplayError } from '../DisplayError'
-import UserInfoRow from '../_fragments/FORMInfoRow'
+import { BASE_URL } from '../../../constants/api'
+import { DisplayLoading } from '../../DisplayLoading'
+import { DisplayError } from '../../DisplayError'
+import UserInfoRow from '../../_fragments/FORMInfoRow'
 
 const UserProfile = () => {
   const dispatch = useDispatch()

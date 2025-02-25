@@ -17,6 +17,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { resetAccount } from '../redux/slices/accountSlice'
 import { fetchUserProfile } from '../redux/slices/userProfileSlice'
 import { logout } from '../services/authService'
+import { ROLE_HOST, ROLE_USER } from '../constants/roles'
 
 export default function MenuBar() {
   const [visible, setVisible] = useState(false)
@@ -63,9 +64,14 @@ export default function MenuBar() {
                 Home
               </CNavLink>
             </CNavItem>
-            {(role === 'ROLE_HOST') && (
+            {(role === ROLE_HOST) && (
               <CNavItem>
                 <CNavLink href="/#/host">Airbnb Your Home</CNavLink>
+              </CNavItem>
+            )}
+            {(role === ROLE_USER) && (
+              <CNavItem>
+                <CNavLink href="/#/user/bookings">Booking History</CNavLink>
               </CNavItem>
             )}
           </CNavbarNav>

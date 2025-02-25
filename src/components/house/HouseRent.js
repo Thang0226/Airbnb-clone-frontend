@@ -121,6 +121,9 @@ export default function HouseRent({houseId}) {
                       minDate={minAvailableDate}
                       dateFormat="dd/MM/yyyy"
                       excludeDateIntervals={bookedDates}
+                      selectsStart
+                      startDate={checkIn}
+                      endDate={checkOut}
                     />
                 </CInputGroup>
             </CCol>
@@ -136,6 +139,9 @@ export default function HouseRent({houseId}) {
                       maxDate={checkIn ? maxAvailableDate : null}
                       dateFormat="dd/MM/yyyy"
                       excludeDateIntervals={bookedDates}
+                      selectsEnd
+                      startDate={checkIn}
+                      endDate={checkOut}
                      />
                 </CInputGroup>
             </CCol>
