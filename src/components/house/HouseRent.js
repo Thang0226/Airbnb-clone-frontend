@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { CButton, CCard, CCardBody, CCardText, CCol, CContainer, CInputGroup, CRow } from '@coreui/react'
 import 'react-datepicker/dist/react-datepicker.css'
+import './styles.css'
 import axiosInstance from '../../services/axiosConfig'
 import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
@@ -62,10 +63,11 @@ export default function HouseRent({houseId}) {
   }
   useEffect(() => {
     initializeDates().catch((err) => {console.log(err)});
+    console.log("Initialized again");
   }, [selectedHouse])
 
   useEffect(() => {
-    getLatestAvailableDate().catch((err) => {console.log(err)});
+    getLatestAvailableDate(checkIn).catch((err) => {console.log(err)});
     let totalDays = Math.round((checkOut - checkIn) / (60 * 60 * 24 * 1000));
     if (totalDays <= 0) {
       totalDays = 0;
@@ -115,7 +117,7 @@ export default function HouseRent({houseId}) {
                     <DatePicker
                       selected={checkIn}
                       onChange={(date) => {setCheckIn(date); setCheckOut(date)}}
-                      className="form-control border-0 text-center"
+                      className="form-control border-0 text-center bring-front"
                       minDate={minAvailableDate}
                       dateFormat="dd/MM/yyyy"
                       excludeDateIntervals={bookedDates}
@@ -129,7 +131,7 @@ export default function HouseRent({houseId}) {
                     <DatePicker
                       selected={checkOut}
                       onChange={(date) => setCheckOut(date)}
-                      className="form-control border-0 text-center"
+                      className="form-control border-0 text-center bring-front"
                       minDate={checkIn ? checkIn : null}
                       maxDate={checkIn ? maxAvailableDate : null}
                       dateFormat="dd/MM/yyyy"
