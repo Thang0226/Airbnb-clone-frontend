@@ -60,9 +60,8 @@ const HouseList = () => {
       </div>
       <CRow xs={{ cols: 1 }} md={{ cols: 2 }} lg={{ cols: 4 }} className="g-4">
         {houseList.map ( (house) => (
-          <CCol key={house.id}>
-            <div className="card h-100 shadow-sm border-0 position-relative hover-shadow"
-                 onClick={() => navigate ( `/houses/${house.id}` )}>
+          <CCol key={house.id} className="card h-100 shadow-sm border-0 position-relative hover-shadow cursor-pointer"
+                onClick={() => navigate ( `/houses/${house.id}` )}>
               <div className="position-relative">
                 {/* Sử dụng HouseCarousel để hiển thị danh sách hình */}
                 <HouseCarousel images={house.houseImages} height="150px" />
@@ -77,7 +76,7 @@ const HouseList = () => {
 
               <CCardBody className="d-flex flex-column">
                 <p
-                  className="fw-bold mb-2"
+                  className="fw-bold mb-2 cursor-pointer"
                   style={{
                     display: '-webkit-box' ,
                     WebkitLineClamp: 2 ,
@@ -103,7 +102,6 @@ const HouseList = () => {
                   </small>
                 </div>
               </CCardBody>
-            </div>
           </CCol>
         ) )}
       </CRow>

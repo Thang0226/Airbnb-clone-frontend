@@ -1,19 +1,19 @@
 import { useDispatch , useSelector } from 'react-redux'
 import { setHouse } from '../../redux/slices/houseSlice'
-import { useParams } from 'react-router-dom'
+import { useNavigate , useParams } from 'react-router-dom'
 import { useEffect , useState } from 'react'
 import axios from 'axios'
 import { BASE_URL_HOUSE } from '../../constants/api'
 import {
-  CCard ,
-  CCardBody ,
-  CCardHeader ,
-  CCol ,
-  CRow ,
-  CSpinner ,
-  CCarousel ,
-  CCarouselItem ,
-  CImage , CFormInput , CLink ,
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCol,
+  CRow,
+  CSpinner,
+  CCarousel,
+  CCarouselItem,
+  CImage, CFormInput, CLink, CButton,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import {
@@ -23,7 +23,7 @@ import {
   cilLocationPin ,
 } from '@coreui/icons'
 import CurrencyFormat from '../_fragments/format/CurrencyFormat'
-import SubmitButton from '../_fragments/FORMSubmitButton'
+import HouseRent from './HouseRent'
 
 export default function House() {
   const selectedHouse = useSelector ( state => state.houses.house )
@@ -50,7 +50,7 @@ export default function House() {
         setLoading ( false )
       }
     }
-    getHouseById ()
+    getHouseById()
 
     return () => {
       dispatch ( setHouse ( null ) )
@@ -88,7 +88,7 @@ export default function House() {
 
   return (
     <CRow className="justify-content-center">
-      <CCol xs={12} md={8}>
+      <CCol xs={12} md={10}>
         <CCard className="mb-4" style={{ border: 'none' }}>
           <CCardHeader className="bg-white" style={{ border: 'none' }}>
             <h2>🏡 {selectedHouse.houseName}</h2>
@@ -111,10 +111,9 @@ export default function House() {
             )}
 
             {/* House Details */}
-            <CRow className="mt-5">
+            <CRow className="mt-5 mb-3">
               {/* Left column */}
-              <CCol xs={12} md={7}>
-                <div>
+              <CCol xs={12} md={6}>
                   <CRow className="mb-3 align-items-center">
                     <CCol xs={2} className="text-center">
                       <CIcon icon={cilBed} size={'xxl'} className="text-warning" />
@@ -145,36 +144,16 @@ export default function House() {
                       </CLink>
                     </CCol>
                   </CRow>
-
                   <div className="p-3">
                     <h5>About this space</h5>
                     <span>{selectedHouse.description}</span>
                   </div>
-
-                </div>
               </CCol>
 
               {/* Right column */}
-              <CCol xs={12} md={5}>
-                <CCard className="p-3"
-                       style={{ borderRadius: '16px' , boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' , border: 'none' }}>
-                  <CCardBody>
-                    <h4 className="mb-5 text-center"><CurrencyFormat value={selectedHouse.price} />/day</h4>
-
-                    <CRow className="mb-3">
-                      <CCol xs={6}>
-                        <span>Check-in</span>
-                        <CFormInput type="date" className="mt-1" />
-                      </CCol>
-                      <CCol xs={6}>
-                        <span>Check-out</span>
-                        <CFormInput type="date" className="mt-1" />
-                      </CCol>
-                    </CRow>
-
-                    <SubmitButton label={'Reserve'} />
-                  </CCardBody>
-                </CCard>
+              <CCol xs={12} md={6}>
+                    <h4 className="mb-2 text-center"><CurrencyFormat value={selectedHouse.price} />/night</h4>
+                    <HouseRent houseId={id}/>
               </CCol>
             </CRow>
           </CCardBody>
