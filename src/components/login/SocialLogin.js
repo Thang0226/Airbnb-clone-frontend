@@ -31,6 +31,7 @@ const SocialLoginComponent = () => {
         dispatch(setToken(user.token))
         dispatch(setUsername(user.username))
         dispatch(deletePassword())
+        localStorage.setItem('userId', user.id)
         localStorage.setItem('username', user.username)
         localStorage.setItem('role', role)
         localStorage.setItem('token', user.token)

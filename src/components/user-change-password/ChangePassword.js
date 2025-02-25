@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
-import axiosInstance from '../auth/axiosConfig';
+import axiosInstance from '../../services/axiosConfig';
 import { useDispatch, useSelector } from 'react-redux'
 import { setPassword, deletePassword, deleteToken } from '../../redux/slices/accountSlice'
 import FORMPasswordInput from '../_fragments/FORMPasswordInput'

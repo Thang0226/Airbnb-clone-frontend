@@ -20,6 +20,7 @@ import Dashboard from './components/admin/Dashboard'
 import { UserList } from './components/admin/UserList'
 import ChangePassword from './components/user-change-password/ChangePassword'
 import UserDetails from './components/admin/UserDetails'
+import HouseRent from './components/house/HouseRent'
 
 import House from './components/house/House'
 
@@ -40,9 +41,11 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
 
-            <Route path="/houses/:id" element={<House />} />
-            <Route element={<RequireAuth allowedRoles={['ROLE_USER' , 'ROLE_ADMIN' , 'ROLE_HOST']} />}>
+            <Route element={<RequireAuth allowedRoles={['ROLE_USER', 'ROLE_HOST']} />}>
+              <Route path="/houses/:id" element={<House />} />
+            </Route>
 
+            <Route element={<RequireAuth allowedRoles={['ROLE_USER' , 'ROLE_ADMIN' , 'ROLE_HOST']} />}>
               <Route path="/profile" element={<UserProfile />} />
               <Route path="/profile/edit" element={<ProfileUpdateForm />} />
               <Route path="/user/change-password" element={<ChangePassword />} />
@@ -75,6 +78,7 @@ export default function App() {
           </Route>
 
           {/* Route không khớp sẽ chuyển hướng về trang chủ */}
+          <Route path="/test" element={<HouseRent/>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </HashRouter>
