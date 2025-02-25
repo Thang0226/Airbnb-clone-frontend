@@ -1,18 +1,10 @@
-import { useSelector } from 'react-redux'
-import {
-  CButton, CCard, CCardBody,
-  CCardText,
-  CCol,
-  CContainer,
-  CInputGroup,
-  CRow,
-} from '@coreui/react'
-import "react-datepicker/dist/react-datepicker.css";
-import axiosInstance from '../../services/axiosConfig';
+import { useDispatch, useSelector } from 'react-redux'
+import { CButton, CCard, CCardBody, CCardText, CCol, CContainer, CInputGroup, CRow } from '@coreui/react'
+import 'react-datepicker/dist/react-datepicker.css'
+import axiosInstance from '../../services/axiosConfig'
 import { useEffect, useState } from 'react'
-import {useDispatch} from 'react-redux'
 import dayjs from 'dayjs'
-import DatePicker from "react-datepicker"
+import DatePicker from 'react-datepicker'
 import CurrencyFormat from '../_fragments/format/CurrencyFormat'
 import { toast } from 'react-toastify'
 import axios from 'axios'
@@ -21,16 +13,59 @@ import { setHouse } from '../../redux/slices/houseSlice'
 
 export default function HouseRent({houseId}) {
   const dispatch = useDispatch()
+  const today = dayjs().toDate();
   const selectedHouse = useSelector(state => state.houses.house)
-  const [checkIn, setCheckIn] = useState(dayjs().toDate())
-  const [checkOut, setCheckOut] = useState(dayjs().toDate())
-  const [totalDays, setTotalDays] = useState(1)
+  const [isLoading, setIsLoading] = useState(true)
+  const [totalDays, setTotalDays] = useState(0)
   const [totalCost, setTotalCost] = useState(selectedHouse.price)
   const [bookedDates, setBookedDates] = useState([])
-  const [nextAvailableDate, setNextAvailableDate] = useState(dayjs().toDate())
+  const [maxAvailableDate, setMaxAvailableDate] = useState(today)
+  const [minAvailableDate, setMinAvailableDate] = useState(today)
+  const [checkIn, setCheckIn] = useState(today)
+  const [checkOut, setCheckOut] = useState(today)
+
+  const getLatestAvailableDate = async (date) => {
+    const res = await axiosInstance.post(`/houses/house-edge-date`, {
+      houseId: houseId,
+      date: date,
+    });
+    setMaxAvailableDate(dayjs(res.data).toDate());
+  };
+
+  const getBookedDates = async () => {
+    let res = await axiosInstance.get(`/houses/${houseId}/booked-dates`);
+    return res.data.map(bookingDTO => {
+      return {
+        start: dayjs(new Date(bookingDTO.startDate)).subtract(1, 'day').toDate(),
+        end: new Date(bookingDTO.endDate),
+      }
+    })
+  };
+
+  const initializeDates = async () => {
+    const bookedDatesList = await getBookedDates();
+    let newMinDate = today;
+    for (let i = 0; i < bookedDatesList.length; i++) {
+      if (bookedDatesList[i].start <= today && today <= bookedDatesList[i].end) { // Today cannot be booked --> find future available period
+        newMinDate = dayjs(bookedDatesList[i].end).add(1, 'day').toDate();
+        break;
+      }
+    }
+    console.log(newMinDate);
+    console.log(bookedDatesList);
+    setMinAvailableDate(newMinDate);
+    setCheckIn(newMinDate);
+    setCheckOut(newMinDate);
+    setBookedDates(bookedDatesList);
+
+    setIsLoading(false);
+  }
+  useEffect(() => {
+    initializeDates().catch((err) => {console.log(err)});
+  }, [selectedHouse])
 
   useEffect(() => {
-    console.log(selectedHouse);
+    getLatestAvailableDate().catch((err) => {console.log(err)});
     let totalDays = Math.round((checkOut - checkIn) / (60 * 60 * 24 * 1000));
     if (totalDays <= 0) {
       totalDays = 0;
@@ -38,46 +73,36 @@ export default function HouseRent({houseId}) {
     setTotalDays(totalDays);
     let totalCost = selectedHouse.price * totalDays;
     setTotalCost(totalCost);
-
-    const getBookedDates = async () => {
-      let res = await axiosInstance.get(`/houses/${houseId}/booked-dates`);
-      let bookedDateList = res.data.map(bookingDTO => {
-        return {
-          start: dayjs(new Date(bookingDTO.startDate)).subtract(1, 'day').toDate(),
-          end: new Date(bookingDTO.endDate),
-        }
-      });
-      setBookedDates(bookedDateList);
-    }
-    getBookedDates().catch(err => console.log(err));
-
-    const getNextAvailableDate = async (date) => {
-      const res = await axiosInstance.post(`/houses/house-date`, {
-        houseId: houseId,
-        date: date,
-      });
-      setNextAvailableDate(res.data);
-    };
-    getNextAvailableDate(checkIn).catch(err => console.log(err));
-
-  }, [checkIn, checkOut, houseId, selectedHouse])
+  }, [checkIn, checkOut]);
 
   const handleRentHouse = async () => {
     try {
-      const response = await axiosInstance.post('/houses/rent-house', {
+      if (totalDays === 0) {
+        toast.info("Have to rent at least one night");
+        return;
+      }
+      let data = {
         houseId: selectedHouse.id,
         userId: localStorage.getItem('userId'),
         startDate: dayjs(checkIn).format('YYYY-MM-DD'),
         endDate: dayjs(checkOut).format('YYYY-MM-DD'),
         price: totalCost,
-      });
+      };
+      console.log(data);
+
+      const response = await axiosInstance.post('/houses/rent-house', data);
       toast.success(response.data);
       const houseUpdated = await axios.get(`${BASE_URL_HOUSE}/${houseId}`);
       dispatch(setHouse(houseUpdated.data));
+
     } catch (error) {
-      toast.error(error.response.data);
-      console.log(error.response.data);
+      toast.error(error.response.data || error.message);
+      console.log(error);
     }
+  }
+
+  if (isLoading) {
+    return <h2>Loading...</h2>; // Show a loading state while fetching
   }
 
   return (
@@ -88,10 +113,10 @@ export default function HouseRent({houseId}) {
                 <CInputGroup className="border-0">
                     <label className="fw-bolder fs-6">Check-In</label>
                     <DatePicker
-                      selected={new Date(checkIn)}
+                      selected={checkIn}
                       onChange={(date) => {setCheckIn(date); setCheckOut(date)}}
                       className="form-control border-0 text-center"
-                      minDate={new Date()}
+                      minDate={minAvailableDate}
                       dateFormat="dd/MM/yyyy"
                       excludeDateIntervals={bookedDates}
                     />
@@ -102,11 +127,11 @@ export default function HouseRent({houseId}) {
                 <CInputGroup className="border-0">
                     <label className="fw-bolder fs-6">Check-Out</label>
                     <DatePicker
-                      selected={new Date(checkOut)}
+                      selected={checkOut}
                       onChange={(date) => setCheckOut(date)}
                       className="form-control border-0 text-center"
                       minDate={checkIn ? checkIn : null}
-                      maxDate={checkIn ? dayjs(nextAvailableDate).toDate() : null}
+                      maxDate={checkIn ? maxAvailableDate : null}
                       dateFormat="dd/MM/yyyy"
                       excludeDateIntervals={bookedDates}
                      />
