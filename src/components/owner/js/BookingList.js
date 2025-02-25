@@ -18,7 +18,7 @@ import {
 import { UserPagination } from '../../_fragments/CustomerPagination'
 import { getBookings } from '../../../redux/slices/bookingSlice'
 import CurrencyFormat from '../../_fragments/format/CurrencyFormat'
-import styles from '../css/HoustList.module.css';
+import styles from '../css/HouseList.module.css';
 
 const BookingList = () => {
   const [page, setPage] = useState(0);
