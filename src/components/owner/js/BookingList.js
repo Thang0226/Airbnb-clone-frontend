@@ -15,7 +15,7 @@ import {
   CTableRow,
 } from '@coreui/react'
 import { UserPagination } from '../../_fragments/CustomerPagination'
-import { getBookings } from '../../../redux/slices/bookingSlice'
+import { getBookings, searchBookings } from '../../../redux/slices/bookingSlice'
 import CurrencyFormat from '../../_fragments/format/CurrencyFormat'
 import styles from '../css/HoustList.module.css'
 
@@ -39,8 +39,17 @@ const BookingList = () => {
     dispatch(getBookings({ username, page, size }))
   }, [dispatch, page, size, username])
 
-  const { bookings, error, loading, totalPages } = useSelector((state) => state.booking)
+  const handleSearch = () => {
+    const searchData = {
+      houseName: houseName,
+      startDate: startDate,
+      endDate: endDate,
+      status: status
+    }
+    dispatch(searchBookings({username, searchData, page, size}))
+  }
 
+  const { bookings, error, loading, totalPages } = useSelector((state) => state.booking)
 
   if (loading || !bookings) return (
     <DisplayLoading />
@@ -56,7 +65,7 @@ const BookingList = () => {
         <CRow className="justify-content-center">
           <CCol sm={12} md={8} lg={3} className="mt-2">
             <div className="d-flex flex-column flex-grow-1">
-              <label className="fw-bolder">Address</label>
+              <label className="fw-bolder ps-2">Address</label>
               <CFormInput
                 type="text"
                 value={houseName}
@@ -68,7 +77,7 @@ const BookingList = () => {
           </CCol>
           <CCol sm={12} md={4} lg={2} className="mt-2">
             <div className="d-flex flex-column flex-grow-1">
-              <label className="fw-bolder">Status</label>
+              <label className="fw-bolder ps-2">Status</label>
               <CFormSelect value={status} onChange={(e) => setStatus(e.target.value)}>
                 <option value="">Chose Status</option>
                 <option key="WAITING" value="WAITING">WAITING</option>
@@ -80,7 +89,7 @@ const BookingList = () => {
           </CCol>
           <CCol sm={12} md={5} lg={3} className="mt-2">
             <div className="d-flex flex-column flex-grow-1">
-              <label className="fw-bolder">Start Date</label>
+              <label className="fw-bolder ps-2">Start Date</label>
               <CFormInput
                 type="date"
                 value={startDate}
@@ -91,7 +100,7 @@ const BookingList = () => {
           </CCol>
           <CCol sm={12} md={5} lg={3} className="mt-2">
             <div className="d-flex flex-column flex-grow-1">
-              <label className="fw-bolder">End Date</label>
+              <label className="fw-bolder ps-2">End Date</label>
               <CFormInput
                 type="date"
                 value={endDate}
@@ -105,7 +114,7 @@ const BookingList = () => {
             <CButton
               color="primary"
               className="w-100"
-              // onClick={handleSearchButtonClick}
+              onClick={handleSearch}
             >
               Search
             </CButton>
