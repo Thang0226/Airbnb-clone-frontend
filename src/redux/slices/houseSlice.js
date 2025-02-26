@@ -26,6 +26,24 @@ export const getHouseList = createAsyncThunk(
   },
 )
 
+export const searchHouses = createAsyncThunk(
+  'houses/searchHouses',
+  async ({ username, houseName, status, page, size },thunkAPI) => {
+    try {
+      const response = await api.post(
+        `/houses/host-house-list/${username}/search?houseName=${houseName}&status=${status}&page=${page}&size=${size}`
+      )
+      console.log(response.data.content)
+      return {
+        houseList: response.data.content,
+        totalPages: response.data.totalPages,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving profile data!')
+    }
+  },
+)
+
 const houseSlice = createSlice({
   name: "houses",
   initialState,
@@ -49,6 +67,19 @@ const houseSlice = createSlice({
         state.loading = false
       })
       .addCase(getHouseList.rejected, (state, action) => {
+        state.error = action.payload
+        state.loading = false
+      })
+      .addCase(searchHouses.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(searchHouses.fulfilled, (state, action) => {
+        state.houseList = action.payload.houseList;
+        state.totalPages = action.payload.totalPages;
+        state.loading = false
+      })
+      .addCase(searchHouses.rejected, (state, action) => {
         state.error = action.payload
         state.loading = false
       })
