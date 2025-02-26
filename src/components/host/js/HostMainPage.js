@@ -3,14 +3,12 @@ import {
     CButton ,
     CContainer ,
     CRow ,
-    CCol , CCard , CCardBody
+    CCol ,
 } from '@coreui/react';
 import { useNavigate } from "react-router-dom";
 import styles from "../css/CreateHouse.module.css";
 import { useEffect } from 'react'
 import HostHouseList from './HostHouseList'
-
-
 
 export default function HostMainPage() {
     const navigate = useNavigate();
