@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Client } from "@stomp/stompjs";
 import axiosInstance from "../../../services/axiosConfig"
+import { CDropdownItem } from '@coreui/react'
 
 const Notifications = ({ hostUsername }) => {
 
@@ -40,12 +41,16 @@ const Notifications = ({ hostUsername }) => {
   }, [hostUsername]);
 
   return (
-    <div>
-      <h4>🔔 Notifications for host {hostUsername}</h4>
-      {notifications.map((notification) => (
-        <p key={notification.id}>{notification.message}</p>
+    <>
+      {notifications.map((notification, index) => (
+        <CDropdownItem
+          key={notification.id}
+          className={index === notifications.length - 1 ? 'no-border' : 'border-bottom'}
+        >
+          {notification.message}
+        </CDropdownItem>
       ))}
-    </div>
+    </>
   );
 };
 

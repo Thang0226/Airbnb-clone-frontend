@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import styles from "../css/CreateHouse.module.css";
 import { useEffect } from 'react'
 import HostHouseList from './HostHouseList'
-import Notifications from './Notifications'
 
 export default function HostMainPage() {
     const navigate = useNavigate();
@@ -31,7 +30,6 @@ export default function HostMainPage() {
                         </CButton>
                     </CCol>
                 </CRow>
-                <Notifications hostUsername={hostUsername} />
                     <h4>Your houses</h4>
                 <HostHouseList />
             </CContainer>

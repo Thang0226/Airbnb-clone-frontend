@@ -172,7 +172,7 @@ export default function HouseRent({houseId}) {
                 className="w-100"
                 onClick={handleRentHouse}
               >
-                Rent
+                Rent House
               </CButton>
             </CCol>
           </CRow>
