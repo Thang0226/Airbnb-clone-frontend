@@ -4,13 +4,13 @@ import store from './redux/store'
 import './scss/custom.scss'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import './App.css'
-import HostLayout from './components/owner/js/HostLayout'
-import CreateHouse from './components/owner/js/CreateHouse'
-import MapSample from './components/owner/js/MapSample'
+import HostLayout from './components/host/js/HostLayout'
+import CreateHouse from './components/host/js/CreateHouse'
+import MapSample from './components/host/js/MapSample'
 import Register from './components/register/Register'
 import Login from './components/login/Login'
-import UserProfile from './components/user-profile/UserProfile'
-import ProfileUpdateForm from './components/user-profile/ProfileUpdateForm'
+import UserProfile from './components/user/user-profile/UserProfile'
+import ProfileUpdateForm from './components/user/user-profile/ProfileUpdateForm'
 import Layout from './components/Layout'
 import Homepage from './components/homepage/Homepage'
 import HostList from './components/admin/HostList'
@@ -18,14 +18,17 @@ import RequireAuth from './components/auth/RequireAuth'
 import AdminLayout from './components/admin/AdminLayout'
 import Dashboard from './components/admin/Dashboard'
 import { UserList } from './components/admin/UserList'
-import ChangePassword from './components/user-change-password/ChangePassword'
+import ChangePassword from './components/user/user-change-password/ChangePassword'
 import UserDetails from './components/admin/UserDetails'
+import HouseRent from './components/house/HouseRent'
 
 import House from './components/house/House'
 import UpdateHouse from './components/owner/js/UpdateHouse'
 import HostDetails from './components/admin/host-profile/HostDetail'
-import HostMainPage from './components/owner/js/HostMainPage'
-import BookingList from './components/owner/js/BookingList'
+import HostMainPage from './components/host/js/HostMainPage'
+import BookingList from './components/host/js/BookingList'
+import { ROLE_ADMIN, ROLE_HOST, ROLE_USER } from './constants/roles'
+import UserBookingList from './components/user/UserBookingList'
 
 
 export default function App() {
@@ -40,17 +43,23 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
 
-            <Route path="/houses/:id" element={<House />} />
-            <Route element={<RequireAuth allowedRoles={['ROLE_USER' , 'ROLE_ADMIN' , 'ROLE_HOST']} />}>
+            <Route element={<RequireAuth allowedRoles={[ROLE_USER]} />}>
+              <Route path="/user/bookings" element={<UserBookingList />} />
+            </Route>
 
+            <Route element={<RequireAuth allowedRoles={[ROLE_USER, ROLE_HOST]} />}>
+              <Route path="/houses/:id" element={<House />} />
+            </Route>
+
+            <Route element={<RequireAuth allowedRoles={[ROLE_USER, ROLE_ADMIN, ROLE_HOST]} />}>
               <Route path="/profile" element={<UserProfile />} />
               <Route path="/profile/edit" element={<ProfileUpdateForm />} />
               <Route path="/user/change-password" element={<ChangePassword />} />
             </Route>
           </Route>
 
-          {/* Route cho Admin */}
-          <Route element={<RequireAuth allowedRoles={['ROLE_ADMIN']} />}>
+          {/* Các route dành riêng cho admin */}
+          <Route element={<RequireAuth allowedRoles={[ROLE_ADMIN]} />}>
             <Route element={<AdminLayout />}>
               <Route path="/admin" element={<Dashboard />} />
               <Route path="/admin/host/request" element={<HostList />} />
@@ -64,8 +73,7 @@ export default function App() {
             </Route>
           </Route>
 
-          {/* Route cho Host */}
-          <Route element={<RequireAuth allowedRoles={['ROLE_HOST']} />}>
+          <Route element={<RequireAuth allowedRoles={[ROLE_HOST]} />}>
             <Route element={<HostLayout />}>
               <Route path="/host" element={<HostMainPage />} />
               <Route path="/host/create" element={<CreateHouse />} />
@@ -76,7 +84,6 @@ export default function App() {
             </Route>
           </Route>
 
-          {/* Route không khớp sẽ chuyển hướng về trang chủ */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </HashRouter>

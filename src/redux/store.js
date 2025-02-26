@@ -6,9 +6,11 @@ import userManagementReducer from "./slices/userManagementSlice"; // Import redu
 import userDetailsReducer from "./slices/userDetailsSlice"; // Import reducer
 import hostManagementReducer from "./slices/hostManagementSlice";
 import bookingReducer from './slices/bookingSlice'
+import authReducer from './slices/authSlice'
 
 const store = configureStore({
   reducer: {
+    auth: authReducer,
     houses: houseReducer, // Đăng ký reducer vào store
     account: accountSlice.reducer,
     booking: bookingReducer,
