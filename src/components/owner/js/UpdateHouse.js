@@ -15,9 +15,9 @@ import {
   CCloseButton ,
   CButton ,
 } from '@coreui/react'
-import { toast } from 'react-toastify' // Assuming you use react-toastify for notifications
+import { toast } from 'react-toastify'
 import { setHouse } from '../../../redux/slices/houseSlice'
-import MapSample from './MapSample' // Adjust import path as needed
+import MapSample from './MapSample'
 
 export default function UpdateHouse() {
   const [validated , setValidated] = useState ( false )
