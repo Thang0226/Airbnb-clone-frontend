@@ -1,10 +1,9 @@
   import {
-    CButton,
     CCard,
     CCardBody,
     CCardHeader,
     CCol,
-    CContainer, CFormSelect, CRow,
+    CContainer, CRow,
     CTable, CTableBody, CTableDataCell,
     CTableHead,
     CTableHeaderCell,
@@ -25,7 +24,7 @@
     const dispatch = useDispatch()
     const username = localStorage.getItem('username')
 
-    const [status, setStatus] = useState('')
+    // const [status, setStatus] = useState('')
 
     useEffect(() => {
       document.title = 'Airbnb | House List'
