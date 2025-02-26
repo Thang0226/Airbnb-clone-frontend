@@ -12,6 +12,7 @@ import HostHouseList from './HostHouseList'
 
 export default function HostMainPage() {
     const navigate = useNavigate();
+    const hostUsername = localStorage.getItem('username');
 
     useEffect(() => {
         document.title = 'Airbnb | Host Main Page'
@@ -21,7 +22,7 @@ export default function HostMainPage() {
             <CContainer className="py-lg-5 py-3">
                 <CRow className={"justify-content-between align-items-center mb-5"}>
                     <CCol>
-                        <h2>Welcome, Huy!</h2>
+                        <h2>Welcome host {hostUsername}!</h2>
                     </CCol>
                     <CCol className="text-end">
                         <CButton color="dark" variant="outline" className={styles["btn-add-house"]} onClick={() => navigate("/host/create")}>
@@ -29,9 +30,7 @@ export default function HostMainPage() {
                         </CButton>
                     </CCol>
                 </CRow>
-                <CRow className={"justify-content-between align-items-center mb-4"}>
-                    <h4>All House Listings</h4>
-                </CRow>
+                    <h4>Your houses</h4>
                 <HostHouseList />
             </CContainer>
         </div>
