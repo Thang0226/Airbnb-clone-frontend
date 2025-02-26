@@ -39,6 +39,18 @@ const UserBookingList = () => {
       .catch(err => {console.log(err)});
   }, [])
 
+  const handleCancelBooking = (bookingId) => {
+    axiosInstance.post(`/bookings/${bookingId}`, username, {
+      headers: {
+        'Content-Type': 'text/plain',
+      }
+    })
+      .then(res => {
+        setBookings(res.data);
+      })
+      .catch(err => {console.log(err)});
+  }
+
   if (loading || !bookings) return (
     <DisplayLoading/>
   )
@@ -52,7 +64,7 @@ const UserBookingList = () => {
         <CCol>
           <CCard>
             <CCardHeader>
-              <h4 className="my-3 text-center">Booking List</h4>
+              <h4 className="my-3 text-center">Your Bookings</h4>
             </CCardHeader>
             <CCardBody>
               <CTable hover responsive>
@@ -97,7 +109,7 @@ const UserBookingList = () => {
                           color={"warning"}
                           className="text-white"
                           style={{ width: "90px" }}
-                          // onClick={() =>}
+                          onClick={() => handleCancelBooking(booking.id)}
                         >
                           Cancel
                         </CButton>)}
