@@ -3,10 +3,10 @@ import axios from 'axios'
 import HouseCarousel from './HouseCarousel'
 import { useDispatch , useSelector } from 'react-redux'
 import {
-  CCardBody ,
-  CRow ,
-  CCol ,
-  CContainer ,
+  CCardBody,
+  CRow,
+  CCol,
+  CContainer, CNavLink,
 } from '@coreui/react'
 import './HouseList.css'
 import { BASE_URL_HOUSE } from '../../constants/api'
@@ -49,20 +49,19 @@ const HouseList = () => {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="h4 mb-0 fw-bold">Houses for you</h2>
         <div className="d-flex gap-3">
-          <a href="#" className="text-decoration-none text-primary">
+          <CNavLink href="#" className="text-decoration-none text-primary">
             Top 5 Most Rented Rooms
-          </a>
+          </CNavLink>
           <span className="text-muted">|</span>
-          <a href="#" className="text-decoration-none text-primary">
+          <CNavLink href="#" className="text-decoration-none text-primary">
             View Full List.
-          </a>
+          </CNavLink>
         </div>
       </div>
       <CRow xs={{ cols: 1 }} md={{ cols: 2 }} lg={{ cols: 4 }} className="g-4">
         {houseList.map ( (house) => (
-          <CCol key={house.id}>
-            <div className="card h-100 shadow-sm border-0 position-relative hover-shadow"
-                 onClick={() => navigate ( `/houses/${house.id}` )}>
+          <CCol key={house.id} className="card h-100 shadow-sm border-0 position-relative hover-shadow cursor-pointer"
+                onClick={() => navigate ( `/houses/${house.id}` )}>
               <div className="position-relative">
                 {/* Sử dụng HouseCarousel để hiển thị danh sách hình */}
                 <HouseCarousel images={house.houseImages} height="150px" />
@@ -77,7 +76,7 @@ const HouseList = () => {
 
               <CCardBody className="d-flex flex-column">
                 <p
-                  className="fw-bold mb-2"
+                  className="fw-bold mb-2 cursor-pointer"
                   style={{
                     display: '-webkit-box' ,
                     WebkitLineClamp: 2 ,
@@ -103,7 +102,6 @@ const HouseList = () => {
                   </small>
                 </div>
               </CCardBody>
-            </div>
           </CCol>
         ) )}
       </CRow>

@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { resetAccount } from '../../../redux/slices/accountSlice'
 import { fetchUserProfile } from '../../../redux/slices/userProfileSlice'
-import { logout } from '../../auth/authService'
+import { logout } from '../../../services/authService'
 
 export default function HostNavBar() {
   const [visible, setVisible] = useState(false)
@@ -24,7 +24,6 @@ export default function HostNavBar() {
   const token = localStorage.getItem('token')
   const dispatch = useDispatch()
   const username = localStorage.getItem('username')
-  const role = localStorage.getItem('role')
 
   useEffect(() => {
     if (username) {
