@@ -20,15 +20,14 @@ import Dashboard from './components/admin/Dashboard'
 import { UserList } from './components/admin/UserList'
 import ChangePassword from './components/user/user-change-password/ChangePassword'
 import UserDetails from './components/admin/UserDetails'
-import HouseRent from './components/house/HouseRent'
-
 import House from './components/house/House'
-import UpdateHouse from './components/owner/js/UpdateHouse'
+import UpdateHouse from './components/host/js/UpdateHouse'
 import HostDetails from './components/admin/host-profile/HostDetail'
 import HostMainPage from './components/host/js/HostMainPage'
 import BookingList from './components/host/js/BookingList'
 import { ROLE_ADMIN, ROLE_HOST, ROLE_USER } from './constants/roles'
 import UserBookingList from './components/user/UserBookingList'
+import HouseList from './components/host/js/HouseList'
 
 
 export default function App() {
@@ -78,6 +77,7 @@ export default function App() {
               <Route path="/host" element={<HostMainPage />} />
               <Route path="/host/create" element={<CreateHouse />} />
               <Route path="/host/update/:houseId" element={<UpdateHouse />} />
+              <Route path="/host/houses" element={<HouseList />} />
               <Route path="/host/bookings" element={<BookingList />} />
               <Route path="/host/profile" element={<UserProfile />} />
               <Route path="/host/profile/edit" element={<ProfileUpdateForm />} />
