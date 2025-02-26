@@ -3,17 +3,17 @@ import {
     CButton ,
     CContainer ,
     CRow ,
-    CCol , CCard , CCardBody
+    CCol ,
 } from '@coreui/react';
 import { useNavigate } from "react-router-dom";
 import styles from "../css/CreateHouse.module.css";
 import { useEffect } from 'react'
 import HostHouseList from './HostHouseList'
-
-
+import Notifications from './Notifications'
 
 export default function HostMainPage() {
     const navigate = useNavigate();
+    const hostUsername = localStorage.getItem('username');
 
     useEffect(() => {
         document.title = 'Airbnb | Host Main Page'
@@ -23,7 +23,7 @@ export default function HostMainPage() {
             <CContainer className="py-lg-5 py-3">
                 <CRow className={"justify-content-between align-items-center mb-5"}>
                     <CCol>
-                        <h2>Welcome, Huy!</h2>
+                        <h2>Welcome host {hostUsername}!</h2>
                     </CCol>
                     <CCol className="text-end">
                         <CButton color="dark" variant="outline" className={styles["btn-add-house"]} onClick={() => navigate("/host/create")}>
@@ -31,9 +31,8 @@ export default function HostMainPage() {
                         </CButton>
                     </CCol>
                 </CRow>
-                <CRow className={"justify-content-between align-items-center mb-4"}>
-                    <h4>All House Listings</h4>
-                </CRow>
+                <Notifications hostUsername={hostUsername} />
+                    <h4>Your houses</h4>
                 <HostHouseList />
             </CContainer>
         </div>

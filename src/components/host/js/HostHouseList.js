@@ -53,7 +53,7 @@ export default function HostHouseList() {
   }
   if (error) {
     return (
-      <CCard className="mt-4 bg-warning justify-content-center rounded-3">
+      <CCard className="mt-2 bg-warning justify-content-center rounded-3">
         <CCardBody className="text-center text-white">
           {error}
         </CCardBody>
