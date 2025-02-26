@@ -66,7 +66,7 @@ export default function HostNavBar() {
               <CNavLink href="/#/host">Airbnb Your Home</CNavLink>
             </CNavItem>
             <CNavItem>
-              <CNavLink href="/#/houses">Houses</CNavLink>
+              <CNavLink href="/#/host">Houses</CNavLink>
             </CNavItem>
             <CNavItem>
               <CNavLink href="/#/host/bookings">Booking</CNavLink>

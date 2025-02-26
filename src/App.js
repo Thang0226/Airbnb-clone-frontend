@@ -23,7 +23,7 @@ import UserDetails from './components/admin/UserDetails'
 import HouseRent from './components/house/HouseRent'
 
 import House from './components/house/House'
-
+import UpdateHouse from './components/owner/js/UpdateHouse'
 import HostDetails from './components/admin/host-profile/HostDetail'
 import HostMainPage from './components/host/js/HostMainPage'
 import BookingList from './components/host/js/BookingList'
@@ -36,7 +36,7 @@ export default function App() {
     <Provider store={store}>
       <HashRouter>
         <Routes>
-          {/* Các route dùng layout cho user */}
+          {/* Route cho User */}
           <Route element={<Layout />}>
             <Route path="/" element={<Homepage />} />
             <Route path="/search" element={<MapSample />} />
@@ -76,7 +76,8 @@ export default function App() {
           <Route element={<RequireAuth allowedRoles={[ROLE_HOST]} />}>
             <Route element={<HostLayout />}>
               <Route path="/host" element={<HostMainPage />} />
-              <Route path="/create" element={<CreateHouse />} />
+              <Route path="/host/create" element={<CreateHouse />} />
+              <Route path="/host/update/:houseId" element={<UpdateHouse />} />
               <Route path="/host/bookings" element={<BookingList />} />
               <Route path="/host/profile" element={<UserProfile />} />
               <Route path="/host/profile/edit" element={<ProfileUpdateForm />} />

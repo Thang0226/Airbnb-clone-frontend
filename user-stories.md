@@ -1,17 +1,17 @@
 1. Là người dùng, tôi muốn có thể đăng ký một tài khoản vào hệ thống ✅
 2. Là người dùng, tôi muốn có thể đăng nhập vào hệ thống ✅
 3. Là người dùng, tôi muốn có thể cập nhật thông tin profile của mình ✅
-4. Là người dùng, tôi muốn có thể thay đổi mật khẩu của mình
+4. Là người dùng, tôi muốn có thể thay đổi mật khẩu của mình ✅
 5. Là người dùng, tôi muốn có thể đăng xuất khỏi hệ thống ✅
-6. Là người dùng, tôi muốn có thể đăng nhập bằng tài khoản Mạng Xã Hội
-7. Là người dùng, tôi muốn có thể đăng ký một tài khoản để làm chủ nhà
-8. Là chủ nhà, tôi muốn có thể đăng nhập vào hệ thống
-9. Là chủ nhà, tôi muốn có thể cập nhật thông tin profile của mình
-10. Là chủ nhà, tôi muốn có thể thay đổi mật khẩu của mình
-11. Là chủ nhà, tôi muốn có thể đăng xuất khỏi hệ thống
-12. Là chủ nhà, tôi muốn có thể đăng nhập bằng tài khoản Mạng Xã Hội
-13. Là Admin tôi muốn xem danh sách user có trong hệ thống
-14. Là Admin tôi muốn xem thông tin chi tiết người dùng trong hệ thống
+6. Là người dùng, tôi muốn có thể đăng nhập bằng tài khoản Mạng Xã Hội ✅
+7. Là người dùng, tôi muốn có thể đăng ký một tài khoản để làm chủ nhà ✅
+8. Là chủ nhà, tôi muốn có thể đăng nhập vào hệ thống ✅
+9. Là chủ nhà, tôi muốn có thể cập nhật thông tin profile của mình ✅
+10. Là chủ nhà, tôi muốn có thể thay đổi mật khẩu của mình ✅
+11. Là chủ nhà, tôi muốn có thể đăng xuất khỏi hệ thống ✅
+12. Là chủ nhà, tôi muốn có thể đăng nhập bằng tài khoản Mạng Xã Hội ✅
+13. Là Admin tôi muốn xem danh sách user có trong hệ thống ✅
+14. Là Admin tôi muốn xem thông tin chi tiết người dùng trong hệ thống ✅
 15. Là Admin tôi muốn xem danh sách chủ nhà
 16. Là Admin tôi muốn xem thông tin chi tiết chủ nhà
 17. Là Admin tôi muốn khóa/mở khóa chủ nhà
