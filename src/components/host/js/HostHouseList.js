@@ -13,11 +13,10 @@ import {
 } from '@coreui/react'
 import { BASE_URL_HOUSE } from '../../../constants/api'
 import { setHouses } from '../../../redux/slices/houseSlice'
-import { useNavigate , useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch , useSelector } from 'react-redux'
 import CIcon from '@coreui/icons-react'
 import { cilBath , cilBed , cilLocationPin } from '@coreui/icons'
-import styles from '../css/HouseList.module.css'
 
 export default function HostHouseList() {
   const houseList = useSelector ( state => state.houses.list )
@@ -53,7 +52,7 @@ export default function HostHouseList() {
   }
   if (error) {
     return (
-      <CCard className="mt-2 bg-warning justify-content-center rounded-3">
+      <CCard className="mt-4 bg-warning justify-content-center rounded-3">
         <CCardBody className="text-center text-white">
           {error}
         </CCardBody>
