@@ -23,7 +23,7 @@ import UserDetails from './components/admin/UserDetails'
 import HouseRent from './components/house/HouseRent'
 
 import House from './components/house/House'
-import UpdateHouse from './components/owner/js/UpdateHouse'
+import UpdateHouse from './components/host/js/UpdateHouse'
 import HostDetails from './components/admin/host-profile/HostDetail'
 import HostMainPage from './components/host/js/HostMainPage'
 import BookingList from './components/host/js/BookingList'
