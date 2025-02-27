@@ -52,8 +52,6 @@ export default function HouseRent({houseId}) {
         break;
       }
     }
-    console.log(newMinDate);
-    console.log(bookedDatesList);
     setMinAvailableDate(newMinDate);
     setCheckIn(newMinDate);
     setCheckOut(newMinDate);
@@ -63,7 +61,6 @@ export default function HouseRent({houseId}) {
   }
   useEffect(() => {
     initializeDates().catch((err) => {console.log(err)});
-    console.log("Initialized again");
   }, [selectedHouse])
 
   useEffect(() => {
@@ -90,7 +87,6 @@ export default function HouseRent({houseId}) {
         endDate: dayjs(checkOut).format('YYYY-MM-DD'),
         price: totalCost,
       };
-      console.log(data);
 
       const response = await axiosInstance.post('/houses/rent-house', data);
       toast.success(response.data);
@@ -176,7 +172,7 @@ export default function HouseRent({houseId}) {
                 className="w-100"
                 onClick={handleRentHouse}
               >
-                Rent
+                Rent House
               </CButton>
             </CCol>
           </CRow>

@@ -9,6 +9,7 @@ import {
   CNavLink,
 } from '@coreui/react'
 import { TbBrandAirbnb } from 'react-icons/tb'
+import { IoNotifications } from "react-icons/io5";
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { BASE_URL } from '../../../constants/api'
@@ -17,6 +18,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { resetAccount } from '../../../redux/slices/accountSlice'
 import { fetchUserProfile } from '../../../redux/slices/userProfileSlice'
 import { logout } from '../../../services/authService'
+import Notifications from './Notifications'
 
 export default function HostNavBar() {
   const [visible, setVisible] = useState(false)
@@ -66,12 +68,29 @@ export default function HostNavBar() {
               <CNavLink href="/#/host">Airbnb Your Home</CNavLink>
             </CNavItem>
             <CNavItem>
-              <CNavLink href="/#/host">Houses</CNavLink>
+              <CNavLink href="/#/host/houses">Houses</CNavLink>
             </CNavItem>
             <CNavItem>
               <CNavLink href="/#/host/bookings">Booking</CNavLink>
             </CNavItem>
           </CNavbarNav>
+          <CDropdown variant="dropdown" popper={true} className="bg-gradient rounded me-2">
+            <CDropdownToggle
+              caret={false}
+              color="success"
+              variant="outline"
+              className="d-flex align-items-center gap-2"
+              style={{
+                borderRadius: '50px',
+                height: '48px',
+              }}
+            >
+              <IoNotifications size={25}/>
+            </CDropdownToggle>
+            <CDropdownMenu className="py-0">
+              <Notifications hostUsername={username}/>
+            </CDropdownMenu>
+          </CDropdown>
           <CDropdown variant="dropdown" popper={true} className="bg-gradient rounded">
             <CDropdownToggle
               caret={false}
@@ -90,7 +109,6 @@ export default function HostNavBar() {
                   ? `${BASE_URL}/images/${userProfile.avatar}`
                   : `${BASE_URL}/images/default.jpg`}
                 alt="avatar"
-                className="border border-dark"
                 style={{
                   width: '32px',
                   height: '32px',

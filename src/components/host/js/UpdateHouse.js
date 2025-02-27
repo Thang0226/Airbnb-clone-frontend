@@ -1,4 +1,5 @@
 import { useState , useEffect , useRef } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate , useParams } from 'react-router-dom'
 import axios from 'axios'
 import {
@@ -15,13 +16,19 @@ import {
   CButton ,
 } from '@coreui/react'
 import { toast } from 'react-toastify'
+import { setHouse } from '../../../redux/slices/houseSlice'
 import MapSample from './MapSample'
 import { BASE_URL_HOUSE } from '../../../constants/api'
 
 export default function UpdateHouse() {
   const [validated , setValidated] = useState ( false )
   const navigate = useNavigate ()
-  const { id } = useParams () // House ID
+  const { houseId } = useParams ()
+  const dispatch = useDispatch ()
+  const token = localStorage.getItem ( 'token' )
+  const username = localStorage.getItem ( 'username' )
+
+  // State for form data
   const [houseData , setHouseData] = useState ( {
     houseName: '' ,
     address: '' ,
@@ -36,23 +43,18 @@ export default function UpdateHouse() {
   const [selectedAddressData , setSelectedAddressData] = useState ( null )
   const textareaRef = useRef ( null )
 
-  // const dispatch = useDispatch ()
-  const token = localStorage.getItem ( 'token' )
-  const username = localStorage.getItem ( 'username' )
-
-
-  // Fetch house data when component mounts
   useEffect ( () => {
     document.title = 'Airbnb | Update House'
     const fetchHouse = async () => {
       try {
         const response = await axios.get ( `${BASE_URL_HOUSE}/${id}` , {
           headers: {
-            'Content-Type': 'application/json' ,
-            'Authorization': `Bearer ${token}` ,
+            Authorization: `Bearer ${token}` ,
           } ,
         } )
+
         const house = response.data
+        console.log ( house )
         setHouseData ( {
           houseName: house.houseName ,
           address: house.address ,
@@ -63,9 +65,8 @@ export default function UpdateHouse() {
         } )
         setMapData ( { name: house.address , address: house.address } )
         setPreviews ( house.houseImages.map ( image => ({
-          file: null ,
-          url: `/images/${image.fileName}` ,
-          id: image.id , // mark to remove
+          file: null , // No file for existing images, just a URL
+          url: `/images/${image.fileName}` , // Assuming images are served this way
         }) ) )
       } catch (error) {
         console.error ( 'Error fetching house:' , error )
@@ -73,7 +74,7 @@ export default function UpdateHouse() {
       }
     }
     fetchHouse ()
-  } , [id] )
+  } , [houseId , token] )
 
   // Handle new images
   const handleFileChange = (event) => {
@@ -81,43 +82,33 @@ export default function UpdateHouse() {
     const validFiles = files.filter ( file =>
       file.type === 'image/jpeg' || file.type === 'image/png' ,
     )
-    setSelectedFiles ( validFiles ) // Save new image
+    setSelectedFiles ( validFiles )
 
-    // Preview new images + add to existing previews
     const newPreviews = validFiles.map ( file => ({
       file: file ,
       url: URL.createObjectURL ( file ) ,
     }) )
-    setPreviews ( [...previews.filter ( p => p.id || !p.file ) , ...newPreviews] )
+
+    // Clean up old preview URLs for new files only
+    previews.filter ( p => p.file ).forEach ( p => URL.revokeObjectURL ( p.url ) )
+    setPreviews ( [...previews.filter ( p => !p.file ) , ...newPreviews] ) // Keep existing images, add new ones
   }
 
-  // Remove image (existing or new) from previews, send DELETE request for existing
-  const removeImage = async (index) => {
-    const image = previews[index]
+  // Remove image (existing or new)
+  const removeImage = (index) => {
     const newPreviews = [...previews]
-    URL.revokeObjectURL ( image.url ) // Clean up the preview URL
+    const newFiles = [...selectedFiles]
 
-    newPreviews.splice ( index , 1 ) // Remove img from preview
+    // Clean up the preview URL
+    URL.revokeObjectURL ( previews[index].url )
 
-    if (image.id) {
-      try {
-        await axios.delete ( `${BASE_URL_HOUSE}/update/${id}/images/${image.id}` , {
-          headers: {
-            'Content-Type': 'application/json' ,
-            'Authorization': `Bearer ${token}` ,
-          } ,
-        } )
-        setPreviews ( newPreviews.filter ( p => p.id !== image.id ) ) // Update previews after deletion
-      } catch (error) {
-        console.error ( 'Error removing image:' , error )
-        toast.error ( 'Failed to remove image. Please try again.' )
-      }
-    } else if (image.file) {
-      // For new images, remove from selectedFiles
-      const newFiles = selectedFiles.filter ( (_ , i) => i !== (index - (previews.filter ( p => p.id ).length || 0)) )
-      setSelectedFiles ( newFiles )
-      setPreviews ( newPreviews )
+    newPreviews.splice ( index , 1 )
+    if (previews[index].file) {
+      newFiles.splice ( index - (previews.length - selectedFiles.length) , 1 )
     }
+
+    setPreviews ( newPreviews )
+    setSelectedFiles ( newFiles )
   }
 
   // For address input
@@ -144,12 +135,6 @@ export default function UpdateHouse() {
     }
   } , [] )
 
-  // Update house data on input change
-  const handleChange = (e) => {
-    const { name , value } = e.target
-    setHouseData ( prev => ({ ...prev , [name]: value }) )
-  }
-
   // Handle form submission for updating
   const handleSubmit = async (event) => {
     event.preventDefault ()
@@ -174,76 +159,37 @@ export default function UpdateHouse() {
       formData.append ( 'address' , mapData.address )
     }
 
-    // Keep what image is not removed
-    const keptImages = previews.filter ( p => p.id ).map ( p => p.url.split ( '/' ).pop () ) // Filenames of kept existing images
-    if (keptImages.length > 0) {
-      keptImages.forEach ( filename => formData.append ( 'existingFiles' , filename ) )
-    }
-
-    // Add new image if any
+    // Append new house images
     if (selectedFiles.length > 0) {
-      selectedFiles.forEach ( file => formData.append ( 'houseImages' , file ) )
+      selectedFiles.forEach ( file => {
+        formData.append ( 'houseImages' , file )
+      } )
     }
 
-    // Log FormData to debug
+    // Log FormData
     for (let pair of formData.entries ()) {
       console.log ( pair[0] + ', ' + pair[1] )
     }
 
-    // Send request to backend
     try {
       const response = await axios.put ( `${BASE_URL_HOUSE}/update/${id}` ,
         formData ,
         {
           headers: {
             'Content-Type': 'multipart/form-data' ,
-            'Authorization': `Bearer ${token}` ,
+            Authorization: `Bearer ${token}` ,
           } ,
         } ,
       )
       console.log ( 'House updated successfully:' , response.data )
       toast.success ( 'House updated successfully' )
+      dispatch ( setHouse ( response.data ) ) // Update Redux if needed
       navigate ( '/host' )
     } catch (error) {
       console.error ( 'Error updating house:' , error )
       toast.error ( 'Failed to update house. Please try again.' )
     }
   }
-
-
-  // Add new images via POST request when file input changes
-  const handleAddImages = async (event) => {
-    const files = Array.from ( event.target.files )
-    const validFiles = files.filter ( file =>
-      file.type === 'image/jpeg' || file.type === 'image/png' ,
-    )
-
-    if (validFiles.length > 0) {
-      const formData = new FormData ()
-      validFiles.forEach ( file => formData.append ( 'images' , file ) )
-
-      try {
-        await axios.post ( `${BASE_URL_HOUSE}/${id}/images` , formData , {
-          headers: {
-            'Content-Type': 'multipart/form-data' ,
-            'Authorization': `Bearer ${token}` ,
-          } ,
-        } )
-        // Fetch updated house to refresh previews
-        const response = await axios.get ( `${BASE_URL_HOUSE}/${id}` )
-        setPreviews ( response.data.houseImages.map ( img => ({
-          file: null ,
-          url: `/images/${img.fileName}` ,
-          id: img.id ,
-        }) ) )
-        toast.success ( 'Images added successfully' )
-      } catch (error) {
-        console.error ( 'Error adding images:' , error )
-        toast.error ( 'Failed to add images. Please try again.' )
-      }
-    }
-  }
-
 
   return (
     <>
@@ -264,7 +210,7 @@ export default function UpdateHouse() {
                 name="houseName"
                 placeholder="Enter House Name"
                 value={houseData.houseName}
-                onChange={handleChange}
+                onChange={(e) => setHouseData ( { ...houseData , houseName: e.target.value } )}
                 feedbackInvalid="Please enter a house name"
                 required
               />
@@ -292,7 +238,7 @@ export default function UpdateHouse() {
                 id="bedrooms"
                 name="bedrooms"
                 value={houseData.bedrooms}
-                onChange={handleChange}
+                onChange={(e) => setHouseData ( { ...houseData , bedrooms: e.target.value } )}
                 min={1}
                 max={10}
                 feedbackInvalid="Please enter number of bedrooms (1-10)"
@@ -311,7 +257,7 @@ export default function UpdateHouse() {
                 id="bathrooms"
                 name="bathrooms"
                 value={houseData.bathrooms}
-                onChange={handleChange}
+                onChange={(e) => setHouseData ( { ...houseData , bathrooms: e.target.value } )}
                 min={1}
                 max={3}
                 feedbackInvalid="Please enter number of bathrooms (1-3)"
@@ -329,7 +275,7 @@ export default function UpdateHouse() {
                 id="description"
                 name="description"
                 value={houseData.description}
-                onChange={handleChange}
+                onChange={(e) => setHouseData ( { ...houseData , description: e.target.value } )}
                 rows={3}
                 ref={textareaRef}
                 style={{ overflow: 'hidden' , resize: 'none' }}
@@ -348,7 +294,7 @@ export default function UpdateHouse() {
                 id="price"
                 name="price"
                 value={houseData.price}
-                onChange={handleChange}
+                onChange={(e) => setHouseData ( { ...houseData , price: e.target.value } )}
                 min={100000}
                 feedbackInvalid="Please enter price per day in VND (min 100.000)"
                 required
@@ -365,12 +311,12 @@ export default function UpdateHouse() {
               id="houseImages"
               name="houseImages"
               accept="image/jpeg, image/png"
-              onChange={handleAddImages}
+              onChange={handleFileChange}
               multiple
             />
             {/* Preview */}
             <CRow className="mt-4 g-4">
-              {previews.filter ( p => p.url !== '/images/default.png' ).map ( (preview , index) => (
+              {previews.map ( (preview , index) => (
                 <CCol key={index} xs="auto" className="position-relative">
                   <CCloseButton
                     className="position-absolute top-0 end-0 rounded-circle p-1"
@@ -388,7 +334,7 @@ export default function UpdateHouse() {
             </CRow>
           </CCol>
 
-          {/* Submit & Cancel */}
+          {/* Submit Button */}
           <CCol xs={12} className="mt-5">
             <CButton
               color="dark"

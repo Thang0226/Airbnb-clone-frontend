@@ -1,6 +1,6 @@
 import { useDispatch , useSelector } from 'react-redux'
 import { setHouse } from '../../redux/slices/houseSlice'
-import { useNavigate , useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useEffect , useState } from 'react'
 import axios from 'axios'
 import { BASE_URL_HOUSE } from '../../constants/api'
@@ -13,7 +13,7 @@ import {
   CSpinner,
   CCarousel,
   CCarouselItem,
-  CImage, CFormInput, CLink, CButton,
+  CImage, CLink,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import {
@@ -96,7 +96,7 @@ export default function House() {
           <CCardBody>
             {/* Images */}
             {selectedHouse.houseImages && selectedHouse.houseImages.length > 0 && (
-              <CCarousel controls indicators style={{ borderRadius: '16px' , overflow: 'hidden' }}>
+              <CCarousel controls indicators style={{ borderRadius: '16px' , overflow: 'hidden', zIndex: 0 }}>
                 {selectedHouse.houseImages.map ( (image) => (
                   <CCarouselItem key={image.id}>
                     <CImage
