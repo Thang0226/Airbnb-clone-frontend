@@ -15,6 +15,7 @@ import {
 import CurrencyFormat from '../_fragments/format/CurrencyFormat'
 import axiosInstance from '../../services/axiosConfig'
 import dayjs from 'dayjs'
+import { toast } from 'react-toastify'
 
 const UserBookingList = () => {
   const [loading, setLoading] = useState(true);
@@ -40,12 +41,13 @@ const UserBookingList = () => {
   }, [])
 
   const handleCancelBooking = (bookingId) => {
-    axiosInstance.post(`/bookings/${bookingId}`, username, {
+    axiosInstance.post(`/bookings/${bookingId}/cancel`, username, {
       headers: {
         'Content-Type': 'text/plain',
       }
     })
       .then(res => {
+        toast.info("Booking canceled");
         setBookings(res.data);
       })
       .catch(err => {console.log(err)});

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Client } from "@stomp/stompjs";
-import axiosInstance from "../../../services/axiosConfig"
-import { CDropdownItem } from '@coreui/react'
+import axiosInstance from "../../../services/axiosConfig";
+import { CDropdownItem } from '@coreui/react';
 
 const Notifications = ({ hostUsername }) => {
 
@@ -22,13 +22,10 @@ const Notifications = ({ hostUsername }) => {
       brokerURL: "ws://localhost:8080/ws",
       onConnect: () => {
         console.log("Connected to WebSocket");
-
-        // Subscribe to notifications for this host
         client.subscribe(`/topic/notifications/${hostUsername}`, (message) => {
-          alert("New notifications: " + message.body);
           try {
-            const array = JSON.parse(message.body);
-            setNotifications(array);
+            const notiArray = JSON.parse(message.body);
+            setNotifications(notiArray);
           } catch (err) {console.log(err)}
         });
       },
