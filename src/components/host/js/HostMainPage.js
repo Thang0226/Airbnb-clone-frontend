@@ -18,14 +18,14 @@ export default function HostMainPage() {
         document.title = 'Airbnb | Host Main Page'
     }, [])
     return (
-        <div>
+        <>
             <CContainer className="py-lg-5 py-3">
                 <CRow className={"justify-content-between align-items-center mb-5"}>
                     <CCol>
                         <h2>Welcome host {hostUsername}!</h2>
                     </CCol>
                     <CCol className="text-end">
-                        <CButton color="dark" variant="outline" className={styles["btn-add-house"]} onClick={() => navigate("/host/create")}>
+                        <CButton color="primary" variant="outline" className={styles["btn-add-house"]} onClick={() => navigate("/host/create")}>
                             List a House
                         </CButton>
                     </CCol>
@@ -33,6 +33,6 @@ export default function HostMainPage() {
                     <h4>Your houses</h4>
                 <HostHouseList />
             </CContainer>
-        </div>
+        </>
     )
 }

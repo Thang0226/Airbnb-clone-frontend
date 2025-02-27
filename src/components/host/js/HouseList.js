@@ -29,7 +29,7 @@
     const [status, setStatus] = useState('');
 
     useEffect(() => {
-      document.title = 'Airbnb | House List'
+      document.title = 'Host | House List'
     }, [])
 
     useEffect(() => {
