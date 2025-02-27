@@ -96,7 +96,7 @@ export default function House() {
           <CCardBody>
             {/* Images */}
             {selectedHouse.houseImages && selectedHouse.houseImages.length > 0 && (
-              <CCarousel controls indicators style={{ borderRadius: '16px' , overflow: 'hidden' }}>
+              <CCarousel controls indicators style={{ borderRadius: '16px' , overflow: 'hidden', zIndex: 0 }}>
                 {selectedHouse.houseImages.map ( (image) => (
                   <CCarouselItem key={image.id}>
                     <CImage
