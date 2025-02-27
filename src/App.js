@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { HashRouter , Routes , Route , Navigate } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './redux/store'
 import './scss/custom.scss'
@@ -25,9 +25,10 @@ import UpdateHouse from './components/host/js/UpdateHouse'
 import HostDetails from './components/admin/host-profile/HostDetail'
 import HostMainPage from './components/host/js/HostMainPage'
 import BookingList from './components/host/js/BookingList'
-import { ROLE_ADMIN, ROLE_HOST, ROLE_USER } from './constants/roles'
+import { ROLE_ADMIN , ROLE_HOST , ROLE_USER } from './constants/roles'
 import UserBookingList from './components/user/UserBookingList'
 import HouseList from './components/host/js/HouseList'
+import HostHouseDetails from './components/host/js/HostHouseDetails'
 
 
 export default function App() {
@@ -46,18 +47,18 @@ export default function App() {
               <Route path="/user/bookings" element={<UserBookingList />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[ROLE_USER, ROLE_HOST]} />}>
+            <Route element={<RequireAuth allowedRoles={[ROLE_USER , ROLE_HOST]} />}>
               <Route path="/houses/:id" element={<House />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[ROLE_USER, ROLE_ADMIN, ROLE_HOST]} />}>
+            <Route element={<RequireAuth allowedRoles={[ROLE_USER , ROLE_ADMIN , ROLE_HOST]} />}>
               <Route path="/profile" element={<UserProfile />} />
               <Route path="/profile/edit" element={<ProfileUpdateForm />} />
               <Route path="/user/change-password" element={<ChangePassword />} />
             </Route>
           </Route>
 
-          {/* Các route dành riêng cho admin */}
+          {/* Route cho Admin */}
           <Route element={<RequireAuth allowedRoles={[ROLE_ADMIN]} />}>
             <Route element={<AdminLayout />}>
               <Route path="/admin" element={<Dashboard />} />
@@ -68,15 +69,16 @@ export default function App() {
               <Route path="/admin/profile" element={<UserProfile />} />
               <Route path="/admin/profile/edit" element={<ProfileUpdateForm />} />
               <Route path="/admin/host/:id" element={<HostDetails />} />
-              {/* Các route admin khác có thể thêm tại đây */}
             </Route>
           </Route>
 
+          {/* Route cho Host */}
           <Route element={<RequireAuth allowedRoles={[ROLE_HOST]} />}>
             <Route element={<HostLayout />}>
               <Route path="/host" element={<HostMainPage />} />
               <Route path="/host/create" element={<CreateHouse />} />
               <Route path="/host/update/:houseId" element={<UpdateHouse />} />
+              <Route path="/host/house/:houseId" element={<HostHouseDetails />} />
               <Route path="/host/houses" element={<HouseList />} />
               <Route path="/host/bookings" element={<BookingList />} />
               <Route path="/host/profile" element={<UserProfile />} />

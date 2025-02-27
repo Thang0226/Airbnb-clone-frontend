@@ -33,7 +33,7 @@ export default function HostHouseList() {
       setLoading ( true )
       setError ( null )
       try {
-        const response = await api.get ( `${BASE_URL_HOUSE}/host/${hostId}` )
+        const response = await api.get ( `${BASE_URL_HOUSE}/host/${hostId}` ) // da co token
         dispatch ( setHouses ( response.data ) )
       } catch (err) {
         setError ( 'Failed to fetch house details. Please try again.' )
@@ -74,7 +74,7 @@ export default function HostHouseList() {
   return (
     <CRow className="mt-4 g-4">
       {houseList.map ( (house) => (
-        <CCol xs={12} md={6} lg={4} key={house.id}>
+        <CCol xs={12} md={6} lg={4} key={house.id} onClick={() => navigate ( `/host/house/${house.id}` )}>
           <CCard className="h-100 shadow-sm rounded-3" style={{ border: 'none' }}>
             <CCardBody>
               {/* House Images Carousel */}

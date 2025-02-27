@@ -71,10 +71,6 @@ export default function UpdateHouse() {
         } )
 
         setMapData ( { name: house.address , address: house.address } )
-        // setPreviews ( house.houseImages.map ( image => ({
-        //   file: null , // No file for existing images, just a URL
-        //   url: `/images/${image.fileName}` , // Assuming images are served this way
-        // }) ) )
         setIsLoading ( false )
       } catch (error) {
         console.error ( 'Error fetching house:' , error )
@@ -146,10 +142,6 @@ export default function UpdateHouse() {
         formData.append ( 'existingImageIds' , id )
       } )
     }
-    // else {
-    //   // If no existing images, send an empty array
-    //   formData.append ( 'existingImageIds' , JSON.stringify ( [] ) )
-    // }
 
     // 2. New images being uploaded (added with existing images)
 
