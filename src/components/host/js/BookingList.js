@@ -17,7 +17,7 @@ import {
 import { UserPagination } from '../../_fragments/CustomerPagination'
 import { getBookings, searchBookings } from '../../../redux/slices/bookingSlice'
 import CurrencyFormat from '../../_fragments/format/CurrencyFormat'
-import styles from '../css/HoustList.module.css'
+import styles from '../css/HouseList.module.css'
 import BookingSearchBar from './BookingSearchBar'
 
 const BookingList = () => {

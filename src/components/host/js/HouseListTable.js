@@ -10,7 +10,7 @@ import {
   CTableHeaderCell,
   CTableRow,
 } from '@coreui/react'
-import styles from '../css/HoustList.module.css'
+import styles from '../css/HouseList.module.css'
 import CurrencyFormat from '../../_fragments/format/CurrencyFormat'
 import { UserPagination } from '../../_fragments/CustomerPagination'
 import React, { useEffect, useState } from 'react'
