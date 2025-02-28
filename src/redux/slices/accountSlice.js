@@ -3,9 +3,9 @@ import { createSlice } from '@reduxjs/toolkit'
 export const accountSlice = createSlice({
   name: 'account',
   initialState: {
-    username: '',
+    username: localStorage.getItem('username') || '',
     password: '',
-    token: '',
+    token: localStorage.getItem('token') || '',
     role: localStorage.getItem('role') || ''
   },
   reducers: {

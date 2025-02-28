@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { ROLE_ADMIN } from '../../constants/roles'
 import "./login_styles.css"
+import { loginSetup, logoutAPI } from '../../services/authService'
 
 const SocialLoginComponent = () => {
 
@@ -25,20 +26,20 @@ const SocialLoginComponent = () => {
       fullName: data.name
     }
     await axios.post(`${BASE_URL_USER}/login-gg`, ggData)
-      .then(res => {
+      .then(async (res) => {
         // console.log(res);
-        toast.success("Login successful", {hideProgressBar: true});
         const user = res.data;
+        if (user.userStatus === 'LOCKED') {
+          await logoutAPI()
+          toast.warning("Your account has been LOCKED, please contact Admin.", { hideProgressBar: true })
+          navigate('/login')
+        }
         const role = user.authorities[0].authority;
-        dispatch(setToken(user.token))
-        dispatch(setUsername(user.username))
         dispatch(setRole(role))
         dispatch(deletePassword())
-        localStorage.setItem('userId', user.id)
-        localStorage.setItem('username', user.username)
-        localStorage.setItem('role', role)
-        localStorage.setItem('token', user.token)
-        localStorage.setItem('loggedIn', JSON.stringify(true))
+        dispatch(setToken(user.token))
+        dispatch(setUsername(user.username))
+        await loginSetup(user, role)
         if (role === ROLE_ADMIN) {
           return navigate('/admin');
         }
