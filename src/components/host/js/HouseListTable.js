@@ -279,7 +279,7 @@ const HouseListTable = () => {
                         <CTableDataCell className="text-center">
                           <CBadge
                             color={getStatusBadgeColor(house.status)}
-                            className="p-2"
+                            className="p-2 fw-normal rounded-pill"
                           >
                             {house.status.replace('_', ' ')}
                           </CBadge>
@@ -288,6 +288,7 @@ const HouseListTable = () => {
                           <CButton
                             color="light"
                             onClick={() => handleUpdateStatus(house)}
+                            className={styles['update-house-btn']}
                           >
                             <TbEdit style={{ width: '20px', height: '20px' }} />
                           </CButton>

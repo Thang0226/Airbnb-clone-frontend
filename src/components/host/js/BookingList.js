@@ -135,7 +135,7 @@ const BookingList = () => {
                         <CTableDataCell className="text-center">
                           <CBadge
                             color={getStatusBadgeColor(booking.status)}
-                            className="p-2"
+                            className="p-2 rounded-pill"
                           >
                             {booking.status.replace('_', ' ')}
                           </CBadge>

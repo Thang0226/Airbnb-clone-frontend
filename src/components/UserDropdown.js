@@ -62,11 +62,10 @@ export default function UserDropdown() {
         <img
           src={avatarUrl}
           alt="avatar"
-          className="border border-dark"
+          className="border border-white rounded-pill"
           style={{
             width: '32px',
             height: '32px',
-            borderRadius: '50%',
             objectFit: 'cover',
           }}
           onError={() => setAvatarUrl(`${BASE_URL}/images/default.jpg`)}
@@ -75,7 +74,9 @@ export default function UserDropdown() {
       <CDropdownMenu>
         {token ? (
           <>
-            <CDropdownItem href="/#/profile">Profile</CDropdownItem>
+            <CDropdownItem href="/#/profile">
+              {username}
+            </CDropdownItem>
             <CDropdownDivider />
             <CDropdownItem onClick={handleChangePassword} style={{ cursor: 'pointer' }}>
               Change Password
