@@ -114,7 +114,7 @@ export const UserList = () => {
                       >
                         <CBadge
                           color={user.status === 'ACTIVE' ? "success" : "secondary"}
-                          className="py-2"
+                          className="py-2 rounded-pill"
                           style={{ width: "90px" }}
                         >
                           {user.status}

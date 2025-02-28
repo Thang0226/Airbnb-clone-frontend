@@ -13,10 +13,21 @@ import { IoNotifications } from "react-icons/io5";
 import { useState } from 'react'
 import Notifications from './Notifications'
 import UserDropdown from '../../UserDropdown'
+import { useNavigate } from 'react-router-dom'
 
 export default function HostNavBar() {
   const [visible, setVisible] = useState(false)
+  const navigate = useNavigate()
   const username = localStorage.getItem('username')
+
+  const toHouses = () => {
+    navigate('/host/houses', {
+      state:
+        {
+          username: username,
+        },
+    });
+  };
 
   return (
     <CNavbar expand="lg" className="bg-body-tertiary">
@@ -34,7 +45,7 @@ export default function HostNavBar() {
               <CNavLink href="/#/host">Airbnb Your Home</CNavLink>
             </CNavItem>
             <CNavItem className="border-end">
-              <CNavLink href="/#/host/houses">Houses</CNavLink>
+              <CNavLink onClick={toHouses}>Houses</CNavLink>
             </CNavItem>
             <CNavItem className="border-end">
               <CNavLink href="/#/host/bookings">Booking</CNavLink>

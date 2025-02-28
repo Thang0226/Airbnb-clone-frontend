@@ -66,9 +66,10 @@ export default function App() {
               <Route path="/admin/users" element={<UserList />} />
               <Route path="/admin/users/:userID" element={<UserDetails />} />
               <Route path="/admin/hosts" element={<HostList />} />
+              <Route path="/admin/host/:id" element={<HostDetails />} />
+              <Route path="/admin/hosts/:id/houses" element={<HouseListTable />} />
               <Route path="/admin/profile" element={<UserProfile />} />
               <Route path="/admin/profile/edit" element={<ProfileUpdateForm />} />
-              <Route path="/admin/host/:id" element={<HostDetails />} />
             </Route>
           </Route>
 

@@ -9,13 +9,15 @@ import {
   CRow,
   CCol,
   CImage,
-  CSpinner,
   CBadge,
   CButton,
 } from '@coreui/react'
 import { BASE_URL } from '../../../constants/api'
-import UserInfoRow from '../../_fragments/FORMInfoRow'
+import TextInfoRow from '../../_fragments/FORMInfoRow'
 import CurrencyFormat from '../../_fragments/format/CurrencyFormat'
+import { DisplayLoading } from '../../DisplayLoading'
+import { DisplayError } from '../../DisplayError'
+import NumberInfoRow from '../../_fragments/FORMNumberInfoRow'
 
 const HostDetail = () => {
   const { id } = useParams()
@@ -45,23 +47,18 @@ const HostDetail = () => {
 
   if (loading) {
     return (
-      <CContainer className="text-center py-5">
-        <CSpinner color="primary" size="xl" />
-        <p className="mt-3 fs-4">Loading...</p>
-      </CContainer>
+      <DisplayLoading/>
     )
   }
 
   if (error) {
     return (
-      <CContainer className="text-center py-5">
-        <p className="text-danger fs-5">{error}</p>
-      </CContainer>
+      <DisplayError error={error} />
     )
   }
 
   return (
-    <CContainer className="py-4">
+    <CContainer className="pb-3">
       {/* Breadcrumb Navigation */}
       <div className="d-flex align-items-center mb-4">
         <span
@@ -85,7 +82,7 @@ const HostDetail = () => {
       <CRow className="justify-content-center">
         <CCol xs={12} sm={12} md={12} lg={6}>
           <CCard className="shadow border-0">
-            <CCardHeader className="text-center p-4 bg-primary text-white">
+            <CCardHeader className="text-center p-4">
               <CImage
                 src={
                   host.avatar
@@ -101,16 +98,16 @@ const HostDetail = () => {
               <h3 className="mt-3">{host.username}</h3>
               <CBadge
                 color={host.status === 'ACTIVE' ? 'success' : 'secondary'}
-                className="py-2 mt-2"
+                className="py-2 mt-2 rounded-pill"
                 style={{ width: '90px' }}
               >
                 {host.status}
               </CBadge>
             </CCardHeader>
             <CCardBody className="p-4 row">
-              <UserInfoRow label="Full Name" value={host.fullName} />
-              <UserInfoRow label="Phone number" value={host.phone} />
-              <UserInfoRow label="Address" value={host.address} />
+              <TextInfoRow label="Full Name" value={host.fullName} />
+              <TextInfoRow label="Phone number" value={host.phone} />
+              <TextInfoRow label="Address" value={host.address} />
             </CCardBody>
           </CCard>
         </CCol>
@@ -121,22 +118,25 @@ const HostDetail = () => {
               <h3>Host Statistics</h3>
             </CCardHeader>
             <CCardBody className="p-4 row">
-              <UserInfoRow label="Houses Listed" value={host.housesForRent ? host.housesForRent : '0'} />
-              <UserInfoRow label="Total Income" value={<CurrencyFormat value={host.totalIncome} />} />
+              <NumberInfoRow
+                label="Houses Listed"
+                value={host.housesForRent ? host.housesForRent : '0'}
+              />
+              <NumberInfoRow
+                label="Total Income"
+                value={<CurrencyFormat value={host.totalIncome} />}
+              />
               <div className="d-flex align-items-center fw-bold">
                 Danh sách nhà
                 <CButton
                   size="sm"
-                  className="ms-2 border"
-                  style={{
-                    backgroundColor: "#f8f9fa",
-                  }}
-                  // onClick={}
+                  className="ms-2 border highlight-btn"
+                  color="light"
+                  onClick={() => navigate(`/admin/hosts/${host.id}/houses`, {state: {username: host.username,}})}
                 >
                   <i className="bi bi-box-arrow-up-right"></i>
                 </CButton>
               </div>
-              <div>(bổ sung onclick navigate đến danh sách house của host trong sprint 3)</div>
             </CCardBody>
           </CCard>
         </CCol>
