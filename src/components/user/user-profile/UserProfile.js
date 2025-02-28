@@ -32,13 +32,10 @@ const UserProfile = () => {
   )
 
   const goToProfileEdit = () => {
-    if (role === "ROLE_ADMIN") {
-      return navigate('/admin/profile/edit', { state: { username: userProfile.username } })
-    }
-    if (role === "ROLE_HOST") {
-      return navigate('/host/profile/edit', { state: { username: userProfile.username } })
-    }
-    navigate('/profile/edit', { state: { username: userProfile.username } })
+    const formattedRole = role.replace(/^ROLE_+/, '').toLowerCase();
+    const path = formattedRole !== "user" ? `/${formattedRole}/profile/edit` : "/profile/edit";
+
+    navigate(path, { state: { username: userProfile.username, role: formattedRole} });
   }
 
   return (

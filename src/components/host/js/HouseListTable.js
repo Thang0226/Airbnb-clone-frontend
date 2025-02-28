@@ -1,4 +1,5 @@
 import {
+  CBadge,
   CButton,
   CCard,
   CCardBody,
@@ -28,6 +29,8 @@ import { DisplayError } from '../../DisplayError'
 import { toast } from 'react-toastify'
 import DatePicker from 'react-datepicker'
 import dayjs from 'dayjs'
+import { HiOutlineSearch } from 'react-icons/hi'
+import { TbEdit } from 'react-icons/tb'
 
 const HouseListTable = () => {
   const [page, setPage] = useState(0)
@@ -136,7 +139,7 @@ const HouseListTable = () => {
       return
     }
 
-    let previousStatus = selectedHouse.status;
+    let previousStatus = selectedHouse.status
 
     try {
       // Cập nhật trạng thái nhà trước
@@ -144,21 +147,25 @@ const HouseListTable = () => {
       console.log(response)
       toast.success('House status updated successfully!')
 
-      const formattedStartDate = startDate.toISOString().split('T')[0];
-      const formattedEndDate = endDate.toISOString().split('T')[0];
+      const formattedStartDate = startDate.toISOString().split('T')[0]
+      const formattedEndDate = endDate.toISOString().split('T')[0]
 
       // Nếu trạng thái được cập nhật thành MAINTAINING, mới tạo maintenance record
       if (newStatus === 'MAINTAINING') {
         try {
           const maintenanceResponse = await dispatch(
-            creatMaintenanceRecord({ houseId: selectedHouse.id, startDate: formattedStartDate, endDate: formattedEndDate })
-          ).unwrap();
-          console.log(maintenanceResponse);
-          toast.success('Maintenance record created successfully!');
+            creatMaintenanceRecord({
+              houseId: selectedHouse.id,
+              startDate: formattedStartDate,
+              endDate: formattedEndDate,
+            }),
+          ).unwrap()
+          console.log(maintenanceResponse)
+          toast.success('Maintenance record created successfully!')
         } catch (error) {
           // Nếu tạo maintenance record thất bại, rollback trạng thái nhà về trạng thái cũ
-          toast.error('Failed to create maintenance record. Rolling back status...');
-          await dispatch(updateHouseStatus({ houseId: selectedHouse.id, status: previousStatus })).unwrap();
+          toast.error('Failed to create maintenance record. Rolling back status...')
+          await dispatch(updateHouseStatus({ houseId: selectedHouse.id, status: previousStatus })).unwrap()
         }
       }
 
@@ -171,6 +178,19 @@ const HouseListTable = () => {
   }
 
   const { houseList, error, loading, totalPages } = useSelector((state) => state.houses)
+
+  const getStatusBadgeColor = (status) => {
+    switch (status) {
+      case 'MAINTAINING':
+        return 'warning'
+      case 'AVAILABLE':
+        return 'success'
+      case 'RENTED':
+        return 'primary'
+      default:
+        return 'dark'
+    }
+  }
 
   if (loading || !houseList) return (
     <DisplayLoading />
@@ -209,10 +229,11 @@ const HouseListTable = () => {
           <div style={{ minHeight: '24px' }}></div>
           <CButton
             color="primary"
-            className="w-auto"
+            className="d-flex align-items-center justify-content-center rounded-circle"
+            style={{ height: '37.6px', width: '37.6px', padding: '0' }}
             onClick={handleSearch}
           >
-            Search
+            <HiOutlineSearch style={{ width: '20px', height: '20px' }} />
           </CButton>
         </CCol>
       </CRow>
@@ -256,10 +277,21 @@ const HouseListTable = () => {
                           <CurrencyFormat value={house.totalRevenue} />
                         </CTableDataCell>
                         <CTableDataCell className="text-center">
-                          {house.status}
+                          <CBadge
+                            color={getStatusBadgeColor(house.status)}
+                            className="p-2 fw-normal rounded-pill"
+                          >
+                            {house.status.replace('_', ' ')}
+                          </CBadge>
                         </CTableDataCell>
                         <CTableDataCell className="d-flex justify-content-center">
-                          <CButton color="warning" onClick={() => handleUpdateStatus(house)}>Update Status</CButton>
+                          <CButton
+                            color="light"
+                            onClick={() => handleUpdateStatus(house)}
+                            className={styles['update-house-btn']}
+                          >
+                            <TbEdit style={{ width: '20px', height: '20px' }} />
+                          </CButton>
                         </CTableDataCell>
                       </CTableRow>
                     ))}

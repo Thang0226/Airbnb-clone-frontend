@@ -1,5 +1,4 @@
 import React , { useState , useEffect } from 'react'
-import axios from 'axios'
 import {
   CButton ,
   CCard ,
@@ -17,6 +16,8 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch , useSelector } from 'react-redux'
 import CIcon from '@coreui/icons-react'
 import { cilBath , cilBed , cilLocationPin } from '@coreui/icons'
+import { TbEdit } from 'react-icons/tb'
+import styles from '../css/HouseList.module.css'
 import api from '../../../services/axiosConfig'
 import HouseCard from '../../homepage/HouseCard'
 
@@ -81,11 +82,11 @@ export default function HostHouseList() {
             <CCardFooter className="bg-light d-flex justify-content-between align-items-center">
               <span className="text-muted">Status: {house.status || 'Not specified'}</span>
               <CButton
-                color="primary"
-                size="sm"
+                size="md"
                 onClick={() => navigate ( `/host/update/${house.id}` )}
+                className={styles['update-house-btn']}
               >
-                Update
+                <TbEdit style={{ width: '22px', height: '22px' }}/>
               </CButton>
             </CCardFooter>
           </CCard>

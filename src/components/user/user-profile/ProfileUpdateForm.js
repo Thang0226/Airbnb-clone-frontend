@@ -63,7 +63,7 @@ const ProfileUpdateForm = () => {
   const location = useLocation()
   const dispatch = useDispatch()
 
-  const { username } = location.state || {}
+  const { username, role } = location.state || {}
 
   useEffect(() => {
     document.title = 'Airbnb | Update Profile'
@@ -156,6 +156,11 @@ const ProfileUpdateForm = () => {
     }
   }
 
+  const handleCancel = () => {
+    const path = role !== "user" ? `/${role}/profile` : "/profile";
+    navigate(path);
+  }
+
   return (
     <div className="container mt-4">
       <CRow
@@ -212,7 +217,7 @@ const ProfileUpdateForm = () => {
                         type="button"
                         color="secondary"
                         className="ms-2"
-                        onClick={() => navigate(-1)}
+                        onClick={handleCancel}
                       >
                         Cancel
                       </CButton>
