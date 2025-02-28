@@ -11,7 +11,7 @@ import {
   CRow ,
   CSpinner ,
 } from '@coreui/react'
-import { BASE_URL_HOUSE } from '../../../constants/api'
+import { BASE_URL , BASE_URL_HOUSE } from '../../../constants/api'
 import { setHouses } from '../../../redux/slices/houseSlice'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch , useSelector } from 'react-redux'
@@ -19,6 +19,7 @@ import CIcon from '@coreui/icons-react'
 import { cilBath , cilBed , cilLocationPin } from '@coreui/icons'
 import { TbEdit } from 'react-icons/tb'
 import styles from '../css/HouseList.module.css'
+import api from '../../../services/axiosConfig'
 
 export default function HostHouseList() {
   const houseList = useSelector ( state => state.houses.list )
@@ -28,12 +29,13 @@ export default function HostHouseList() {
   const navigate = useNavigate ()
   const hostId = localStorage.getItem ( 'userId' )
 
+
   useEffect ( () => {
     const getHousesByHostId = async () => {
       setLoading ( true )
       setError ( null )
       try {
-        const response = await axios.get ( `${BASE_URL_HOUSE}/host/${hostId}` )
+        const response = await api.get ( `${BASE_URL_HOUSE}/host/${hostId}` ) // da co token
         dispatch ( setHouses ( response.data ) )
       } catch (err) {
         setError ( 'Failed to fetch house details. Please try again.' )
@@ -74,24 +76,33 @@ export default function HostHouseList() {
   return (
     <CRow className="mt-4 g-4">
       {houseList.map ( (house) => (
-        <CCol xs={12} md={6} lg={4} key={house.id}>
+        <CCol xs={12} md={6} lg={4} key={house.id} onClick={() => navigate ( `/host/house/${house.id}` )}>
           <CCard className="h-100 shadow-sm rounded-3" style={{ border: 'none' }}>
             <CCardBody>
               {/* House Images Carousel */}
-              {house.houseImages && house.houseImages.length > 0 && (
-                <CCarousel controls indicators interval={false} className="rounded - 3 overflow-hidden">
-                  {house.houseImages.map ( (image) => (
+              <CCarousel controls indicators interval={false} className="rounded-3 overflow-hidden">
+                {house.houseImages && house.houseImages.length > 0 ? (
+                  house.houseImages.map ( (image) => (
                     <CCarouselItem key={image.id}>
                       <CImage
                         className="d-block w-100"
-                        src={`/images/${image.fileName}`}
+                        src={`${BASE_URL}/images/${image.fileName}`}
                         alt={house.houseName}
                         style={{ height: '200px' , objectFit: 'cover' }}
                       />
                     </CCarouselItem>
-                  ) )}
-                </CCarousel>
-              )}
+                  ) )
+                ) : (
+                  <CCarouselItem>
+                    <CImage
+                      className="d-block w-100"
+                      src={`${BASE_URL}/images/default.png`}
+                      alt="Default Image"
+                      style={{ height: '200px' , objectFit: 'cover' }}
+                    />
+                  </CCarouselItem>
+                )}
+              </CCarousel>
               <div className="mt-3">
                 <h5 className="card-title fw-bold">{house.houseName}</h5>
                 <p className="text-muted mb-1">
