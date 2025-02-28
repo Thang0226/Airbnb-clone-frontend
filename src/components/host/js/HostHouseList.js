@@ -17,6 +17,8 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch , useSelector } from 'react-redux'
 import CIcon from '@coreui/icons-react'
 import { cilBath , cilBed , cilLocationPin } from '@coreui/icons'
+import { TbEdit } from 'react-icons/tb'
+import styles from '../css/HouseList.module.css'
 
 export default function HostHouseList() {
   const houseList = useSelector ( state => state.houses.list )
@@ -115,11 +117,11 @@ export default function HostHouseList() {
             <CCardFooter className="bg-light d-flex justify-content-between align-items-center">
               <span className="text-muted">Status: {house.status || 'Not specified'}</span>
               <CButton
-                color="primary"
-                size="sm"
+                size="md"
                 onClick={() => navigate ( `/host/update/${house.id}` )}
+                className={styles['update-house-btn']}
               >
-                Update
+                <TbEdit style={{ width: '22px', height: '22px' }}/>
               </CButton>
             </CCardFooter>
           </CCard>
