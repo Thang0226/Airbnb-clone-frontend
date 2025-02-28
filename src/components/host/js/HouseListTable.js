@@ -9,7 +9,7 @@ import {
   CTable, CTableBody, CTableDataCell,
   CTableHead,
   CTableHeaderCell,
-  CTableRow,
+  CTableRow, CTooltip,
 } from '@coreui/react'
 import styles from '../css/HouseList.module.css'
 import CurrencyFormat from '../../_fragments/format/CurrencyFormat'
@@ -31,12 +31,15 @@ import DatePicker from 'react-datepicker'
 import dayjs from 'dayjs'
 import { HiOutlineSearch } from 'react-icons/hi'
 import { TbEdit } from 'react-icons/tb'
+import { useLocation } from 'react-router-dom'
 
 const HouseListTable = () => {
   const [page, setPage] = useState(0)
   const [size] = useState(10)
   const dispatch = useDispatch()
-  const username = localStorage.getItem('username')
+  const location = useLocation()
+
+  const { username } = location.state
 
   const [houseName, setHouseName] = useState('')
   const [status, setStatus] = useState('')
@@ -267,7 +270,9 @@ const HouseListTable = () => {
                     {houseList.map((house) => (
                       <CTableRow key={house.id} className="align-middle">
                         <CTableDataCell className={styles['house-name']} title={house.houseName}>
-                          {house.houseName}
+                          <CTooltip content={house.houseName}>
+                            <span>{house.houseName}</span>
+                          </CTooltip>
                         </CTableDataCell>
                         <CTableDataCell>{house.address}</CTableDataCell>
                         <CTableDataCell className="text-end">
@@ -285,13 +290,15 @@ const HouseListTable = () => {
                           </CBadge>
                         </CTableDataCell>
                         <CTableDataCell className="d-flex justify-content-center">
-                          <CButton
-                            color="light"
-                            onClick={() => handleUpdateStatus(house)}
-                            className={styles['update-house-btn']}
-                          >
-                            <TbEdit style={{ width: '20px', height: '20px' }} />
-                          </CButton>
+                          <CTooltip content={'Change house status'}>
+                            <CButton
+                              color="light"
+                              onClick={() => handleUpdateStatus(house)}
+                              className={styles['update-house-btn']}
+                            >
+                              <TbEdit style={{ width: '20px', height: '20px' }} />
+                            </CButton>
+                          </CTooltip>
                         </CTableDataCell>
                       </CTableRow>
                     ))}

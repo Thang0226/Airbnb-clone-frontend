@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { BASE_URL } from '../../../constants/api'
 import { DisplayLoading } from '../../DisplayLoading'
 import { DisplayError } from '../../DisplayError'
-import UserInfoRow from '../../_fragments/FORMInfoRow'
+import TextInfoRow from '../../_fragments/FORMInfoRow'
 
 const UserProfile = () => {
   const dispatch = useDispatch()
@@ -62,9 +62,9 @@ const UserProfile = () => {
               <h3 className="mt-3">{userProfile.username}</h3>
             </CCardHeader>
             <CCardBody className="p-4 row">
-              <UserInfoRow label="Full Name" value={userProfile.fullName} />
-              <UserInfoRow label="Address" value={userProfile.address} />
-              <UserInfoRow label="Phone" value={userProfile.phone} />
+              <TextInfoRow label="Full Name" value={userProfile.fullName} />
+              <TextInfoRow label="Address" value={userProfile.address} />
+              <TextInfoRow label="Phone" value={userProfile.phone} />
               <div className="text-center mt-3">
                 <CButton color="primary" onClick={goToProfileEdit}>
                   Edit Profile

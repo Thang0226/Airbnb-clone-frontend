@@ -15,7 +15,7 @@ import { TbBrandAirbnb } from 'react-icons/tb'
 export const AdminSideBar = () => {
   return (
     <CSidebar className="border-end" unfoldable>
-      <CSidebarHeader className="border-bottom">
+      <CSidebarHeader className="border-bottom" style={{height:'64px'}}>
         <CSidebarBrand href="#/admin"><TbBrandAirbnb color={'#FF385C'} size={40} /></CSidebarBrand>
       </CSidebarHeader>
       <CSidebarNav>

@@ -22,8 +22,6 @@ import {
   cilLocationPin ,
 } from '@coreui/icons'
 import { BASE_URL_HOUSE } from '../../../constants/api'
-import CurrencyFormat from '../../_fragments/format/CurrencyFormat'
-import HouseRent from '../../house/HouseRent'
 
 export default function HostHouseDetails() {
   const { houseId } = useParams ()

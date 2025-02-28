@@ -5,3 +5,12 @@ body {
 .modal-backdrop {
     background: rgba(0, 0, 0, 0.3) !important; /* Semi-transparent black */
 }
+
+.highlight-btn {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.highlight-btn:hover {
+    background-color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}

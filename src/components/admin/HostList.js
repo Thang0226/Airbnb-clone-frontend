@@ -83,7 +83,7 @@ export default function HostList() {
           Dashboard
         </span>
           <span className="mx-1">{'/'}</span>
-          <span>User Details</span>
+          <span>Host List</span>
         </div>
         <CRow
           xs={{ cols: 1 }} md={{ cols: 1 }} lg={{ cols: 1 }}
@@ -99,9 +99,9 @@ export default function HostList() {
                   <CTableHead>
                     <CTableRow>
                       <CTableHeaderCell>Full Name</CTableHeaderCell>
-                      <CTableHeaderCell>Phone</CTableHeaderCell>
-                      <CTableHeaderCell>Income</CTableHeaderCell>
-                      <CTableHeaderCell>Houses For Rent</CTableHeaderCell>
+                      <CTableHeaderCell className="text-center">Phone</CTableHeaderCell>
+                      <CTableHeaderCell className="text-center">Income</CTableHeaderCell>
+                      <CTableHeaderCell className="text-center">Houses For Rent</CTableHeaderCell>
                       <CTableHeaderCell className="text-center">Status</CTableHeaderCell>
                       <CTableHeaderCell className="text-center">Action</CTableHeaderCell>
                     </CTableRow>
@@ -110,15 +110,15 @@ export default function HostList() {
                     {hosts.map((host) => (
                       <CTableRow key={host.id} className="align-middle">
                         <CTableDataCell>{host.fullName}</CTableDataCell>
-                        <CTableDataCell>{host.phone}</CTableDataCell>
-                        <CTableDataCell>{<CurrencyFormat value={host.totalIncome} />}</CTableDataCell>
-                        <CTableDataCell>{host.housesForRent}</CTableDataCell>
+                        <CTableDataCell className="text-center">{host.phone}</CTableDataCell>
+                        <CTableDataCell className="text-end">{<CurrencyFormat value={host.totalIncome} />}</CTableDataCell>
+                        <CTableDataCell className="text-end">{host.housesForRent}</CTableDataCell>
                         <CTableDataCell
                           className="text-center"
                         >
                           <CBadge
                             color={host.status === 'ACTIVE' ? 'success' : 'secondary'}
-                            className="py-2"
+                            className="py-2 rounded-pill"
                             style={{ width: '80px' }}
                           >
                             {host.status}
