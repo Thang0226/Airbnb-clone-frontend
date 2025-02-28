@@ -74,7 +74,7 @@ export default function HouseRent({houseId}) {
     setTotalCost(totalCost);
   }, [checkIn, checkOut]);
 
-  const handleRentHouse = async () => {
+  const  handleRentHouse = async () => {
     try {
       if (totalDays === 0) {
         toast.info("Have to rent at least one night");

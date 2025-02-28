@@ -122,7 +122,7 @@ const ProfileUpdateForm = () => {
     dispatch(updateUserProfile(formData))
       .then(() => {
         toast.success('Profile updated successfully!')
-        navigate(-1)
+        navigate('/profile')
       })
       .catch((err) => {
         toast.error('Error updating profile: ' + err.message)
@@ -173,7 +173,7 @@ const ProfileUpdateForm = () => {
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
               >
-                {({ isSubmitting, setFieldValue, setFieldError }) => (
+                {({ isSubmitting, setFieldValue }) => (
                   <Form>
                     <FORMTextInput label="Username" name="username" readOnly />
 

@@ -27,8 +27,8 @@ import HostMainPage from './components/host/js/HostMainPage'
 import BookingList from './components/host/js/BookingList'
 import { ROLE_ADMIN, ROLE_HOST, ROLE_USER } from './constants/roles'
 import UserBookingList from './components/user/UserBookingList'
-import HouseList from './components/host/js/HouseList'
-
+import HouseListTable from './components/host/js/HouseListTable'
+import HostEarnings from './components/host/js/HostEarnings'
 
 export default function App() {
   return (
@@ -77,8 +77,9 @@ export default function App() {
               <Route path="/host" element={<HostMainPage />} />
               <Route path="/host/create" element={<CreateHouse />} />
               <Route path="/host/update/:houseId" element={<UpdateHouse />} />
-              <Route path="/host/houses" element={<HouseList />} />
+              <Route path="/host/houses" element={<HouseListTable />} />
               <Route path="/host/bookings" element={<BookingList />} />
+              <Route path="/host/earnings" element={<HostEarnings />} />
               <Route path="/host/profile" element={<UserProfile />} />
               <Route path="/host/profile/edit" element={<ProfileUpdateForm />} />
             </Route>
