@@ -18,6 +18,9 @@ import {
 import { toast } from 'react-toastify'
 import { setHouse } from '../../../redux/slices/houseSlice'
 import MapSample from './MapSample'
+import ImageUploader from './ImageUploader'
+import { BASE_URL_HOUSE } from '../../../constants/api'
+
 
 export default function UpdateHouse() {
   const [validated , setValidated] = useState ( false )
@@ -26,6 +29,8 @@ export default function UpdateHouse() {
   const dispatch = useDispatch ()
   const token = localStorage.getItem ( 'token' )
   const username = localStorage.getItem ( 'username' )
+
+  const [isLoading , setIsLoading] = useState ( true )
 
   // State for form data
   const [houseData , setHouseData] = useState ( {
@@ -44,20 +49,18 @@ export default function UpdateHouse() {
 
   useEffect ( () => {
     document.title = 'Airbnb | Update House'
-  } , [] )
-
-  // Fetch house data when component mounts
-  useEffect ( () => {
+    setIsLoading ( true )
     const fetchHouse = async () => {
       try {
-        const response = await axios.get ( `http://localhost:8080/api/houses/${houseId}` , {
+        const response = await axios.get ( `${BASE_URL_HOUSE}/${houseId}` , {
           headers: {
             Authorization: `Bearer ${token}` ,
           } ,
         } )
 
         const house = response.data
-        console.log ( house )
+        console.log ( 'House Response Data' , house )
+
         setHouseData ( {
           houseName: house.houseName ,
           address: house.address ,
@@ -66,56 +69,20 @@ export default function UpdateHouse() {
           description: house.description ,
           price: house.price ,
         } )
-        setMapData ( { name: house.address , address: house.address } )
-        setPreviews ( house.houseImages.map ( image => ({
-          file: null , // No file for existing images, just a URL
-          url: `/images/${image.fileName}` , // Assuming images are served this way
-        }) ) )
 
+        setMapData ( { name: house.address , address: house.address } )
+        setIsLoading ( false )
       } catch (error) {
         console.error ( 'Error fetching house:' , error )
         toast.error ( 'Failed to fetch house details. Please try again.' )
+        setIsLoading ( false )
       }
     }
     fetchHouse ()
   } , [houseId , token] )
 
-  // Handle file changes (for new images)
-  const handleFileChange = (event) => {
-    const files = Array.from ( event.target.files )
-    const validFiles = files.filter ( file =>
-      file.type === 'image/jpeg' || file.type === 'image/png' ,
-    )
-    setSelectedFiles ( validFiles )
 
-    const newPreviews = validFiles.map ( file => ({
-      file: file ,
-      url: URL.createObjectURL ( file ) ,
-    }) )
-
-    // Clean up old preview URLs for new files only
-    previews.filter ( p => p.file ).forEach ( p => URL.revokeObjectURL ( p.url ) )
-    setPreviews ( [...previews.filter ( p => !p.file ) , ...newPreviews] ) // Keep existing images, add new ones
-  }
-
-  // Remove image (existing or new)
-  const removeImage = (index) => {
-    const newPreviews = [...previews]
-    const newFiles = [...selectedFiles]
-
-    // Clean up the preview URL
-    URL.revokeObjectURL ( previews[index].url )
-
-    newPreviews.splice ( index , 1 )
-    if (previews[index].file) {
-      newFiles.splice ( index - (previews.length - selectedFiles.length) , 1 )
-    }
-
-    setPreviews ( newPreviews )
-    setSelectedFiles ( newFiles )
-  }
-
-  // Handle address selection (same as CreateHouse)
+  // For address input
   const handleAddressSelect = (addressData) => {
     const formattedAddress = addressData.formattedAddress || ''
     setMapData ( {
@@ -142,8 +109,8 @@ export default function UpdateHouse() {
   // Handle form submission for updating
   const handleSubmit = async (event) => {
     event.preventDefault ()
-
     const form = event.currentTarget
+
     if (form.checkValidity () === false) {
       event.stopPropagation ()
       setValidated ( true )
@@ -163,12 +130,27 @@ export default function UpdateHouse() {
       formData.append ( 'address' , mapData.address )
     }
 
-    // Append new house images
+    // Image handling
+    // 1. Existing images that weren't removed
+    const existingImageIds = previews
+      .filter ( preview => preview.isExisting && preview.id )
+      .map ( preview => preview.id )
+
+    // If we have existing image IDs, add them to formData
+    if (existingImageIds.length > 0) {
+      existingImageIds.forEach ( id => {
+        formData.append ( 'existingImageIds' , id )
+      } )
+    }
+
+    // 2. New images being uploaded (added with existing images)
+
     if (selectedFiles.length > 0) {
-      selectedFiles.forEach ( file => {
+      selectedFiles.forEach ( (file) => {
         formData.append ( 'houseImages' , file )
       } )
     }
+    console.log ( selectedFiles )
 
     // Log FormData
     for (let pair of formData.entries ()) {
@@ -176,7 +158,10 @@ export default function UpdateHouse() {
     }
 
     try {
-      const response = await axios.put ( `http://localhost:8080/api/houses/update/${houseId}` ,
+      setIsLoading ( true )
+
+      const response = await axios.put (
+        `${BASE_URL_HOUSE}/update/${houseId}` ,
         formData ,
         {
           headers: {
@@ -191,8 +176,16 @@ export default function UpdateHouse() {
       navigate ( '/host' )
     } catch (error) {
       console.error ( 'Error updating house:' , error )
+      console.error ( 'Error response data:' , error.response.data )
       toast.error ( 'Failed to update house. Please try again.' )
+      setIsLoading ( false )
     }
+  }
+
+  if (isLoading) {
+    return <CContainer className="py-5">
+      <div>Loading house details...</div>
+    </CContainer>
   }
 
   return (
@@ -309,33 +302,13 @@ export default function UpdateHouse() {
 
           {/* Image */}
           <CCol xs={12}>
-            <CFormLabel htmlFor="houseImages" className="my-3">Upload House Images (PNG, JPEG)</CFormLabel>
-            <CFormInput
-              type="file"
-              id="houseImages"
-              name="houseImages"
-              accept="image/jpeg, image/png"
-              onChange={handleFileChange}
-              multiple
+            <ImageUploader
+              houseId={houseId}
+              previews={previews}
+              setPreviews={setPreviews}
+              selectedFiles={selectedFiles}
+              setSelectedFiles={setSelectedFiles}
             />
-            {/* Preview */}
-            <CRow className="mt-4 g-4">
-              {previews.map ( (preview , index) => (
-                <CCol key={index} xs="auto" className="position-relative">
-                  <CCloseButton
-                    className="position-absolute top-0 end-0 rounded-circle p-1"
-                    color="white"
-                    onClick={() => removeImage ( index )}
-                  />
-                  <CImage
-                    src={preview.url}
-                    alt={`Preview ${index}`}
-                    className="object-fit-cover rounded"
-                    style={{ width: '6rem' , height: '6rem' }}
-                  />
-                </CCol>
-              ) )}
-            </CRow>
           </CCol>
 
           {/* Submit Button */}
@@ -351,7 +324,7 @@ export default function UpdateHouse() {
               color="light"
               shape="rounded-pill"
               className="ms-3"
-              onClick={() => navigate ( '/owner' )}
+              onClick={() => navigate ( '/host' )}
             >
               Cancel
             </CButton>

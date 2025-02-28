@@ -27,6 +27,7 @@ import HostMainPage from './components/host/js/HostMainPage'
 import BookingList from './components/host/js/BookingList'
 import { ROLE_ADMIN, ROLE_HOST, ROLE_USER } from './constants/roles'
 import UserBookingList from './components/user/UserBookingList'
+import HostHouseDetails from './components/host/js/HostHouseDetails'
 import HouseListTable from './components/host/js/HouseListTable'
 import HostEarnings from './components/host/js/HostEarnings'
 
@@ -57,7 +58,7 @@ export default function App() {
             </Route>
           </Route>
 
-          {/* Các route dành riêng cho admin */}
+          {/* Route cho Admin */}
           <Route element={<RequireAuth allowedRoles={[ROLE_ADMIN]} />}>
             <Route element={<AdminLayout />}>
               <Route path="/admin" element={<Dashboard />} />
@@ -68,15 +69,16 @@ export default function App() {
               <Route path="/admin/profile" element={<UserProfile />} />
               <Route path="/admin/profile/edit" element={<ProfileUpdateForm />} />
               <Route path="/admin/host/:id" element={<HostDetails />} />
-              {/* Các route admin khác có thể thêm tại đây */}
             </Route>
           </Route>
 
+          {/* Route cho Host */}
           <Route element={<RequireAuth allowedRoles={[ROLE_HOST]} />}>
             <Route element={<HostLayout />}>
               <Route path="/host" element={<HostMainPage />} />
               <Route path="/host/create" element={<CreateHouse />} />
               <Route path="/host/update/:houseId" element={<UpdateHouse />} />
+              <Route path="/host/house/:houseId" element={<HostHouseDetails />} />
               <Route path="/host/houses" element={<HouseListTable />} />
               <Route path="/host/bookings" element={<BookingList />} />
               <Route path="/host/earnings" element={<HostEarnings />} />
