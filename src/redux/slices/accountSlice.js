@@ -6,6 +6,7 @@ export const accountSlice = createSlice({
     username: '',
     password: '',
     token: '',
+    role: localStorage.getItem('role') || ''
   },
   reducers: {
     setUsername: (state, action) => {
@@ -17,6 +18,9 @@ export const accountSlice = createSlice({
     setToken: (state, action) => {
       state.token = action.payload || ''
     },
+    setRole: (state, action) => {
+      state.role = action.payload || ''
+    },
     deletePassword: (state) => {
       state.password = ''
     },
@@ -27,9 +31,10 @@ export const accountSlice = createSlice({
       state.token = ''
       state.password = ''
       state.username = ''
+      state.role = ''
     },
   },
 })
 
 // Export slice actions
-export const { setUsername, setPassword, setToken, deleteToken, deletePassword, resetAccount } = accountSlice.actions
+export const { setUsername, setPassword, setToken, setRole, deleteToken, deletePassword, resetAccount } = accountSlice.actions

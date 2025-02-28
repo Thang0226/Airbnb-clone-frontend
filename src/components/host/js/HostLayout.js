@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import HostNavBar from './HostNavBar'
 import { Outlet } from 'react-router-dom'
 import { CContainer, CFooter } from '@coreui/react'
 import { ToastContainer } from 'react-toastify'
+import MenuBar from '../../MenuBar'
 
 function HostLayout() {
 
@@ -16,7 +16,7 @@ function HostLayout() {
       <div
         className="d-flex flex-column min-h-screen min-vh-100"
       >
-        <HostNavBar />
+        <MenuBar />
 
         <CContainer className="p-4 overflow-auto flex-1">
           <Outlet />
