@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { CButton, CCol, CFormInput, CFormSelect, CRow } from '@coreui/react'
+import { HiOutlineSearch } from 'react-icons/hi'
 
 const BookingSearchBar = ({onSearch, searchData}) => {
   const [houseName, setHouseName] = useState(searchData.houseName || '');
@@ -15,7 +16,6 @@ const BookingSearchBar = ({onSearch, searchData}) => {
   }, [searchData]); // Cập nhật khi searchData thay đổi
 
   const handleSearch = () => {
-    if (!houseName && !startDate && !endDate && !status) return
     onSearch({ houseName, startDate, endDate, status });
   };
 
@@ -23,7 +23,7 @@ const BookingSearchBar = ({onSearch, searchData}) => {
     <CRow className="justify-content-center">
       <CCol sm={12} md={8} lg={3} className="mt-2">
         <div className="d-flex flex-column flex-grow-1">
-          <label className="fw-bolder ps-1">Address</label>
+          <label className="fw-bolder ps-1">House Name</label>
           <CFormInput
             type="text"
             value={houseName}
@@ -69,8 +69,13 @@ const BookingSearchBar = ({onSearch, searchData}) => {
       </CCol>
       <CCol sm={12} md={2} lg={1} className="text-center mt-2">
         <div style={{ minHeight: '24px' }}></div>
-        <CButton color="primary" className="w-100" onClick={handleSearch}>
-          Search
+        <CButton
+          color="primary"
+          className="d-flex align-items-center justify-content-center rounded-circle"
+          style={{ height: '40px', width: '40px', padding: '0' }}
+          onClick={handleSearch}
+        >
+          <HiOutlineSearch style={{ width: '20px', height: '20px' }} />
         </CButton>
       </CCol>
     </CRow>
