@@ -14,6 +14,7 @@ import {
   CTableRow,
 } from '@coreui/react'
 import ConfirmWindow from '../modals/ConfirmWindow'
+import dayjs from 'dayjs'
 
 export default function HostRequests(){
   const [requests, setRequests] = useState([]);
@@ -151,20 +152,20 @@ export default function HostRequests(){
                 <CTableDataCell>{request.user.username}</CTableDataCell>
                 <CTableDataCell className="text-center">{request.user.phone}</CTableDataCell>
                 <CTableDataCell className="text-center">
-                  {new Intl.DateTimeFormat("en-GB").format(new Date(request.requestDate))}
+                  {dayjs(request.requestDate).format('DD/MM/YYYY')}
                 </CTableDataCell>
                 <CTableDataCell className="text-center">
                   <CButton
                     color="success"
                     className="fs-5 cursor-pointer text-white me-3"
-                    onClick={() => handleApprove(request.id)}
+                    onClick={() => handleApprove(request)}
                   >
                     Approve
                   </CButton>
                   <CButton
                     color="secondary"
                     className="fs-5 cursor-pointer text-white"
-                    onClick={() => handleDecline(request.id)}
+                    onClick={() => handleDecline(request)}
                   >
                     Decline
                   </CButton>
