@@ -19,6 +19,7 @@ import { cilBath , cilBed , cilLocationPin } from '@coreui/icons'
 import { TbEdit } from 'react-icons/tb'
 import styles from '../css/HouseList.module.css'
 import api from '../../../services/axiosConfig'
+import HouseCard from '../../homepage/HouseCard'
 
 export default function HostHouseList() {
   const houseList = useSelector ( state => state.houses.list )
@@ -73,57 +74,11 @@ export default function HostHouseList() {
   }
 
   return (
-    <CRow className="mt-4 g-4">
+    <CRow className="mt-4 gap-4">
       {houseList.map ( (house) => (
         <CCol xs={12} md={6} lg={4} key={house.id} onClick={() => navigate ( `/host/house/${house.id}` )}>
           <CCard className="h-100 shadow-sm rounded-3" style={{ border: 'none' }}>
-            <CCardBody>
-              {/* House Images Carousel */}
-              <CCarousel controls indicators interval={false} className="rounded-3 overflow-hidden">
-                {house.houseImages && house.houseImages.length > 0 ? (
-                  house.houseImages.map ( (image) => (
-                    <CCarouselItem key={image.id}>
-                      <CImage
-                        className="d-block w-100"
-                        src={`${BASE_URL}/images/${image.fileName}`}
-                        alt={house.houseName}
-                        style={{ height: '200px' , objectFit: 'cover' }}
-                      />
-                    </CCarouselItem>
-                  ) )
-                ) : (
-                  <CCarouselItem>
-                    <CImage
-                      className="d-block w-100"
-                      src={`${BASE_URL}/images/default.png`}
-                      alt="Default Image"
-                      style={{ height: '200px' , objectFit: 'cover' }}
-                    />
-                  </CCarouselItem>
-                )}
-              </CCarousel>
-              <div className="mt-3">
-                <h5 className="card-title fw-bold">{house.houseName}</h5>
-                <p className="text-muted mb-1">
-                  <CIcon icon={cilLocationPin} size="sm" className="me-1" />
-                  {house.address}
-                </p>
-                <p className="mb-1">
-                  <CIcon icon={cilBed} size="sm" className="me-1 text-warning" />
-                  {house.bedrooms} Bedrooms
-                </p>
-                <p className="mb-1">
-                  <CIcon icon={cilBath} size="sm" className="me-1 text-primary" />
-                  {house.bathrooms} Bathrooms
-                </p>
-                <p className="text-muted mb-2" style={{ fontSize: '0.9rem' }}>
-                  {house.description.length > 50
-                    ? `${house.description.substring ( 0 , 50 )}...`
-                    : house.description}
-                </p>
-                <p className="fw-bold mb-0">{house.price.toLocaleString ()} VND/day</p>
-              </div>
-            </CCardBody>
+            <HouseCard house={house} />
             <CCardFooter className="bg-light d-flex justify-content-between align-items-center">
               <span className="text-muted">Status: {house.status || 'Not specified'}</span>
               <CButton
