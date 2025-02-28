@@ -12,7 +12,7 @@ import {
   CTable,
   CTableBody,
   CTableDataCell, CTableHead, CTableHeaderCell,
-  CTableRow,
+  CTableRow, CTooltip,
 } from '@coreui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchHosts } from '../../redux/slices/hostManagementSlice'
@@ -23,6 +23,8 @@ import { useNavigate } from 'react-router-dom'
 import CurrencyFormat from '../_fragments/format/CurrencyFormat'
 import { UserPagination } from '../_fragments/CustomerPagination'
 import HostRequests from './HostRequests'
+import { FiCheckSquare, FiLock, FiUnlock, FiXSquare } from 'react-icons/fi'
+import { PiListMagnifyingGlass } from 'react-icons/pi'
 
 export default function HostList() {
   const dispatch = useDispatch()
@@ -33,8 +35,6 @@ export default function HostList() {
   useEffect(() => {
     document.title = 'Admin | Host List'
   }, [])
-
-  const token = localStorage.getItem('token')
 
   useEffect(() => {
     dispatch(fetchHosts({ page, size }))
@@ -65,7 +65,7 @@ export default function HostList() {
             </div>,
           )
         }
-        dispatch(fetchUsers(page, size))
+        dispatch(fetchHosts(page, size))
       })
       .catch((error) => {
         toast.error('Error updating user status:', error)
@@ -117,7 +117,7 @@ export default function HostList() {
                           className="text-center"
                         >
                           <CBadge
-                            color={host.status === 'ACTIVE' ? 'success' : 'secondary'}
+                            color={host.status === 'ACTIVE' ? 'success' : 'dark'}
                             className="py-2 rounded-pill"
                             style={{ width: '80px' }}
                           >
@@ -125,44 +125,54 @@ export default function HostList() {
                           </CBadge>
                         </CTableDataCell>
                         <CTableDataCell
-                          className="text-center"
+                          className="d-flex align-items-center justify-content-center gap-2"
                         >
-                          <CButton
-                            size="sm"
-                            color={host.status === 'ACTIVE' ? 'warning' : 'success'}
-                            className="text-white"
-                            style={{ width: '70px' }}
-                            onClick={() => handleStatusChange(host)}
-                          >
-                            {host.status === 'ACTIVE' ? 'Lock' : 'Unlock'}
-                          </CButton>
-                          <CButton
-                            size="sm"
-                            color="primary"
-                            className="text-white ms-2"
-                            style={{ width: '70px' }}
-                            onClick={() => navigate(`/admin/host/${host.id}`)}
-                          >
-                            Details
-                          </CButton>
-                          <CButton
-                            size="sm"
-                            color="success"
-                            className="text-white ms-2"
-                            style={{ width: '70px' }}
-                            // onClick={() => handleApprove(request.id)}
-                          >
-                            Approve
-                          </CButton>
-                          <CButton
-                            size="sm"
-                            color="secondary"
-                            className="text-white ms-2"
-                            style={{ width: '70px' }}
-                            // onClick={() => handleDecline(request.id)}
-                          >
-                            Decline
-                          </CButton>
+                          <CTooltip content={host.status === "ACTIVE" ? "Lock" : "Unlock"}>
+                            <CButton
+                              size="md"
+                              color={host.status === 'ACTIVE' ? 'warning' : 'success'}
+                              className="text-white d-flex align-items-center justify-content-center"
+                              onClick={() => handleStatusChange(host)}
+                            >
+                              {host.status === 'ACTIVE'
+                                ? <FiLock style={{ width: '20px', height: '20px' }}/>
+                                : <FiUnlock style={{ width: '20px', height: '20px' }}/>
+                              }
+                            </CButton>
+                          </CTooltip>
+
+                          <CTooltip content={"Details"}>
+                            <CButton
+                              size="md"
+                              color="primary"
+                              className="text-white d-flex align-items-center justify-content-center"
+                              onClick={() => navigate(`/admin/host/${host.id}`)}
+                            >
+                              <PiListMagnifyingGlass  style={{ width: '20px', height: '20px' }}/>
+                            </CButton>
+                          </CTooltip>
+
+                          <CTooltip content={"Approve"}>
+                            <CButton
+                              size="md"
+                              color="info"
+                              className="text-white d-flex align-items-center justify-content-center"
+                              // onClick={() => handleApprove(request.id)}
+                            >
+                              <FiCheckSquare style={{ width: '20px', height: '20px' }}/>
+                            </CButton>
+                          </CTooltip>
+
+                          <CTooltip content={"Decline"}>
+                            <CButton
+                              size="md"
+                              color="secondary"
+                              className="text-white d-flex align-items-center justify-content-center"
+                              // onClick={() => handleDecline(request.id)}
+                            >
+                              <FiXSquare style={{ width: '20px', height: '20px' }}/>
+                            </CButton>
+                          </CTooltip>
                         </CTableDataCell>
                       </CTableRow>
                     ))}

@@ -23,9 +23,6 @@ export default function AdminNavBar() {
         <CCollapse className="navbar-collapse" visible={visible}>
           <CNavbarNav className="me-auto">
             <CNavItem>
-              <CNavLink href="#/admin" active>
-                Home
-              </CNavLink>
             </CNavItem>
           </CNavbarNav>
           <UserDropdown/>
