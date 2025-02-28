@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
-import { BASE_URL } from '../../constants/api'
+import api from '../../services/axiosConfig';
 
 export const initialState = {
   userProfile: null,
@@ -12,13 +11,8 @@ export const initialState = {
 export const fetchUserProfile = createAsyncThunk(
   'userProfile/fetchUserProfile',
   async (username, thunkAPI) => {
-    const token = localStorage.getItem('token')
     try {
-      const response = await axios.get(`${BASE_URL}/api/users/profile/${username}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const response = await api.get(`/users/profile/${username}`)
       return response.data
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving profile data!')
@@ -30,13 +24,8 @@ export const fetchUserProfile = createAsyncThunk(
 export const updateUserProfile = createAsyncThunk(
   'userProfile/updateUserProfile',
   async (formData, thunkAPI) => {
-    const token = localStorage.getItem('token')
     try {
-      const response = await axios.put(`${BASE_URL}/api/users/profile/update`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const response = await api.put(`/users/profile/update`, formData)
       return response.data
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error updating profile!')

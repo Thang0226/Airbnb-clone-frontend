@@ -1,149 +1,149 @@
 import MapSample from './MapSample'
 import { useNavigate } from 'react-router-dom'
-import React, { useRef, useState, useEffect } from 'react'
+import React , { useRef , useState , useEffect } from 'react'
 import { toast } from 'react-toastify'
 import {
-  CContainer,
-  CForm,
-  CCol,
-  CFormFloating,
-  CFormInput,
-  CButton, CFormTextarea, CFormLabel,
-  CCloseButton, CImage, CRow,
+  CContainer ,
+  CForm ,
+  CCol ,
+  CFormFloating ,
+  CFormInput ,
+  CButton , CFormTextarea , CFormLabel ,
+  CCloseButton , CImage , CRow ,
 } from '@coreui/react'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
 
 export default function CreateHouse() {
-  const [validated, setValidated] = useState(false)
-  const navigate = useNavigate()
-  const token = useSelector(state => state.account.token)
-  const username = useSelector(state => state.account.username)
+  const [validated , setValidated] = useState ( false )
+  const navigate = useNavigate ()
+  const token = useSelector ( state => state.account.token )
+  const username = localStorage.getItem ( 'username' )
 
-  useEffect(() => {
+  useEffect ( () => {
     document.title = 'Airbnb | Add House'
-  }, [])
+  } , [] )
 
   // Upload files
-  const [selectedFiles, setSelectedFiles] = useState([])
-  const [previews, setPreviews] = useState([])
+  const [selectedFiles , setSelectedFiles] = useState ( [] )
+  const [previews , setPreviews] = useState ( [] )
   const handleFileChange = (event) => {
-    const files = Array.from(event.target.files)
-    const validFiles = files.filter(file =>
-      file.type === 'image/jpeg' || file.type === 'image/png',
+    const files = Array.from ( event.target.files )
+    const validFiles = files.filter ( file =>
+      file.type === 'image/jpeg' || file.type === 'image/png' ,
     )
-    setSelectedFiles(validFiles)
+    setSelectedFiles ( validFiles )
 
     // Create preview URLs
-    const newPreviews = validFiles.map(file => ({
-      file: file,
-      url: URL.createObjectURL(file),
-    }))
+    const newPreviews = validFiles.map ( file => ({
+      file: file ,
+      url: URL.createObjectURL ( file ) ,
+    }) )
 
     // Clean up old preview URLs
-    previews.forEach(preview => URL.revokeObjectURL(preview.url))
-    setPreviews(newPreviews)
+    previews.forEach ( preview => URL.revokeObjectURL ( preview.url ) )
+    setPreviews ( newPreviews )
   }
   const removeImage = (index) => {
     const newPreviews = [...previews]
     const newFiles = [...selectedFiles]
 
     // Clean up the preview URL
-    URL.revokeObjectURL(previews[index].url)
+    URL.revokeObjectURL ( previews[index].url )
 
-    newPreviews.splice(index, 1)
-    newFiles.splice(index, 1)
+    newPreviews.splice ( index , 1 )
+    newFiles.splice ( index , 1 )
 
-    setPreviews(newPreviews)
-    setSelectedFiles(newFiles)
+    setPreviews ( newPreviews )
+    setSelectedFiles ( newFiles )
   }
 
   // Suggest addresses from MapAPI
-  const [mapData, setMapData] = useState({
-    name: '',
-    address: '',
-  })
-  const [selectedAddressData, setSelectedAddressData] = useState(null)
+  const [mapData , setMapData] = useState ( {
+    name: '' ,
+    address: '' ,
+  } )
+  const [selectedAddressData , setSelectedAddressData] = useState ( null )
 
   const handleAddressSelect = (addressData) => {
     const formattedAddress = addressData.formattedAddress || ''
-    setMapData({
-      name: formattedAddress,
-      address: formattedAddress,
-    })
-    setSelectedAddressData(addressData)
+    setMapData ( {
+      name: formattedAddress ,
+      address: formattedAddress ,
+    } )
+    setSelectedAddressData ( addressData )
   }
 
   // Make CFormTextarea expandable:
-  const textareaRef = useRef(null)
-  useEffect(() => {
+  const textareaRef = useRef ( null )
+  useEffect ( () => {
     const textarea = textareaRef.current
     if (textarea) {
       const adjustHeight = () => {
         textarea.style.height = 'auto'
         textarea.style.height = `${textarea.scrollHeight}px`
       }
-      adjustHeight()
-      textarea.addEventListener('input', adjustHeight)
-      return () => textarea.removeEventListener('input', adjustHeight)
+      adjustHeight ()
+      textarea.addEventListener ( 'input' , adjustHeight )
+      return () => textarea.removeEventListener ( 'input' , adjustHeight )
     }
-  }, [])
+  } , [] )
 
   // Submit
   const handleSubmit = async (event) => {
-    event.preventDefault()
+    event.preventDefault ()
 
     const form = event.currentTarget
-    if (form.checkValidity() === false) {
-      event.stopPropagation()
-      setValidated(true)
+    if (form.checkValidity () === false) {
+      event.stopPropagation ()
+      setValidated ( true )
       return
     }
 
     // Collect form data
-    const formData = new FormData()
-    formData.append('houseName', form.houseName.value)
-    formData.append('bedrooms', form.bedrooms.value)
-    formData.append('bathrooms', form.bathrooms.value)
-    formData.append('price', form.price.value)
-    formData.append('description', form.description.value)
-    formData.append('username', username)
+    const formData = new FormData ()
+    formData.append ( 'houseName' , form.houseName.value )
+    formData.append ( 'bedrooms' , form.bedrooms.value )
+    formData.append ( 'bathrooms' , form.bathrooms.value )
+    formData.append ( 'price' , form.price.value )
+    formData.append ( 'description' , form.description.value )
+    formData.append ( 'username' , username )
     if (selectedAddressData && selectedAddressData.formattedAddress) {
-      formData.append('address', selectedAddressData.formattedAddress)
+      formData.append ( 'address' , selectedAddressData.formattedAddress )
     } else if (mapData.address) {
-      formData.append('address', mapData.address)
+      formData.append ( 'address' , mapData.address )
     }
 
     // Append houseImages only if there are selected files
     if (selectedFiles.length > 0) {
-      selectedFiles.forEach(file => {
-        formData.append('houseImages', file)
-      })
+      selectedFiles.forEach ( file => {
+        formData.append ( 'houseImages' , file )
+      } )
     }
 
     // Log FormData for debugging
-    for (let pair of formData.entries()) {
-      console.log(pair[0] + ', ' + pair[1])
+    for (let pair of formData.entries ()) {
+      console.log ( pair[0] + ', ' + pair[1] )
     }
-    console.log('Address being sent:', formData.get('address'))
+    console.log ( 'Address being sent:' , formData.get ( 'address' ) )
 
     // Send request
     try {
-      const response = await axios.post('http://localhost:8080/api/houses/create',
-        formData,
+      const response = await axios.post ( 'http://localhost:8080/api/houses/create' ,
+        formData ,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${token}`,
-          },
-        },
+            'Content-Type': 'multipart/form-data' ,
+            Authorization: `Bearer ${token}` ,
+          } ,
+        } ,
       )
-      console.log('House created successfully:', response.data)
-      toast.success('House created successfully')
-      navigate('/owner')
+      console.log ( 'House created successfully:' , response.data )
+      toast.success ( 'House created successfully' )
+      navigate ( '/host' )
     } catch (error) {
-      console.error('Error creating house:', error)
-      toast.error(error)
+      console.error ( 'Error creating house:' , error )
+      toast.error ( error )
     }
   }
 
@@ -179,7 +179,7 @@ export default function CreateHouse() {
             <CFormFloating>
               <MapSample
                 value={mapData.name}
-                onChange={(newValue) => setMapData(prev => ({ ...prev, name: newValue }))}
+                onChange={(newValue) => setMapData ( prev => ({ ...prev , name: newValue }) )}
                 onAddressSelect={handleAddressSelect}
               />
             </CFormFloating>
@@ -228,7 +228,7 @@ export default function CreateHouse() {
                 name="description"
                 rows={3}
                 ref={textareaRef}
-                style={{ overflow: 'hidden', resize: 'none' }}
+                style={{ overflow: 'hidden' , resize: 'none' }}
                 feedbackValid="Introduce your house, amenities, and other information"
                 //required
               />
@@ -267,18 +267,18 @@ export default function CreateHouse() {
             />
             {/* Preview */}
             <CRow className="mt-4 g-4">
-              {previews.map((preview, index) => (
+              {previews.map ( (preview , index) => (
                 <CCol key={index} xs="auto" className="position-relative">
                   <CCloseButton className="position-absolute top-0 end-0 rounded-circle p-1"
-                                color="white" onClick={() => removeImage(index)} />
+                                color="white" onClick={() => removeImage ( index )} />
                   <CImage
                     src={preview.url}
                     alt={`Preview ${index}`}
                     className="object-fit-cover rounded"
-                    style={{ width: '6rem', height: '6rem' }}
+                    style={{ width: '6rem' , height: '6rem' }}
                   />
                 </CCol>
-              ))}
+              ) )}
             </CRow>
           </CCol>
 
@@ -294,7 +294,7 @@ export default function CreateHouse() {
             <CButton
               color="light rounded-pill"
               className="ms-3"
-              onClick={() => navigate('/owner')}
+              onClick={() => navigate ( '/owner' )}
             >
               Cancel
             </CButton>

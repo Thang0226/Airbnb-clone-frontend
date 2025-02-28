@@ -15,12 +15,17 @@ import {
   CTableRow,
 } from '@coreui/react'
 import { toast } from 'react-toastify'
-import Pagination from 'react-bootstrap/Pagination';
+import { useNavigate } from 'react-router-dom'
+import { ConfirmModal } from '../modals/StatusChangeConfirm';
+import { UserPagination } from '../_fragments/CustomerPagination'
 
 export const UserList = () => {
   const [page, setPage] = useState(0);
   const [size] = useState(10);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     document.title = 'Airbnb | User List';
@@ -39,39 +44,49 @@ export const UserList = () => {
     <DisplayError error={error} />
   )
 
-  const handleApprove = (user) => {
-    dispatch(updateUserStatus(user.id))
+  const confirmStatusChange = (user) => {
+    setSelectedUser(user);
+    setShowModal(true);
+  };
+
+  const handleStatusChange = () => {
+    if (!selectedUser) return;
+    dispatch(updateUserStatus(selectedUser.id))
       .then(() => {
-        if (user.status === 'ACTIVE') {
-          toast.success(
-            <div>
-             Locked user <span style={{ fontWeight: 'bold' }}>{user.username}</span>!
-            </div>
-          );
-        } else {
-          toast.success(
-            <div>
-              Unlocked user <span style={{ fontWeight: 'bold' }}>{user.username}</span>!
-            </div>
-          );
-        }
-        dispatch(fetchUsers(page, size));
+        toast.success(
+          <div>
+            {selectedUser.status === 'ACTIVE' ? "Locked" : "Unlocked"} user <span style={{ fontWeight: 'bold' }}>{selectedUser.username}</span>!
+          </div>
+        );
+        dispatch(fetchUsers({ page, size }));
       })
       .catch((error) => {
         toast.error("Error updating user status:", error);
+      })
+      .finally(() => {
+        setShowModal(false);
+        setSelectedUser(null);
       });
   }
 
-  const handlePageChange = (newPage) => {
-    if (newPage >= 0 && newPage < totalPages) {
-      setPage(newPage);
-    }
+  const goToUserDetails = (userId) => {
+    navigate(`/admin/users/${userId}`);
   };
 
   return (
-    <div className="container mt-4">
+    <div className="container">
+      <div className="d-flex align-items-center">
+        <span
+          style={{ cursor: 'pointer', textDecoration: 'underline', color: '#0d6efd' }}
+          onClick={() => navigate("/admin")}
+        >
+          Dashboard
+        </span>
+        <span className="mx-1">{'/'}</span>
+        <span>User List</span>
+      </div>
       <CRow
-        xs={{cols: 1}} md={{cols: 1}} lg={{cols: 1}}
+        xs={{ cols: 1 }} md={{ cols: 1 }} lg={{ cols: 1 }}
         className="justify-content-center mt-4"
       >
         <CCol>
@@ -91,7 +106,7 @@ export const UserList = () => {
                 </CTableHead>
                 <CTableBody>
                   {users.map((user) => (
-                    <CTableRow key={user.id}>
+                    <CTableRow key={user.id} className='align-middle'>
                       <CTableDataCell>{user.username}</CTableDataCell>
                       <CTableDataCell>{user.phone}</CTableDataCell>
                       <CTableDataCell
@@ -100,7 +115,7 @@ export const UserList = () => {
                         <CBadge
                           color={user.status === 'ACTIVE' ? "success" : "secondary"}
                           className="py-2"
-                          style={{width: "90px"}}
+                          style={{ width: "90px" }}
                         >
                           {user.status}
                         </CBadge>
@@ -112,33 +127,35 @@ export const UserList = () => {
                           size="sm"
                           color={user.status === 'ACTIVE' ? "warning" : "success"}
                           className="text-white"
-                          style={{width: "90px"}}
-                          onClick={() => handleApprove(user)}
+                          style={{ width: "90px" }}
+                          onClick={() => confirmStatusChange(user)}
                         >
                           {user.status === 'ACTIVE' ? "Lock" : "Unlock"}
+                        </CButton>
+                        <ConfirmModal
+                          visible={showModal}
+                          onClose={() => setShowModal(false)}
+                          onConfirm={handleStatusChange}
+                          user={selectedUser}
+                        />
+                        <CButton
+                          size="sm"
+                          color="primary"
+                          className="text-white ms-2"
+                          style={{ width: "90px" }}
+                          onClick={() => goToUserDetails(user.id)}
+                        >
+                          Details
                         </CButton>
                       </CTableDataCell>
                     </CTableRow>
                   ))}
                 </CTableBody>
               </CTable>
-              <Pagination className="mt-3 justify-content-center">
-                <Pagination.First onClick={() => handlePageChange(0)} disabled={page === 0} />
-                <Pagination.Prev onClick={() => handlePageChange(page - 1)} disabled={page === 0} />
-
-                {[...Array(totalPages)].map((_, index) => (
-                  <Pagination.Item key={index} active={index === page} onClick={() => handlePageChange(index)}>
-                    {index + 1}
-                  </Pagination.Item>
-                ))}
-
-                <Pagination.Next onClick={() => handlePageChange(page + 1)} disabled={page === totalPages - 1} />
-                <Pagination.Last onClick={() => handlePageChange(totalPages - 1)} disabled={page === totalPages - 1} />
-              </Pagination>
+              <UserPagination page={page} totalPages={totalPages} setPage={setPage} />
             </CCardBody>
           </CCard>
         </CCol>
-
       </CRow>
     </div>
   )

@@ -11,10 +11,10 @@ import {
 } from '@coreui/react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchUserProfile, updateUserProfile } from '../../redux/slices/userProfileSlice'
+import { fetchUserProfile, updateUserProfile } from '../../../redux/slices/userProfileSlice'
 import { toast } from 'react-toastify'
-import FORMAvatarInput from '../_fragments/FORMAvatarInput'
-import FORMTextInput from '../_fragments/FORMTextInput'
+import FORMAvatarInput from '../../_fragments/FORMAvatarInput'
+import FORMTextInput from '../../_fragments/FORMTextInput'
 
 const FILE_SIZE_LIMIT = 5 * 1024 * 1024 // 5MB
 const SUPPORTED_FORMATS = ['image/jpeg', 'image/png', 'image/jpg']
@@ -24,7 +24,7 @@ const validationSchema = Yup.object({
     .matches(/^[a-zA-ZÀ-ỹ\s]+$/, 'Full Name cannot contain special characters')
     .required('Full Name is required'),
   address: Yup.string()
-    .matches(/^[a-zA-Z0-9À-ỹ\s]+$/, 'Address cannot contain special characters')
+    .matches(/^[a-zA-Z0-9À-ỹ\s,.]+$/, 'Address cannot contain special characters')
     .required('Address is required'),
   phone: Yup.string()
     .matches(/^0[0-9]{9}$/, 'Phone number must start with 0 and have at least 10 digits')
@@ -173,7 +173,7 @@ const ProfileUpdateForm = () => {
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
               >
-                {({ isSubmitting, setFieldValue, setFieldError }) => (
+                {({ isSubmitting, setFieldValue }) => (
                   <Form>
                     <FORMTextInput label="Username" name="username" readOnly />
 
@@ -212,7 +212,7 @@ const ProfileUpdateForm = () => {
                         type="button"
                         color="secondary"
                         className="ms-2"
-                        onClick={() => navigate(`/profile`)}
+                        onClick={() => navigate(-1)}
                       >
                         Cancel
                       </CButton>

@@ -1,8 +1,7 @@
 import {
-  CButton,
   CCollapse,
   CContainer, CDropdown, CDropdownDivider, CDropdownItem, CDropdownMenu, CDropdownToggle,
-  CForm, CFormInput, CNavbar,
+  CNavbar,
   CNavbarBrand,
   CNavbarNav,
   CNavbarToggler,
@@ -10,14 +9,15 @@ import {
   CNavLink,
 } from '@coreui/react'
 import { TbBrandAirbnb } from 'react-icons/tb'
-import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-import { BASE_URL, BASE_URL_USER } from '../constants/api'
+import { BASE_URL} from '../constants/api'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { resetAccount } from '../redux/slices/accountSlice'
 import { fetchUserProfile } from '../redux/slices/userProfileSlice'
+import { logout } from '../services/authService'
+import { ROLE_HOST, ROLE_USER } from '../constants/roles'
 
 export default function MenuBar() {
   const [visible, setVisible] = useState(false)
@@ -31,32 +31,21 @@ export default function MenuBar() {
     if (username) {
       dispatch(fetchUserProfile(username))
     }
-
   }, [dispatch, username])
 
   const { userProfile } = useSelector((state) => state.userProfile)
 
   const handleLogout = async () => {
-    await axios.post(
-      `${BASE_URL_USER}/logout`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    )
-      .then(res => {
-        toast.success(res.data, { hideProgressBar: true })
-        dispatch(resetAccount())
-        localStorage.clear()
-        navigate('/login')
-      })
-      .catch(err => {
-        console.log(err)
-        toast.error(err.response.data || err.message, { hideProgressBar: true })
-        navigate('/')
-      })
+    try {
+      const message = await logout();
+      toast.success(message, { hideProgressBar: true });
+      dispatch(resetAccount());
+      localStorage.clear();
+      navigate('/login');
+    } catch (err) {
+      console.log(err)
+      toast.error(err.response.data || err.message, { hideProgressBar: true })
+    }
   }
 
   const handleChangePassword = () => {
@@ -75,9 +64,14 @@ export default function MenuBar() {
                 Home
               </CNavLink>
             </CNavItem>
-            {(role === 'ROLE_HOST') && (
+            {(role === ROLE_HOST) && (
               <CNavItem>
-                <CNavLink href="/#/owner">Airbnb Your Home</CNavLink>
+                <CNavLink href="/#/host">Airbnb Your Home</CNavLink>
+              </CNavItem>
+            )}
+            {(role === ROLE_USER) && (
+              <CNavItem>
+                <CNavLink href="/#/user/bookings">Booking History</CNavLink>
               </CNavItem>
             )}
           </CNavbarNav>

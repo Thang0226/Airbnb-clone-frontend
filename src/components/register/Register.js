@@ -7,7 +7,6 @@ import {
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
-import {useForm} from 'react-hook-form'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
@@ -21,7 +20,6 @@ import SubmitButton from '../_fragments/FORMSubmitButton'
 export default function Register() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { register } = useForm();
 
   const REGEX = {
     username: /^[a-zA-Z0-9_]{4,30}$/,
@@ -39,7 +37,10 @@ export default function Register() {
   }
 
   useEffect(() => {
-    document.title = 'Airbnb | Register'
+    document.title = 'Airbnb | Register';
+    if (localStorage.getItem('loggedIn')) {
+      navigate('/')
+    }
   }, [])
 
   const validationSchema = Yup.object().shape({
