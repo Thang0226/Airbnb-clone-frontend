@@ -5,10 +5,11 @@ import { FcGoogle } from "react-icons/fc";
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { BASE_URL_USER } from '../../constants/api'
-import { deletePassword, setToken, setUsername } from '../../redux/slices/accountSlice'
+import { deletePassword, setRole, setToken, setUsername } from '../../redux/slices/accountSlice'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { ROLE_ADMIN } from '../../constants/roles'
+import "./login_styles.css"
 
 const SocialLoginComponent = () => {
 
@@ -31,6 +32,7 @@ const SocialLoginComponent = () => {
         const role = user.authorities[0].authority;
         dispatch(setToken(user.token))
         dispatch(setUsername(user.username))
+        dispatch(setRole(role))
         dispatch(deletePassword())
         localStorage.setItem('userId', user.id)
         localStorage.setItem('username', user.username)
@@ -63,8 +65,8 @@ const SocialLoginComponent = () => {
                 className="d-flex justify-content-center"
               >
                 <CButton
-                  color="secondary"
-                  className="d-flex align-items-center justify-content-center"
+                  color="danger"
+                  className="d-flex align-items-center justify-content-center gg-button"
                 >
                   <FcGoogle size={25} className="me-2"/>
                   Login with Google
