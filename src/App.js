@@ -1,4 +1,4 @@
-import { HashRouter , Routes , Route , Navigate } from 'react-router-dom'
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './redux/store'
 import './scss/custom.scss'
@@ -25,11 +25,11 @@ import UpdateHouse from './components/host/js/UpdateHouse'
 import HostDetails from './components/admin/host-profile/HostDetail'
 import HostMainPage from './components/host/js/HostMainPage'
 import BookingList from './components/host/js/BookingList'
-import { ROLE_ADMIN , ROLE_HOST , ROLE_USER } from './constants/roles'
+import { ROLE_ADMIN, ROLE_HOST, ROLE_USER } from './constants/roles'
 import UserBookingList from './components/user/UserBookingList'
-import HouseList from './components/host/js/HouseList'
 import HostHouseDetails from './components/host/js/HostHouseDetails'
-
+import HouseListTable from './components/host/js/HouseListTable'
+import HostEarnings from './components/host/js/HostEarnings'
 
 export default function App() {
   return (
@@ -47,11 +47,11 @@ export default function App() {
               <Route path="/user/bookings" element={<UserBookingList />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[ROLE_USER , ROLE_HOST]} />}>
+            <Route element={<RequireAuth allowedRoles={[ROLE_USER, ROLE_HOST]} />}>
               <Route path="/houses/:id" element={<House />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[ROLE_USER , ROLE_ADMIN , ROLE_HOST]} />}>
+            <Route element={<RequireAuth allowedRoles={[ROLE_USER, ROLE_ADMIN, ROLE_HOST]} />}>
               <Route path="/profile" element={<UserProfile />} />
               <Route path="/profile/edit" element={<ProfileUpdateForm />} />
               <Route path="/user/change-password" element={<ChangePassword />} />
@@ -79,8 +79,9 @@ export default function App() {
               <Route path="/host/create" element={<CreateHouse />} />
               <Route path="/host/update/:houseId" element={<UpdateHouse />} />
               <Route path="/host/house/:houseId" element={<HostHouseDetails />} />
-              <Route path="/host/houses" element={<HouseList />} />
+              <Route path="/host/houses" element={<HouseListTable />} />
               <Route path="/host/bookings" element={<BookingList />} />
+              <Route path="/host/earnings" element={<HostEarnings />} />
               <Route path="/host/profile" element={<UserProfile />} />
               <Route path="/host/profile/edit" element={<ProfileUpdateForm />} />
             </Route>

@@ -34,7 +34,7 @@ const BookingList = () => {
   });
 
   useEffect(() => {
-    document.title = 'Airbnb | Booking List'
+    document.title = 'Host | Booking List'
   }, [])
 
   useEffect(() => {

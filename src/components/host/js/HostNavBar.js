@@ -59,19 +59,22 @@ export default function HostNavBar() {
         <CNavbarToggler onClick={() => setVisible(!visible)} />
         <CCollapse className="navbar-collapse" visible={visible}>
           <CNavbarNav className="me-auto">
-            <CNavItem>
+            <CNavItem className="border-end">
               <CNavLink href="#" active>
                 Home
               </CNavLink>
             </CNavItem>
-            <CNavItem>
+            <CNavItem className="border-end">
               <CNavLink href="/#/host">Airbnb Your Home</CNavLink>
             </CNavItem>
-            <CNavItem>
+            <CNavItem className="border-end">
               <CNavLink href="/#/host/houses">Houses</CNavLink>
             </CNavItem>
-            <CNavItem>
+            <CNavItem className="border-end">
               <CNavLink href="/#/host/bookings">Booking</CNavLink>
+            </CNavItem>
+            <CNavItem className="border-end">
+              <CNavLink href="/#/host/earnings">Earnings</CNavLink>
             </CNavItem>
           </CNavbarNav>
           <CDropdown variant="dropdown" popper={true} className="bg-gradient rounded me-2">
