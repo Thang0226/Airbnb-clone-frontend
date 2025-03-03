@@ -7,7 +7,7 @@ export const ConfirmModal = ({ visible, onClose, onConfirm, user }) => {
   return (
     <CModal visible={visible} onClose={onClose}>
       <CModalHeader closeButton>
-        <CModalTitle>Confirm Action</CModalTitle>
+        <CModalTitle>Confirm</CModalTitle>
       </CModalHeader>
       <CModalBody>
         Are you sure you want to {user.status === "ACTIVE" ? "lock" : "unlock"} user <strong>{user.username}</strong>?

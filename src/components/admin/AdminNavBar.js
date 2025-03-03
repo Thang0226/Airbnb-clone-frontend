@@ -1,5 +1,4 @@
 import {
-
   CCollapse,
   CContainer,
   CNavbar,
@@ -7,7 +6,6 @@ import {
   CNavbarNav,
   CNavbarToggler,
   CNavItem,
-  CNavLink,
 } from '@coreui/react'
 import { useState } from 'react'
 import UserDropdown from '../UserDropdown'

@@ -14,7 +14,7 @@ export const fetchHosts = createAsyncThunk(
   'hostManagement/fetchHosts',
   async ({ page, size }, thunkAPI) => {
     try {
-      const response = await api.get(`/admin/hosts?page=${page}&size=${size}`, )
+      const response = await api.get(`/admin/hosts?page=${page}&size=${size}`)
       return {
         hosts: response.data.content,
         totalPages: response.data.totalPages,
