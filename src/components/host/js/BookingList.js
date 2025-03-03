@@ -86,13 +86,13 @@ const BookingList = () => {
   const getStatusBadgeColor = (status) => {
     switch (status) {
       case 'WAITING':
-        return 'success'
+        return 'success';
       case 'CANCELED':
         return 'secondary'
       case 'CHECKED_IN':
         return 'primary'
       case 'CHECKED_OUT':
-        return 'secondary'
+        return 'secondary';
       default:
         return 'dark'
     }

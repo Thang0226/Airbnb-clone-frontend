@@ -4,7 +4,7 @@ import { BASE_URL } from '../constants/api'
 import { useSelector, useDispatch } from 'react-redux'
 import { resetAccount } from '../redux/slices/accountSlice'
 import { fetchUserProfile } from '../redux/slices/userProfileSlice'
-import { logout } from '../services/authService'
+import { logoutAPI } from '../services/authService'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 
@@ -31,10 +31,9 @@ export default function UserDropdown() {
 
   const handleLogout = async () => {
     try {
-      const message = await logout()
-      toast.success(message, { hideProgressBar: true })
+      await logoutAPI()
+      toast.info("Logged out successfully", { hideProgressBar: true })
       dispatch(resetAccount())
-      localStorage.clear()
       setAvatarUrl(`${BASE_URL}/images/default.jpg`)
       navigate('/login')
     } catch (err) {
