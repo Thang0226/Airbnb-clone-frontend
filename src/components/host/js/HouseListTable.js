@@ -260,6 +260,7 @@ const HouseListTable = () => {
                     <CTableRow>
                       <CTableHeaderCell className="text-center">House Name</CTableHeaderCell>
                       <CTableHeaderCell className="text-center">Address</CTableHeaderCell>
+                      <CTableHeaderCell className="text-center">Rentals Count</CTableHeaderCell>
                       <CTableHeaderCell className="text-center">Daily Rent</CTableHeaderCell>
                       <CTableHeaderCell className="text-center">Revenue</CTableHeaderCell>
                       <CTableHeaderCell className="text-center">Status</CTableHeaderCell>
@@ -275,6 +276,7 @@ const HouseListTable = () => {
                           </CTooltip>
                         </CTableDataCell>
                         <CTableDataCell>{house.address}</CTableDataCell>
+                        <CTableDataCell className="text-end">{house.rentals}</CTableDataCell>
                         <CTableDataCell className="text-end">
                           <CurrencyFormat value={house.price} />
                         </CTableDataCell>
