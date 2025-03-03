@@ -1,9 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { CButton, CCard, CCardBody, CCardFooter, CCol, CRow, CSpinner } from '@coreui/react'
+import React , { useState , useEffect } from 'react'
+import {
+  CButton ,
+  CCard ,
+  CCardBody ,
+  CCardFooter ,
+  CCol ,
+  CRow ,
+  CSpinner ,
+} from '@coreui/react'
 import { BASE_URL_HOUSE } from '../../../constants/api'
 import { setHouses } from '../../../redux/slices/houseSlice'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch , useSelector } from 'react-redux'
 import { TbEdit } from 'react-icons/tb'
 import styles from '../css/HouseList.module.css'
 import api from '../../../services/axiosConfig'

@@ -24,6 +24,7 @@ import {
 } from '@coreui/icons'
 import CurrencyFormat from '../_fragments/format/CurrencyFormat'
 import HouseRent from './HouseRent'
+import HouseReviews from './HouseReviews'
 
 export default function House() {
   const selectedHouse = useSelector ( state => state.houses.house )
@@ -156,6 +157,7 @@ export default function House() {
                     <HouseRent houseId={id}/>
               </CCol>
             </CRow>
+            <HouseReviews/>
           </CCardBody>
         </CCard>
       </CCol>
