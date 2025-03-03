@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { DisplayLoading } from '../DisplayLoading'
+import { DisplayLoading } from '../../DisplayLoading'
 import {
   CButton,
   CCard,
@@ -12,14 +12,17 @@ import {
   CTableHeaderCell,
   CTableRow,
 } from '@coreui/react'
-import CurrencyFormat from '../_fragments/format/CurrencyFormat'
-import axiosInstance from '../../services/axiosConfig'
+import CurrencyFormat from '../../_fragments/format/CurrencyFormat'
+import axiosInstance from '../../../services/axiosConfig'
 import dayjs from 'dayjs'
 import { toast } from 'react-toastify'
+import ReviewWindow from './review/ReviewWindow'
 
 const UserBookingList = () => {
   const [loading, setLoading] = useState(true);
   const [bookings, setBookings] = useState([]);
+  const [reviewVisible, setReviewVisible] = useState(false);
+  const [bookingInfo, setBookingInfo] = useState({});
 
   const now = new Date();
   const username = localStorage.getItem("username")
@@ -53,6 +56,29 @@ const UserBookingList = () => {
       .catch(err => {console.log(err)});
   }
 
+  const getBookingInfo = async (bookingId) => {
+    return await axiosInstance.get(`/bookings/${bookingId}/get`)
+  }
+
+  const handleReviewBooking = async (bookingId) => {
+    const res = await getBookingInfo(bookingId);
+    const bookingInfo = res.data;
+    setBookingInfo(bookingInfo);
+    setReviewVisible(true);
+  }
+
+  const handleFinishReview = async (rating, comment) => {
+    await axiosInstance.post(`/bookings/${bookingInfo.id}/review`, {
+      rating: rating,
+      comment: comment
+    }).then((res) => {
+      toast.success(res.data);
+      setReviewVisible(false);
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
   if (loading || !bookings) return (
     <DisplayLoading/>
   )
@@ -82,39 +108,50 @@ const UserBookingList = () => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {bookings.map((booking) => (
-                    <CTableRow key={booking.id} className='align-middle'>
+                  {bookings.map((bookingInfo) => (
+                    <CTableRow key={bookingInfo.id} className='align-middle'>
                       <CTableDataCell
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
-                        title={booking.houseName}
+                        title={bookingInfo.houseName}
                       >
-                        {booking.houseName}
+                        {bookingInfo.houseName}
                       </CTableDataCell>
-                      <CTableDataCell>{booking.address}</CTableDataCell>
+                      <CTableDataCell>{bookingInfo.address}</CTableDataCell>
                       <CTableDataCell className="text-center">
-                        {new Date(booking.startDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                        {new Date(bookingInfo.startDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}
                       </CTableDataCell>
                       <CTableDataCell className="text-center">
-                        {new Date(booking.endDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                        {new Date(bookingInfo.endDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}
                       </CTableDataCell>
                       <CTableDataCell className="text-end">
-                        <CurrencyFormat value={booking.totalCost} />
+                        <CurrencyFormat value={bookingInfo.totalCost} />
                       </CTableDataCell>
                       <CTableDataCell className="text-center">
-                        {booking.bookingStatus.replace("_", " ")}
+                        {bookingInfo.bookingStatus.replace("_", " ")}
                       </CTableDataCell>
                       <CTableDataCell className="text-center">
-                        {(isOneDayBeforeStartDate(booking.startDate)) && (
+                        {(isOneDayBeforeStartDate(bookingInfo.startDate)) && (
                           <CButton
                           size="sm"
                           color={"warning"}
                           className="text-white"
                           style={{ width: "90px" }}
-                          onClick={() => handleCancelBooking(booking.id)}
+                          onClick={() => handleCancelBooking(bookingInfo.id)}
                         >
                           Cancel
                         </CButton>)}
+                        {(bookingInfo.bookingStatus === 'CHECKED_OUT') && (
+                          <CButton
+                            size="sm"
+                            color="info"
+                            className="text-white"
+                            style={{ width: "90px" }}
+                            onClick={() => handleReviewBooking(bookingInfo.id)}
+                          >
+                            Review
+                          </CButton>
+                        )}
                       </CTableDataCell>
                     </CTableRow>
                   ))}
@@ -124,6 +161,12 @@ const UserBookingList = () => {
           </CCard>
         </CCol>
       </CRow>
+      <ReviewWindow
+        visible={reviewVisible}
+        setVisible={setReviewVisible}
+        bookingInfo={bookingInfo}
+        handleAfterConfirm={(rating, comment) => handleFinishReview(rating, comment)}
+      />
     </div>
   )
 }

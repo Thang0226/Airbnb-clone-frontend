@@ -17,6 +17,6 @@ export const loginSetup = async (user, role) => {
   localStorage.setItem('loggedIn', JSON.stringify(true))
   localStorage.setItem('username', user.username)
   localStorage.setItem('role', role)
-  toast.success('login successful', { hideProgressBar: true })
+  toast.success('Login successful', { hideProgressBar: true })
 }
 
