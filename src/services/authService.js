@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 export const logoutAPI = async () => {
   try {
     const response = await axiosInstance.post('/users/logout');
-    console.log(response.data);
+    // console.log(response.data);
     localStorage.clear()
   } catch (error) {
     throw error.response.data;

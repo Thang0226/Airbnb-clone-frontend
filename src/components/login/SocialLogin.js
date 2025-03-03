@@ -29,6 +29,7 @@ const SocialLoginComponent = () => {
       .then(async (res) => {
         // console.log(res);
         const user = res.data;
+        localStorage.setItem("token", user.token);
         if (user.userStatus === 'LOCKED') {
           await logoutAPI()
           toast.warning("Your account has been LOCKED, please contact Admin.", { hideProgressBar: true })

@@ -11,8 +11,8 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { setToken, setUsername, deletePassword, setRole, resetAccount } from '../../redux/slices/accountSlice'
-import { BASE_URL, BASE_URL_USER } from '../../constants/api'
+import { setToken, setUsername, deletePassword, setRole } from '../../redux/slices/accountSlice'
+import { BASE_URL_USER } from '../../constants/api'
 import FORMTextInput from '../_fragments/FORMTextInput'
 import FORMPasswordInput from '../_fragments/FORMPasswordInput'
 import SubmitButton from '../_fragments/FORMSubmitButton'
@@ -60,13 +60,13 @@ export default function Login() {
     })
       .then(async (res) => {
         const user = res.data;
+        localStorage.setItem("token", user.token);
         if (user.userStatus === 'LOCKED') {
           await logoutAPI()
           toast.warning("Your account has been LOCKED, please contact Admin.", { hideProgressBar: true })
-          navigate('/login')
+          return navigate('/login');
         }
         const role = user.authorities[0].authority;
-        dispatch(setToken(user.token))
         dispatch(setUsername(user.username))
         dispatch(setRole(role))
         dispatch(deletePassword())
