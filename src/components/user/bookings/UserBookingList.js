@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { DisplayLoading } from '../../DisplayLoading'
 import {
+  CBadge,
   CButton,
   CCard,
   CCardBody,
@@ -32,6 +33,21 @@ const UserBookingList = () => {
     let timeDifference = (startTime - now) / (1000 * 60 * 60);
     return timeDifference >= 24;
   }
+
+  const getStatusBadgeColor = (status) => {
+    switch (status) {
+      case 'WAITING':
+        return 'success';
+      case 'CANCELED':
+        return 'secondary';
+      case 'CHECKED_IN':
+        return 'primary';
+      case 'CHECKED_OUT':
+        return 'secondary';
+      default:
+        return 'dark';
+    }
+  };
 
   useEffect(() => {
     document.title = 'Airbnb | User Booking History';
@@ -108,46 +124,51 @@ const UserBookingList = () => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {bookings.map((bookingInfo) => (
-                    <CTableRow key={bookingInfo.id} className='align-middle'>
+                  {bookings.map((booking) => (
+                    <CTableRow key={booking.id} className='align-middle'>
                       <CTableDataCell
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
-                        title={bookingInfo.houseName}
+                        title={booking.houseName}
                       >
-                        {bookingInfo.houseName}
+                        {booking.houseName}
                       </CTableDataCell>
-                      <CTableDataCell>{bookingInfo.address}</CTableDataCell>
+                      <CTableDataCell>{booking.address}</CTableDataCell>
                       <CTableDataCell className="text-center">
-                        {new Date(bookingInfo.startDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                        {new Date(booking.startDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}
                       </CTableDataCell>
                       <CTableDataCell className="text-center">
-                        {new Date(bookingInfo.endDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                        {new Date(booking.endDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}
                       </CTableDataCell>
                       <CTableDataCell className="text-end">
-                        <CurrencyFormat value={bookingInfo.totalCost} />
+                        <CurrencyFormat value={booking.totalCost} />
                       </CTableDataCell>
                       <CTableDataCell className="text-center">
-                        {bookingInfo.bookingStatus.replace("_", " ")}
+                        <CBadge
+                          color={getStatusBadgeColor(booking.bookingStatus)}
+                          className="p-2 rounded-pill"
+                        >
+                          {booking.bookingStatus.replace('_', ' ')}
+                        </CBadge>
                       </CTableDataCell>
                       <CTableDataCell className="text-center">
-                        {(isOneDayBeforeStartDate(bookingInfo.startDate)) && (
+                        {(isOneDayBeforeStartDate(booking.startDate)) && (
                           <CButton
                           size="sm"
                           color={"warning"}
                           className="text-white"
                           style={{ width: "90px" }}
-                          onClick={() => handleCancelBooking(bookingInfo.id)}
+                          onClick={() => handleCancelBooking(booking.id)}
                         >
                           Cancel
                         </CButton>)}
-                        {(bookingInfo.bookingStatus === 'CHECKED_OUT') && (
+                        {(booking.bookingStatus === 'CHECKED_OUT') && (
                           <CButton
                             size="sm"
                             color="info"
                             className="text-white"
                             style={{ width: "90px" }}
-                            onClick={() => handleReviewBooking(bookingInfo.id)}
+                            onClick={() => handleReviewBooking(booking.id)}
                           >
                             Review
                           </CButton>
