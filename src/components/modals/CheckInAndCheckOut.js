@@ -19,7 +19,7 @@ export const CheckInAndCheckOut = ({ visible, onClose, onConfirm, booking, actio
         <p>
           {action === "check-in"
             ? "Once checked in, the booking status will be updated, and the house will be marked as rented."
-            : "Once checked out, the booking will be completed, and the house will be available for new reservations."}
+            : "Once checked out, the booking will be completed, and the house will be available for the next customer."}
         </p>
       </CModalBody>
       <CModalFooter>

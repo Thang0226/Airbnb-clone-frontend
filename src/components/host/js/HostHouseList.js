@@ -1,21 +1,9 @@
-import React , { useState , useEffect } from 'react'
-import {
-  CButton ,
-  CCard ,
-  CCardBody ,
-  CCardFooter , CCarousel ,
-  CCarouselItem ,
-  CCol ,
-  CImage ,
-  CRow ,
-  CSpinner ,
-} from '@coreui/react'
-import { BASE_URL , BASE_URL_HOUSE } from '../../../constants/api'
+import React, { useEffect, useState } from 'react'
+import { CButton, CCard, CCardBody, CCardFooter, CCol, CRow, CSpinner } from '@coreui/react'
+import { BASE_URL_HOUSE } from '../../../constants/api'
 import { setHouses } from '../../../redux/slices/houseSlice'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch , useSelector } from 'react-redux'
-import CIcon from '@coreui/icons-react'
-import { cilBath , cilBed , cilLocationPin } from '@coreui/icons'
+import { useDispatch, useSelector } from 'react-redux'
 import { TbEdit } from 'react-icons/tb'
 import styles from '../css/HouseList.module.css'
 import api from '../../../services/axiosConfig'
@@ -27,7 +15,7 @@ export default function HostHouseList() {
   const [error , setError] = useState ( null )
   const dispatch = useDispatch ()
   const navigate = useNavigate ()
-  const hostId = localStorage.getItem ( 'userId' )
+  const hostId = useSelector(state => state.account.userId)
 
 
   useEffect ( () => {
@@ -45,7 +33,7 @@ export default function HostHouseList() {
       }
     }
     getHousesByHostId ()
-  } , [] )
+  } , [dispatch, hostId] )
 
   if (loading) {
     return (

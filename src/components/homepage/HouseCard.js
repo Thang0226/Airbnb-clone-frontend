@@ -1,5 +1,5 @@
 import { BASE_URL } from '../../constants/api'
-import { CCard , CCardBody , CCarousel , CCarouselItem , CImage , CRow } from '@coreui/react'
+import { CCardBody , CCarousel , CCarouselItem , CImage , CRow } from '@coreui/react'
 import React from 'react'
 import CIcon from '@coreui/icons-react'
 import { cilBath , cilBed , cilLocationPin } from '@coreui/icons'

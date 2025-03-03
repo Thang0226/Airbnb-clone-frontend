@@ -3,15 +3,13 @@ import axios from 'axios'
 import HouseCard from './HouseCard'
 import { useDispatch , useSelector } from 'react-redux'
 import {
-  CCardBody ,
   CRow ,
   CCol ,
-  CContainer , CNavLink , CCard , CLink ,
+  CContainer , CCard , CLink ,
 } from '@coreui/react'
 import './HouseList.css'
 import { BASE_URL_HOUSE } from '../../constants/api'
 import { setHouses } from '../../redux/slices/houseSlice'
-import { FaMapMarkerAlt } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 
 const HouseList = () => {
@@ -24,14 +22,13 @@ const HouseList = () => {
     axios
       .get ( `${BASE_URL_HOUSE}` )
       .then ( (response) => {
-        // console.log(response.data)
         dispatch ( setHouses ( response.data ) )
         setLoading ( false )
       } )
       .catch ( (error) => {
         console.error ( 'There was an error fetching the data!' , error )
       } )
-  } , [] )
+  } , [dispatch] )
 
   if (loading) {
     return <div>Loading...</div>

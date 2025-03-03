@@ -4,6 +4,7 @@ export const accountSlice = createSlice({
   name: 'account',
   initialState: {
     username: localStorage.getItem('username') || '',
+    userId: localStorage.getItem('userId') || '',
     password: '',
     token: localStorage.getItem('token') || '',
     role: localStorage.getItem('role') || ''

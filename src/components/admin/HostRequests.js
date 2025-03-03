@@ -15,13 +15,14 @@ import {
 } from '@coreui/react'
 import ConfirmWindow from '../modals/ConfirmWindow'
 import dayjs from 'dayjs'
+import { useSelector } from 'react-redux'
 
 export default function HostRequests(){
   const [requests, setRequests] = useState([]);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [approveVisible, setApproveVisible] = useState(false);
   const [declineVisible, setDeclineVisible] = useState(false);
-  const token = localStorage.getItem('token');
+  const token = useSelector(state => state.account.token)
 
   useEffect(() => {
     document.title = 'Admin | Host Requests';
@@ -39,7 +40,7 @@ export default function HostRequests(){
       }
     }
     getRequests();
-  }, [approveVisible, declineVisible]);
+  }, [approveVisible, declineVisible, token]);
 
   const handleApprove = (request) => {
     setSelectedRequest(request);
