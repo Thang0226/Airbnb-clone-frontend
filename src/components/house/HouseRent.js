@@ -167,15 +167,16 @@ export default function HouseRent({houseId}) {
           </div>
         </CCol>
         <CCol sm={12} md={5} className="pt-3">
-              <CButton
-                color="primary"
-                className="w-100"
-                onClick={handleRentHouse}
-              >
-                Rent House
-              </CButton>
-            </CCol>
-          </CRow>
-        </CContainer>
+          <CButton
+            color="primary"
+            className="w-100"
+            onClick={handleRentHouse}
+          >
+            Rent House
+          </CButton>
+        </CCol>
+      </CRow>
+    </CContainer>
+
   )
 }

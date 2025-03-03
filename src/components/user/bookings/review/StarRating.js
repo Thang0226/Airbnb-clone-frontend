@@ -2,12 +2,14 @@ import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import "./stars-styles.css";
 
-const StarRating = ({ onChange, value = 0 }) => {
+const StarRating = ({ onChange, value = 0, disable = false }) => {
   const [rating, setRating] = useState(value);
 
   const handleClick = (index) => {
-    setRating(index);
-    onChange(index);
+    if (!disable) {
+      setRating(index);
+      onChange(index);
+    }
   };
 
   return (
