@@ -23,7 +23,7 @@ export default function HostHouseList() {
   const [error , setError] = useState ( null )
   const dispatch = useDispatch ()
   const navigate = useNavigate ()
-  const hostId = localStorage.getItem ( 'userId' )
+  const hostId = useSelector(state => state.account.userId)
 
 
   useEffect ( () => {
@@ -41,7 +41,7 @@ export default function HostHouseList() {
       }
     }
     getHousesByHostId ()
-  } , [] )
+  } , [dispatch, hostId] )
 
   if (loading) {
     return (

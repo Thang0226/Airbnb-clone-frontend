@@ -16,18 +16,22 @@ import {
   CTableRow, CTooltip,
 } from '@coreui/react'
 import { UserPagination } from '../../_fragments/CustomerPagination'
-import { getBookings, searchBookings } from '../../../redux/slices/bookingSlice'
+import { getBookings, processBooking, searchBookings } from '../../../redux/slices/bookingSlice'
 import CurrencyFormat from '../../_fragments/format/CurrencyFormat'
 import styles from '../css/HouseList.module.css'
 import BookingSearchBar from './BookingSearchBar'
 import { HiOutlineArrowRightEndOnRectangle, HiOutlineArrowRightOnRectangle } from 'react-icons/hi2'
-
+import { CheckInAndCheckOut } from '../../modals/CheckInAndCheckOut'
+import { toast } from 'react-toastify'
 
 const BookingList = () => {
   const [page, setPage] = useState(0)
   const [size] = useState(10)
   const dispatch = useDispatch()
-  const username = localStorage.getItem('username')
+  const username = useSelector(state => state.account.username)
+  const [modalVisible, setModalVisible] = useState(false)
+  const [selectedBooking, setSelectedBooking] = useState(null)
+  const [action, setAction] = useState('')
 
   const [searchData, setSearchData] = useState({
     houseName: '',
@@ -51,20 +55,48 @@ const BookingList = () => {
 
   const { bookings, error, loading, totalPages } = useSelector((state) => state.booking)
 
+  const handleBooking = (booking, action) => {
+    setSelectedBooking(booking)
+    setAction(action)
+    setModalVisible(true)
+  }
+
+  const handleConfirm = () => {
+    const bookingId = selectedBooking.id
+    const formatedAction = action.replace('-',"")
+
+    dispatch(processBooking({bookingID: bookingId, action: formatedAction}))
+      .then(() => {
+        toast.success(
+          <div>
+            Successfully {action} for <strong>{selectedBooking.houseName}</strong>!
+          </div>
+        )
+      })
+      .catch((error) => {
+        toast.error('Error processing booking:', error)
+      })
+      .finally(() => {
+        dispatch(getBookings({ username, page, size }))
+        setModalVisible(false)
+      })
+
+  }
+
   const getStatusBadgeColor = (status) => {
     switch (status) {
       case 'WAITING':
         return 'success';
       case 'CANCELED':
-        return 'secondary';
+        return 'secondary'
       case 'CHECKED_IN':
-        return 'primary';
+        return 'primary'
       case 'CHECKED_OUT':
         return 'secondary';
       default:
-        return 'dark';
+        return 'dark'
     }
-  };
+  }
 
   if (loading || !bookings) return (
     <DisplayLoading />
@@ -102,14 +134,14 @@ const BookingList = () => {
                       <CTableHeaderCell>Customer Name</CTableHeaderCell>
                       <CTableHeaderCell className="text-center">Total cost</CTableHeaderCell>
                       <CTableHeaderCell className="text-center">Status</CTableHeaderCell>
-                      <CTableHeaderCell className="text-center">Action</CTableHeaderCell>
+                      <CTableHeaderCell className="text-center">Actions</CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
                   <CTableBody>
                     {bookings.map((booking) => (
                       <CTableRow key={booking.id} className="align-middle">
                         <CTableDataCell className={styles['house-name']} title={booking.houseName}>
-                          <CTooltip content= {booking.houseName} >
+                          <CTooltip content={booking.houseName}>
                             <span>{booking.houseName}</span>
                           </CTooltip>
                         </CTableDataCell>
@@ -141,27 +173,43 @@ const BookingList = () => {
                           </CBadge>
                         </CTableDataCell>
                         <CTableDataCell className="text-center">
-                          <div className="d-flex justify-content-center gap-2">
-                            <CTooltip content="Check-in">
-                              <CButton
-                                size="md"
-                                color="primary"
-                                className="text-white d-flex align-items-center justify-content-center"
-                              >
-                                <HiOutlineArrowRightEndOnRectangle
-                                  style={{ width: '24px', height: '24px', flexShrink: 0 }} />
-                              </CButton>
-                            </CTooltip>
-                            <CTooltip content="Check-out">
-                              <CButton
-                                size="md"
-                                color="success"
-                                className="text-white d-flex align-items-center justify-content-center"
-                              >
-                                <HiOutlineArrowRightOnRectangle
-                                  style={{ width: '24px', height: '24px', flexShrink: 0 }} />
-                              </CButton>
-                            </CTooltip>
+                          <div className="d-flex justify-content-center">
+                            {booking.status === 'WAITING' &&
+                              <CTooltip content="Check-in">
+                                <CButton
+                                  size="md"
+                                  color="primary"
+                                  className="text-white d-flex align-items-center justify-content-center"
+                                  style={{ width: '40px', height: '40px', flexShrink: 0 }}
+                                  onClick={() => handleBooking(booking, "check-in")}
+                                >
+                                  <HiOutlineArrowRightEndOnRectangle
+                                    style={{ width: '24px', height: '24px', flexShrink: 0 }} />
+                                </CButton>
+                              </CTooltip>
+                            }
+                            {booking.status === 'CHECKED_IN' &&
+                              <CTooltip content="Check-out">
+                                <CButton
+                                  size="md"
+                                  color="secondary"
+                                  className="text-white d-flex align-items-center justify-content-center"
+                                  style={{ width: '40px', height: '40px', flexShrink: 0 }}
+                                  onClick={() => handleBooking(booking, "check-out")}
+
+                                >
+                                  <HiOutlineArrowRightOnRectangle
+                                    style={{ width: '24px', height: '24px', flexShrink: 0 }} />
+                                </CButton>
+                              </CTooltip>
+                            }
+                            <CheckInAndCheckOut
+                              visible={modalVisible}
+                              onClose={() => setModalVisible(false)}
+                              onConfirm={handleConfirm}
+                              booking={selectedBooking}
+                              action={action}
+                            />
                           </div>
                         </CTableDataCell>
                       </CTableRow>

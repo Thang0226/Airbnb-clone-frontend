@@ -12,12 +12,14 @@ import {
   CTableBody, CTableDataCell,
   CTableHead,
   CTableHeaderCell,
-  CTableRow,
+  CTableRow, CTooltip,
 } from '@coreui/react'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { ConfirmModal } from '../modals/StatusChangeConfirm';
 import { UserPagination } from '../_fragments/CustomerPagination'
+import { FiLock, FiUnlock } from 'react-icons/fi'
+import { PiListMagnifyingGlass } from 'react-icons/pi'
 
 export const UserList = () => {
   const [page, setPage] = useState(0);
@@ -113,7 +115,7 @@ export const UserList = () => {
                         className="text-center"
                       >
                         <CBadge
-                          color={user.status === 'ACTIVE' ? "success" : "secondary"}
+                          color={user.status === 'ACTIVE' ? "success" : "dark"}
                           className="py-2 rounded-pill"
                           style={{ width: "90px" }}
                         >
@@ -121,32 +123,37 @@ export const UserList = () => {
                         </CBadge>
                       </CTableDataCell>
                       <CTableDataCell
-                        className="text-center"
+                        className="d-flex align-items-center justify-content-center gap-2"
                       >
-                        <CButton
-                          size="sm"
-                          color={user.status === 'ACTIVE' ? "warning" : "success"}
-                          className="text-white"
-                          style={{ width: "90px" }}
-                          onClick={() => confirmStatusChange(user)}
-                        >
-                          {user.status === 'ACTIVE' ? "Lock" : "Unlock"}
-                        </CButton>
+                        <CTooltip content={user.status === "ACTIVE" ? "Lock" : "Unlock"}>
+                          <CButton
+                            size="md"
+                            color={user.status === 'ACTIVE' ? "warning" : "success"}
+                            className="text-white d-flex align-items-center justify-content-center"
+                            onClick={() => confirmStatusChange(user)}
+                          >
+                            {user.status === 'ACTIVE'
+                              ? <FiLock style={{ width: '20px', height: '20px' }}/>
+                              : <FiUnlock style={{ width: '20px', height: '20px' }}/>
+                            }
+                          </CButton>
+                        </CTooltip>
                         <ConfirmModal
                           visible={showModal}
                           onClose={() => setShowModal(false)}
                           onConfirm={handleStatusChange}
                           user={selectedUser}
                         />
-                        <CButton
-                          size="sm"
-                          color="primary"
-                          className="text-white ms-2"
-                          style={{ width: "90px" }}
-                          onClick={() => goToUserDetails(user.id)}
-                        >
-                          Details
-                        </CButton>
+                        <CTooltip content={"Details"}>
+                          <CButton
+                            size="md"
+                            color="primary"
+                            className="text-white d-flex align-items-center justify-content-center"
+                            onClick={() => goToUserDetails(user.id)}
+                          >
+                            <PiListMagnifyingGlass  style={{ width: '20px', height: '20px' }}/>
+                          </CButton>
+                        </CTooltip>
                       </CTableDataCell>
                     </CTableRow>
                   ))}

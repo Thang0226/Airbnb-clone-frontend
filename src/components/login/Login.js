@@ -11,7 +11,7 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { setToken, setUsername, deletePassword, setRole } from '../../redux/slices/accountSlice'
+import { setUsername, deletePassword, setRole } from '../../redux/slices/accountSlice'
 import { BASE_URL_USER } from '../../constants/api'
 import FORMTextInput from '../_fragments/FORMTextInput'
 import FORMPasswordInput from '../_fragments/FORMPasswordInput'
@@ -40,7 +40,7 @@ export default function Login() {
     if (localStorage.getItem('loggedIn')) {
       navigate('/')
     }
-  }, [])
+  }, [navigate])
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()

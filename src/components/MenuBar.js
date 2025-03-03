@@ -15,9 +15,11 @@ import { ROLE_HOST, ROLE_USER } from '../constants/roles'
 import UserDropdown from './UserDropdown'
 import { IoNotifications } from 'react-icons/io5'
 import Notifications from './host/js/Notifications'
+import { useNavigate } from 'react-router-dom'
 
 export default function MenuBar() {
   const [visible, setVisible] = useState(false)
+  const navigate = useNavigate()
   const role = useSelector(state => state.account.role)
   const username = useSelector(state => state.account.username)
 
@@ -39,7 +41,7 @@ export default function MenuBar() {
                   <CNavLink href="/#/host">Airbnb Your Home</CNavLink>
                 </CNavItem>
                 <CNavItem className="border-end">
-                  <CNavLink href="/#/host/houses">Houses</CNavLink>
+                  <CNavLink onClick={() => navigate("/host/houses", {state :{username: username}})}>Houses</CNavLink>
                 </CNavItem>
                 <CNavItem className="border-end">
                   <CNavLink href="/#/host/bookings">Booking</CNavLink>

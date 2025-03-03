@@ -18,6 +18,7 @@ import axiosInstance from '../../../services/axiosConfig'
 import dayjs from 'dayjs'
 import { toast } from 'react-toastify'
 import ReviewWindow from './review/ReviewWindow'
+import { useSelector } from 'react-redux'
 
 const UserBookingList = () => {
   const [loading, setLoading] = useState(true);
@@ -26,7 +27,7 @@ const UserBookingList = () => {
   const [bookingInfo, setBookingInfo] = useState({});
 
   const now = new Date();
-  const username = localStorage.getItem("username")
+  const username = useSelector(state => state.account.username)
 
   const isOneDayBeforeStartDate = (startDate) => {
     let startTime = dayjs(startDate).hour(12).minute(0).second(0).toDate();
@@ -57,7 +58,7 @@ const UserBookingList = () => {
         setLoading(false);
       })
       .catch(err => {console.log(err)});
-  }, [])
+  }, [username])
 
   const handleCancelBooking = (bookingId) => {
     axiosInstance.post(`/bookings/${bookingId}/cancel`, username, {
