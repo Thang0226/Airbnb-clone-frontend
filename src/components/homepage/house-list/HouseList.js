@@ -36,10 +36,6 @@ const HouseList = () => {
       <CRow className="d-flex justify-content-between align-items-center my-4">
         <div className="d-flex gap-3">
           <CLink href="#" className="text-decoration-none text-primary">
-            Top 5 Most Rented Rooms
-          </CLink>
-          <span className="text-muted">|</span>
-          <CLink href="#" className="text-decoration-none text-primary">
             View Full List.
           </CLink>
         </div>

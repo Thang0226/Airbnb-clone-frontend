@@ -2,7 +2,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import '../../style/css/custom-swiiper-bullet.css'
+import '../../style/css/custom-swiper.css'
 import { Autoplay, Navigation, Pagination } from 'swiper/modules'
 import { CCol, CContainer, CImage, CRow } from '@coreui/react'
 import React, { useEffect } from 'react'
@@ -33,30 +33,29 @@ const TopFiveHousesSlider = () => {
 
   return (
     <CContainer className="mt-4">
+      <h2 className="fw-bold text-center">Top 5 Featured Houses</h2>
       <Swiper
         slidesPerView={3}
-        spaceBetween={15}
-        loop={true}
+        spaceBetween={10}
         navigation
         pagination={{ clickable: true }}
         autoplay={{
-          delay: 10000,
+          delay: 7000,
           disableOnInteraction: false,
         }}
+        speed={1000}
         modules={[Autoplay, Pagination, Navigation]}
       >
         {topFiveHouses.map((house) => (
           <SwiperSlide key={house.id}>
             <CRow className="justify-content-center">
-              <CCol
-                sm={12} md={12} lg={12}
-              >
+              <CCol sm={12} md={12} lg={12}>
                 <div
-                  className="position-relative rounded overflow-hidden"
+                  className="position-relative rounded overflow-hidden house-card"
                   style={{
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
-                    height: '260px',
+                    height: '280px',
                     cursor: 'pointer',
                   }}
                   onClick={() => navigate(`/houses/${house.id}`)}
@@ -64,18 +63,14 @@ const TopFiveHousesSlider = () => {
                   <CImage
                     src={house.image ? `${BASE_URL}/images/${house.image}` : `${BASE_URL}/images/default.png`}
                     alt={house.houseName}
-                    className="w-100 h-100 object-fit-cover"
+                    className="w-100 h-100 object-fit-cover transition-transform"
                   />
-                  <div className="position-absolute top-0 start-0 w-100 h-100 "></div>
-                  <div
-                    className="position-absolute bottom-0 start-0 w-100 bg-dark bg-opacity-50 text-white p-2 rounded-bottom"
-                    style={{ zIndex: 2 }}
-                  >
+                  <div className="house-info">
                     <h5 className="fw-bold text-truncate">{house.houseName}</h5>
                     <h6>
-                      <CurrencyFormat value={house.price} displayType={'text'} thousandSeparator={true} /> VNĐ / Ngày
+                      <CurrencyFormat value={house.price} displayType={'text'} thousandSeparator={true} /> VNĐ/day
                     </h6>
-                    <h6 className="mb-4 text-truncate">{house.address}</h6>
+                    <h6 className="mb-2 text-truncate">{house.address}</h6>
                   </div>
                 </div>
               </CCol>
