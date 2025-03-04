@@ -1,0 +1,5 @@
+.carouselContainer :global(.carousel-control-next-icon),
+.carouselContainer :global(.carousel-control-prev-icon) {
+    width: 1vw;
+    height: 1vw;
+}
