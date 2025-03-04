@@ -11,7 +11,7 @@ export default function Layout() {
       <MenuBar />
 
       {/* Content */}
-      <CContainer className="p-4 overflow-auto flex-1">
+      <CContainer className="p-3 pt-0 overflow-auto flex-1">
         <Outlet />
       </CContainer>
 

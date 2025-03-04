@@ -7,9 +7,8 @@ import {
   CCol ,
   CContainer , CCard , CLink ,
 } from '@coreui/react'
-import './HouseList.css'
-import { BASE_URL_HOUSE } from '../../constants/api'
-import { setHouses } from '../../redux/slices/houseSlice'
+import { BASE_URL_HOUSE } from '../../../constants/api'
+import { setHouses } from '../../../redux/slices/houseSlice'
 import { useNavigate } from 'react-router-dom'
 
 const HouseList = () => {

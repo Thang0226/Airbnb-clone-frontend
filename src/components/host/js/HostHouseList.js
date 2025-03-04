@@ -15,7 +15,7 @@ import { useDispatch , useSelector } from 'react-redux'
 import { TbEdit } from 'react-icons/tb'
 import styles from '../css/HouseList.module.css'
 import api from '../../../services/axiosConfig'
-import HouseCard from '../../homepage/HouseCard'
+import HouseCard from '../../homepage/house-list/HouseCard'
 
 export default function HostHouseList() {
   const houseList = useSelector ( state => state.houses.list )
