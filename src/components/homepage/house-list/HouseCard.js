@@ -1,4 +1,4 @@
-import { BASE_URL } from '../../constants/api'
+import { BASE_URL } from '../../../constants/api'
 import { CCardBody , CCarousel , CCarouselItem , CImage , CRow } from '@coreui/react'
 import React from 'react'
 import CIcon from '@coreui/icons-react'
