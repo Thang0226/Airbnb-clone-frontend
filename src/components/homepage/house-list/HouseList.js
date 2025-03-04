@@ -9,13 +9,11 @@ import {
 } from '@coreui/react'
 import { BASE_URL_HOUSE } from '../../../constants/api'
 import { setHouses } from '../../../redux/slices/houseSlice'
-import { useNavigate } from 'react-router-dom'
 
 const HouseList = () => {
   const houseList = useSelector ( state => state.houses.list )
   const [loading , setLoading] = useState ( true )
   const dispatch = useDispatch ()
-  const navigate = useNavigate ()
 
   useEffect ( () => {
     axios
@@ -50,7 +48,6 @@ const HouseList = () => {
         {houseList.map ( (house) => (
           <CCol
             xs={12} md={6} lg={3}
-            onClick={() => navigate ( `/houses/${house.id}` )}
           >
             <CCard className="h-100 shadow-sm rounded-3" style={{ border: 'none' }}>
               <HouseCard key={house.id} house={house} />

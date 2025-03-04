@@ -4,7 +4,7 @@ import "./homepage.css"
 export default function Banner() {
 
   return (
-    <CCarousel controls interval={3000}>
+    <CCarousel controls interval={3000} transition='slide'>
       <CCarouselItem>
         <CImage className="d-block w-100 banner" src="/hero/banner_1.png" alt="slide 1" />
       </CCarouselItem>
