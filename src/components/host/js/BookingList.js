@@ -99,7 +99,7 @@ const BookingList = () => {
   }
 
   if (loading || !bookings) return (
-    <DisplayLoading />
+    <DisplayLoading message={"Loading Booking List..."}/>
   )
   if (error) return (
     <DisplayError error={error} />

@@ -25,7 +25,7 @@ const UserProfile = () => {
   const { userProfile, error, loading } = useSelector((state) => state.userProfile)
 
   if (loading || !userProfile) return (
-    <DisplayLoading/>
+    <DisplayLoading message={"Loading User Profile..."}/>
   )
   if (error) return (
     <DisplayError error={error} />

@@ -40,7 +40,7 @@ export const UserList = () => {
   const { users, error, loading, totalPages } = useSelector((state) => state.userManagement);
 
   if (loading || !users) return (
-    <DisplayLoading/>
+    <DisplayLoading message={"Loading User List..."}/>
   )
   if (error) return (
     <DisplayError error={error} />
