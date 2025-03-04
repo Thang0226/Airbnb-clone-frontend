@@ -19,7 +19,7 @@ export default function HostMainPage() {
     }, [])
     return (
         <>
-            <CContainer className="py-lg-5 py-3">
+            <CContainer className="py-lg-4 py-3">
                 <CRow className={"justify-content-between align-items-center mb-5"}>
                     <CCol>
                         <h2>Welcome host {hostUsername}!</h2>

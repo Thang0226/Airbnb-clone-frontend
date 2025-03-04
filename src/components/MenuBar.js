@@ -41,7 +41,9 @@ export default function MenuBar() {
                   <CNavLink href="/#/host">Airbnb Your Home</CNavLink>
                 </CNavItem>
                 <CNavItem className="border-end">
-                  <CNavLink onClick={() => navigate("/host/houses", {state :{username: username}})}>Houses</CNavLink>
+                  <CNavLink style={{cursor: 'pointer'}}
+                            onClick={() => navigate("/host/houses", {state :{username: username}})}
+                  >Houses</CNavLink>
                 </CNavItem>
                 <CNavItem className="border-end">
                   <CNavLink href="/#/host/bookings">Booking</CNavLink>

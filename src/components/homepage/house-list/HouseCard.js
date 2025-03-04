@@ -6,8 +6,14 @@ import CIcon from '@coreui/icons-react'
 import { cilBath , cilBed , cilLocationPin } from '@coreui/icons'
 import styles from './HouseList.module.css'
 
-const HouseCard = ({ house }) => {
+const HouseCard = ({ house, disableHouseView = false }) => {
   const navigate = useNavigate();
+
+  const handleViewHouse = () => {
+    if (!disableHouseView) {
+      navigate(`/houses/${house.id}`);
+    }
+  }
 
   return (
     <CCardBody>
@@ -35,7 +41,7 @@ const HouseCard = ({ house }) => {
             </CCarouselItem>)
         }
       </CCarousel>
-      <div className="mt-3 house-click" onClick={() => navigate ( `/houses/${house.id}` )}>
+      <div className="mt-3 house-click" onClick={() => handleViewHouse()}>
         <h5 className="card-title fw-bold">{house.houseName}</h5>
         <p className="text-muted mb-1 text-truncate">
           <CIcon icon={cilLocationPin} size="sm" className="me-1" />

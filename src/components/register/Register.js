@@ -136,14 +136,14 @@ export default function Register() {
   }
 
   return (
-      <div className="container mt-0">
+      <div>
         <CRow
           xs={{ cols: 1 }} md={{ cols: 1 }} lg={{ cols: 2 }}
-          className="justify-content-center mt-0"
+          className="justify-content-center mt-2"
         >
           <CCol>
             <CCard className="shadow border-0">
-              <CCardHeader className="text-center p-4">
+              <CCardHeader className="text-center p-2">
                 <h3>Register New Account</h3>
               </CCardHeader>
               <CCardBody className="p-4">

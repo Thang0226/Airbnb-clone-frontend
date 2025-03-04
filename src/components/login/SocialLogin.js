@@ -69,7 +69,7 @@ const SocialLoginComponent = () => {
               >
                 <CButton
                   color="danger"
-                  className="d-flex align-items-center justify-content-center gg-button"
+                  className="d-flex align-items-center justify-content-center gg-button w-100"
                 >
                   <FcGoogle size={25} className="me-2"/>
                   Login with Google

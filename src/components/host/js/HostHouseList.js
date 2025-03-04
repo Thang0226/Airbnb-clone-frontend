@@ -70,11 +70,12 @@ export default function HostHouseList() {
   }
 
   return (
-    <CRow className="mt-4 gap-4">
+    <CRow className="mt-3">
       {houseList.map ( (house) => (
-        <CCol xs={12} md={6} lg={4} key={house.id} onClick={() => navigate ( `/host/house/${house.id}` )}>
+        <CCol xs={12} md={6} lg={4} className="mb-3"
+              key={house.id} onClick={() => navigate ( `/host/house/${house.id}` )}>
           <CCard className="h-100 shadow-sm rounded-3" style={{ border: 'none' }}>
-            <HouseCard house={house} />
+            <HouseCard house={house} disableHouseView/>
             <CCardFooter className="bg-light d-flex justify-content-between align-items-center">
               <span className="text-muted">Status: {house.status || 'Not specified'}</span>
               <CButton

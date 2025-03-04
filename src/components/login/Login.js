@@ -115,16 +115,20 @@ export default function Login() {
                       <SubmitButton
                         label="Login"
                       />
-                      <CRow className="mb-3 mt-3">
+                      <CRow className="mb-1 mt-3">
                         <CCol className="d-flex justify-content-center fs-6">
                           Don't have an account?
-                          <Link to="/register" style={{textDecoration: "none"}}> Register</Link>
+                          <Link to="/register" style={{ textDecoration: 'none' }}> Register</Link>
                         </CCol>
                       </CRow>
-                      <hr/>
-                      <CRow>
+                      <div className="d-flex align-items-center">
+                        <hr className="flex-grow-1" />
+                        <span className="mx-2 text-muted">Or</span>
+                        <hr className="flex-grow-1" />
+                      </div>
+                      <CRow className="mt-2">
                         <CCol className="d-flex justify-content-center">
-                          <SocialLoginComponent/>
+                          <SocialLoginComponent />
                         </CCol>
                       </CRow>
                     </CForm>
