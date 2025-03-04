@@ -97,7 +97,7 @@ const UserBookingList = () => {
   }
 
   if (loading || !bookings) return (
-    <DisplayLoading/>
+    <DisplayLoading message={"Loading Bookings..."}/>
   )
 
   return (

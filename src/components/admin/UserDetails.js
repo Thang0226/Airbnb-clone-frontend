@@ -47,7 +47,7 @@ const UserDetails = () => {
 
 
   if (loading || !userDetails) return (
-    <DisplayLoading />
+    <DisplayLoading message={"Loading User Details..."}/>
   )
   if (error) return (
     <DisplayError error={error} />

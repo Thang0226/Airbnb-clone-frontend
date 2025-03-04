@@ -47,7 +47,7 @@ const HostDetail = () => {
 
   if (loading) {
     return (
-      <DisplayLoading/>
+      <DisplayLoading message={"Loading Host Details..."}/>
     )
   }
 

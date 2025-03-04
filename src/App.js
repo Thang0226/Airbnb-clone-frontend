@@ -1,7 +1,7 @@
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './redux/store'
-import './scss/custom.scss'
+import './style/scss/custom.scss'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import './App.css'
 import HostLayout from './components/host/js/HostLayout'

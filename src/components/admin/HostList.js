@@ -44,7 +44,7 @@ export default function HostList() {
   const { hosts, error, loading, totalPages } = useSelector((state) => state.hostManagement)
 
   if (loading || !hosts) return (
-    <DisplayLoading />
+    <DisplayLoading message={"Loading Host List..."} />
   )
   if (error) return (
     <DisplayError error={error} />
