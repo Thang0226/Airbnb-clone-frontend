@@ -5,7 +5,7 @@ import { FcGoogle } from "react-icons/fc";
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { BASE_URL_USER } from '../../constants/api'
-import { deletePassword, setRole, setToken, setUsername } from '../../redux/slices/accountSlice'
+import { deletePassword, setRole, setToken, setUserId, setUsername } from '../../redux/slices/accountSlice'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { ROLE_ADMIN } from '../../constants/roles'
@@ -40,6 +40,7 @@ const SocialLoginComponent = () => {
         dispatch(deletePassword())
         dispatch(setToken(user.token))
         dispatch(setUsername(user.username))
+        dispatch(setUserId(user.id))
         await loginSetup(user, role)
         if (role === ROLE_ADMIN) {
           return navigate('/admin');

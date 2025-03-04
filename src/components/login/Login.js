@@ -11,7 +11,7 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { setUsername, deletePassword, setRole } from '../../redux/slices/accountSlice'
+import { setUsername, deletePassword, setRole, setUserId } from '../../redux/slices/accountSlice'
 import { BASE_URL_USER } from '../../constants/api'
 import FORMTextInput from '../_fragments/FORMTextInput'
 import FORMPasswordInput from '../_fragments/FORMPasswordInput'
@@ -68,6 +68,7 @@ export default function Login() {
         }
         const role = user.authorities[0].authority;
         dispatch(setUsername(user.username))
+        dispatch(setUserId(user.id))
         dispatch(setRole(role))
         dispatch(deletePassword())
         await loginSetup(user, role)

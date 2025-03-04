@@ -13,6 +13,9 @@ export const accountSlice = createSlice({
     setUsername: (state, action) => {
       state.username = action.payload || ''
     },
+    setUserId: (state, action) => {
+      state.userId = action.payload || ''
+    },
     setPassword: (state, action) => {
       state.password = action.payload || ''
     },
@@ -33,9 +36,10 @@ export const accountSlice = createSlice({
       state.password = ''
       state.username = ''
       state.role = ''
+      state.userId = ''
     },
   },
 })
 
 // Export slice actions
-export const { setUsername, setPassword, setToken, setRole, deleteToken, deletePassword, resetAccount } = accountSlice.actions
+export const { setUsername, setUserId, setPassword, setToken, setRole, deleteToken, deletePassword, resetAccount } = accountSlice.actions
