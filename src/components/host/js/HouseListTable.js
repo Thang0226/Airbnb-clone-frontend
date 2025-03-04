@@ -17,7 +17,7 @@ import { UserPagination } from '../../_fragments/CustomerPagination'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  creatMaintenanceRecord,
+  createMaintenanceRecord,
   getBookedDates,
   getHouseList,
   getLatestAvailableDate,
@@ -44,9 +44,10 @@ const HouseListTable = () => {
   const [houseName, setHouseName] = useState('')
   const [status, setStatus] = useState('')
 
-  const today = dayjs().toDate()
   const [selectedHouse, setSelectedHouse] = useState({})
   const [newStatus, setNewStatus] = useState('')
+
+  const today = dayjs().toDate()
   const [modalVisible, setModalVisible] = useState(false)
   const [bookedDates, setBookedDates] = useState([])
   const [maxAvailableDate, setMaxAvailableDate] = useState(today.getFullYear() + 10)
@@ -67,7 +68,6 @@ const HouseListTable = () => {
     dispatch(searchHouses({ username, houseName, status, page, size }))
   }
 
-
   const handleUpdateStatus = async (house) => {
     if (house.status === 'RENTED') {
       toast.warning('Cannot change status of the house being rented!')
@@ -77,7 +77,6 @@ const HouseListTable = () => {
     setNewStatus(house.status)
     setModalVisible(true)
     const houseId = house.id
-    console.log(newStatus)
     try {
       const response = await dispatch(getBookedDates({ houseId })).unwrap()
       console.log(response)
@@ -110,12 +109,10 @@ const HouseListTable = () => {
     try {
       const response = await dispatch(getLatestAvailableDate({ houseId, startDate })).unwrap()
       setMaxAvailableDate(dayjs(response).toDate())
-      console.log(response)
     } catch (error) {
       console.error('Error fetching booked dates:', error)
       toast.error('Failed to fetch booked dates')
     }
-
   }
 
   const handleCloseModal = () => {
@@ -157,7 +154,7 @@ const HouseListTable = () => {
       if (newStatus === 'MAINTAINING') {
         try {
           const maintenanceResponse = await dispatch(
-            creatMaintenanceRecord({
+            createMaintenanceRecord({
               houseId: selectedHouse.id,
               startDate: formattedStartDate,
               endDate: formattedEndDate,
@@ -174,13 +171,13 @@ const HouseListTable = () => {
 
       // Đóng modal & cập nhật danh sách
       handleCloseModal()
-      dispatch(getHouseList({ username, page, size }))
+      await dispatch(getHouseList({ username, page, size }))
     } catch (error) {
       toast.error('Failed to update house status or create maintenance record!')
     }
   }
 
-  const { houseList, error, loading, totalPages } = useSelector((state) => state.houses)
+  const { houseList, totalPages, loading, error } = useSelector((state) => state.houses);
 
   const getStatusBadgeColor = (status) => {
     switch (status) {
@@ -195,10 +192,10 @@ const HouseListTable = () => {
     }
   }
 
-  if (loading || !houseList) return (
-    <DisplayLoading />
+  if (loading.houseList || !houseList) return (
+    <DisplayLoading message={"Loading profile..."} />
   )
-  if (error) return (
+  if (error.houseList) return (
     <DisplayError error={error} />
   )
 
@@ -307,8 +304,9 @@ const HouseListTable = () => {
                   </CTableBody>
                 </CTable>
               )}
-              {houseList && houseList.length > 0 &&
-                <UserPagination page={page} totalPages={totalPages} setPage={setPage} />}
+              {houseList && houseList.length > 0
+                && <UserPagination page={page} totalPages={totalPages} setPage={setPage} />
+              }
             </CCardBody>
           </CCard>
         </CCol>
