@@ -39,10 +39,6 @@ const HouseList = () => {
       <CRow className="d-flex justify-content-between align-items-center my-4">
         <div className="d-flex gap-3">
           <CLink href="#" className="text-decoration-none text-primary">
-            Top 5 Most Rented Rooms
-          </CLink>
-          <span className="text-muted">|</span>
-          <CLink href="#" className="text-decoration-none text-primary">
             View Full List.
           </CLink>
         </div>
@@ -52,6 +48,7 @@ const HouseList = () => {
           <CCol
             xs={12} md={6} lg={3}
             onClick={() => navigate ( `/houses/${house.id}` )}
+            key={house.id}
           >
             <CCard className="h-100 shadow-sm rounded-3" style={{ border: 'none' }}>
               <HouseCard key={house.id} house={house} />
