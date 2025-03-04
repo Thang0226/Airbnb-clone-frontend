@@ -1,0 +1,26 @@
+.swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    opacity: 0.4;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+/* Đổi màu bullet được chọn */
+.swiper-pagination-bullet-active {
+    background: #fff; /* Màu vàng nổi bật */
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+/* Mũi tên Swiper */
+.swiper-button-prev,
+.swiper-button-next {
+    color: #ffffff; /* Màu trắng */
+}
+
+/* Khi hover vào mũi tên */
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+    opacity: 0.8; /* Giảm độ mờ để tạo hiệu ứng */
+}

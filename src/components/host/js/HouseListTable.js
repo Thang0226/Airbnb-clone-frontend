@@ -193,7 +193,7 @@ const HouseListTable = () => {
   }
 
   if (loading.houseList || !houseList) return (
-    <DisplayLoading message={"Loading profile..."} />
+    <DisplayLoading message={"Loading Houses..."} />
   )
   if (error.houseList) return (
     <DisplayError error={error} />
