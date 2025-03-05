@@ -15,7 +15,7 @@ export const fetchUserProfile = createAsyncThunk(
       const response = await api.get(`/users/profile/${username}`)
       return response.data
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving profile data!')
+      return thunkAPI.rejectWithValue(error || 'Error retrieving profile data!')
     }
   },
 )
@@ -28,7 +28,7 @@ export const updateUserProfile = createAsyncThunk(
       const response = await api.put(`/users/profile/update`, formData)
       return response.data
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error updating profile!')
+      return thunkAPI.rejectWithValue(error || 'Error updating profile!')
     }
   },
 )

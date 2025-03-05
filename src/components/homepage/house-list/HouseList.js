@@ -43,7 +43,7 @@ const HouseList = () => {
       <CRow className="g-4">
         {houseList.map ( (house) => (
           <CCol
-            xs={12} md={6} lg={3}
+            xs={12} md={6} lg={3} key={house.id}
           >
             <CCard className="h-100 shadow-sm rounded-3" style={{ border: 'none' }}>
               <HouseCard key={house.id} house={house} />

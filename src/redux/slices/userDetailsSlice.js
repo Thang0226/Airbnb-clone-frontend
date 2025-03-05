@@ -16,7 +16,7 @@ export const getUserDetails = createAsyncThunk(
       const response = await api.get(`/admin/users/${userId}`)
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving profile data!')
+      return thunkAPI.rejectWithValue(error|| 'Error retrieving profile data!')
     }
   },
 )
@@ -29,7 +29,7 @@ export const getUserRentalHistory = createAsyncThunk(
       console.log(response.data.content)
       return response.data.content;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving profile data!')
+      return thunkAPI.rejectWithValue(error || 'Error retrieving profile data!')
     }
   },
 )
@@ -41,7 +41,7 @@ export const getUserTotalPayment = createAsyncThunk(
       const response = await api.get(`/admin/user-payment/${userId}`)
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving profile data!')
+      return thunkAPI.rejectWithValue(error|| 'Error retrieving profile data!')
     }
   },
 )
@@ -76,17 +76,11 @@ const userDetailsSlice = createSlice({
         state.error = action.payload
         state.loading = false
       })
-      .addCase(getUserTotalPayment.pending, (state) => {
-        state.loading = true
-        state.error = null
-      })
       .addCase(getUserTotalPayment.fulfilled, (state, action) => {
         state.userTotalPayment = action.payload
-        state.loading = false
       })
       .addCase(getUserTotalPayment.rejected, (state, action) => {
         state.error = action.payload
-        state.loading = false
       })
   },
 })
