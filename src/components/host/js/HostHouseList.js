@@ -70,7 +70,7 @@ export default function HostHouseList() {
   }
 
   return (
-    <CRow className="mt-4 gap-4">
+    <CRow className="mt-3">
       {houseList.map ( (house) => (
         <CCol xs={12} md={6} lg={4} key={house.id} onClick={() => navigate ( `/host/house/${house.id}` )}>
           <CCard className="h-100 shadow-sm rounded-3" style={{ border: 'none' }}>

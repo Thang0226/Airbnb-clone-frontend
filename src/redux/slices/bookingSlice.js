@@ -19,7 +19,7 @@ export const getBookings = createAsyncThunk(
         totalPages: response.data.totalPages,
       };
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving bookings data!')
+      return thunkAPI.rejectWithValue(error || 'Error retrieving bookings data!')
     }
   },
 )
@@ -34,7 +34,7 @@ export const searchBookings = createAsyncThunk(
         totalPages: response.data.totalPages,
       };
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error searching for booking data!')
+      return thunkAPI.rejectWithValue(error || 'Error searching for booking data!')
     }
   },
 )
@@ -46,7 +46,7 @@ export const processBooking = createAsyncThunk(
       const response = await api.put(`/bookings/${bookingID}/process-booking?action=${action}`)
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error processing booking!')
+      return thunkAPI.rejectWithValue(error || 'Error processing booking!')
     }
   },
 )

@@ -1,5 +1,5 @@
-import React from "react";
-import { CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter, CButton } from "@coreui/react";
+import React from 'react'
+import { CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
 
 export const CheckInAndCheckOut = ({ visible, onClose, onConfirm, booking, action }) => {
   if (!booking) return null;

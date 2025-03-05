@@ -5,30 +5,27 @@ import {
   CCardBody,
   CCardHeader,
   CCol,
-  CContainer, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CRow,
-  CTable, CTableBody, CTableDataCell,
+  CContainer,
+  CFormInput,
+  CFormSelect,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
   CTableHead,
   CTableHeaderCell,
-  CTableRow, CTooltip,
+  CTableRow,
+  CTooltip,
 } from '@coreui/react'
 import styles from '../css/HouseList.module.css'
 import CurrencyFormat from '../../_fragments/format/CurrencyFormat'
 import { UserPagination } from '../../_fragments/CustomerPagination'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  createMaintenanceRecord,
-  getBookedDates,
-  getHouseList,
-  getLatestAvailableDate,
-  searchHouses,
-  updateHouseStatus,
-} from '../../../redux/slices/houseSlice'
+import { getHouseList, searchHouses } from '../../../redux/slices/houseSlice'
 import { DisplayLoading } from '../../DisplayLoading'
 import { DisplayError } from '../../DisplayError'
 import { toast } from 'react-toastify'
-import DatePicker from 'react-datepicker'
-import dayjs from 'dayjs'
 import { HiOutlineSearch } from 'react-icons/hi'
 import { TbEdit } from 'react-icons/tb'
 import { useLocation } from 'react-router-dom'
@@ -218,7 +215,7 @@ const HouseListTable = () => {
                 selectedHouse={selectedHouse}
                 newStatus={newStatus}
                 setNewStatus={setNewStatus}
-                reload={async ()=>(getHouseList({ username, page, size }))}
+                refresh={()=> getHouseList({ username, page, size })}
               />
             </CCardBody>
           </CCard>

@@ -5,18 +5,19 @@ import dayjs from 'dayjs'
 import {
   createMaintenanceRecord,
   getBookedDates,
-  getLatestAvailableDate,
+  getLatestAvailableDate, getMaintenanceRecords,
   updateHouseStatus,
 } from '../../redux/slices/houseSlice'
 import { toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
 
-const UpdateHouseStatusModal = ({visible, onClose, selectedHouse, newStatus, setNewStatus, reload}) => {
+const UpdateHouseStatusModal = ({visible, onClose, selectedHouse, newStatus, setNewStatus, refresh}) => {
   const dispatch = useDispatch()
 
   const today = dayjs().toDate()
   const [bookedDates, setBookedDates] = useState([])
-  const [maxAvailableDate, setMaxAvailableDate] = useState(today.getFullYear() + 10)
+  const [maintenanceDates, setMaintenanceDates] = useState([])
+  const [maxAvailableDate, setMaxAvailableDate] = useState(today)
   const [minAvailableDate, setMinAvailableDate] = useState(today)
   const [startDate, setStartDate] = useState(today)
   const [endDate, setEndDate] = useState(today)
@@ -56,8 +57,22 @@ const UpdateHouseStatusModal = ({visible, onClose, selectedHouse, newStatus, set
       const response = await dispatch(getLatestAvailableDate({ houseId })).unwrap()
       setMaxAvailableDate(dayjs(response).toDate())
     } catch (error) {
-      console.error('Error fetching latest available date:', error)
+      console.log('Error fetching latest available date:', error)
       toast.error('Failed to fetch latest available date')
+    }
+
+    try {
+      const response = await dispatch(getMaintenanceRecords({ houseId })).unwrap()
+      if (response.length > 0) {
+        const maintenanceList = response.map(record => ({
+          start: dayjs(new Date(record.startDate)).subtract(1, 'day').toDate(),
+          end: new Date(record.endDate),
+        }))
+        setMaintenanceDates(maintenanceList)
+      }
+    } catch (error) {
+      console.error('Error fetching maintenance dates:', error)
+      toast.error('Failed to fetch maintenance dates')
     }
   }, [dispatch, selectedHouse?.id])
 
@@ -115,7 +130,7 @@ const UpdateHouseStatusModal = ({visible, onClose, selectedHouse, newStatus, set
 
       // Đóng modal & cập nhật danh sách
       onClose()
-      reload()
+      refresh()
     } catch (error) {
       toast.error('Failed to update house status or create maintenance record!')
     }
@@ -154,7 +169,7 @@ const UpdateHouseStatusModal = ({visible, onClose, selectedHouse, newStatus, set
                   minDate={minAvailableDate}
                   maxDate={maxAvailableDate || undefined}
                   dateFormat="dd/MM/yyyy"
-                  excludeDateIntervals={bookedDates}
+                  excludeDateIntervals={[...bookedDates, ...maintenanceDates]}
                   selectsRange
                 />
               </div>
