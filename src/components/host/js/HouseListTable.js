@@ -32,6 +32,7 @@ import dayjs from 'dayjs'
 import { HiOutlineSearch } from 'react-icons/hi'
 import { TbEdit } from 'react-icons/tb'
 import { useLocation } from 'react-router-dom'
+import UpdateHouseStatusModal from '../../modals/UpdateHouseStatusModal'
 
 const HouseListTable = () => {
   const [page, setPage] = useState(0)
@@ -47,13 +48,7 @@ const HouseListTable = () => {
   const [selectedHouse, setSelectedHouse] = useState({})
   const [newStatus, setNewStatus] = useState('')
 
-  const today = dayjs().toDate()
   const [modalVisible, setModalVisible] = useState(false)
-  const [bookedDates, setBookedDates] = useState([])
-  const [maxAvailableDate, setMaxAvailableDate] = useState(today.getFullYear() + 10)
-  const [minAvailableDate, setMinAvailableDate] = useState(today)
-  const [startDate, setStartDate] = useState(today)
-  const [endDate, setEndDate] = useState(today)
 
 
   useEffect(() => {
@@ -76,106 +71,16 @@ const HouseListTable = () => {
     setSelectedHouse(house)
     setNewStatus(house.status)
     setModalVisible(true)
-    const houseId = house.id
-    try {
-      const response = await dispatch(getBookedDates({ houseId })).unwrap()
-      console.log(response)
-      if (response.length > 0) {
-        const bookedDatesList = response.map(bookingDTO => ({
-          start: dayjs(new Date(bookingDTO.startDate)).subtract(1, 'day').toDate(),
-          end: new Date(bookingDTO.endDate),
-        }))
-        let newMinDate = new Date() // Lấy ngày hiện tại
-        for (let i = 0; i < bookedDatesList.length; i++) {
-          if (bookedDatesList[i].start <= newMinDate && newMinDate <= bookedDatesList[i].end) {
-            // Nếu hôm nay nằm trong khoảng đặt chỗ, tìm ngày có thể đặt tiếp theo
-            newMinDate = dayjs(bookedDatesList[i].end).add(1, 'day').toDate()
-            break
-          }
-        }
-        console.log(newMinDate)
-        console.log(bookedDatesList)
 
-        setMinAvailableDate(newMinDate)
-        setStartDate(newMinDate)
-        setEndDate(newMinDate)
-        setBookedDates(bookedDatesList)
-      }
-    } catch (error) {
-      console.error('Error fetching booked dates:', error)
-      toast.error('Failed to fetch booked dates')
-    }
-
-    try {
-      const response = await dispatch(getLatestAvailableDate({ houseId, startDate })).unwrap()
-      setMaxAvailableDate(dayjs(response).toDate())
-    } catch (error) {
-      console.error('Error fetching booked dates:', error)
-      toast.error('Failed to fetch booked dates')
-    }
   }
 
-  const handleCloseModal = () => {
+  const handleCloseModal = async () => {
     setModalVisible(false)
     setNewStatus('')
-    setStartDate(today)
-    setEndDate(today)
-    setBookedDates([])
+    // await dispatch(getHouseList({ username, page, size }))
   }
 
-  const handleSubmitUpdate = async () => {
-    if (!newStatus) {
-      toast.warning('Please select a status!')
-      return
-    }
 
-    if (newStatus === selectedHouse.status) {
-      handleCloseModal()
-      return
-    }
-
-    if (newStatus === 'MAINTAINING' && (!startDate || !endDate)) {
-      toast.warning('Please select a valid date range for maintenance!')
-      return
-    }
-
-    let previousStatus = selectedHouse.status
-
-    try {
-      // Cập nhật trạng thái nhà trước
-      const response = await dispatch(updateHouseStatus({ houseId: selectedHouse.id, status: newStatus })).unwrap()
-      console.log(response)
-      toast.success('House status updated successfully!')
-
-      const formattedStartDate = startDate.toISOString().split('T')[0]
-      const formattedEndDate = endDate.toISOString().split('T')[0]
-
-      // Nếu trạng thái được cập nhật thành MAINTAINING, mới tạo maintenance record
-      if (newStatus === 'MAINTAINING') {
-        try {
-          const maintenanceResponse = await dispatch(
-            createMaintenanceRecord({
-              houseId: selectedHouse.id,
-              startDate: formattedStartDate,
-              endDate: formattedEndDate,
-            }),
-          ).unwrap()
-          console.log(maintenanceResponse)
-          toast.success('Maintenance record created successfully!')
-        } catch (error) {
-          // Nếu tạo maintenance record thất bại, rollback trạng thái nhà về trạng thái cũ
-          toast.error('Failed to create maintenance record. Rolling back status...')
-          await dispatch(updateHouseStatus({ houseId: selectedHouse.id, status: previousStatus })).unwrap()
-        }
-      }
-
-      // Đóng modal & cập nhật danh sách
-      handleCloseModal()
-      await dispatch(getHouseList({ username, page, size }))
-    } catch (error) {
-      toast.error('Failed to update house status or create maintenance record!')
-    }
-  }
 
   const { houseList, totalPages, loading, error } = useSelector((state) => state.houses);
 
@@ -307,59 +212,19 @@ const HouseListTable = () => {
               {houseList && houseList.length > 0
                 && <UserPagination page={page} totalPages={totalPages} setPage={setPage} />
               }
+              <UpdateHouseStatusModal
+                visible={modalVisible}
+                onClose={handleCloseModal}
+                selectedHouse={selectedHouse}
+                newStatus={newStatus}
+                setNewStatus={setNewStatus}
+                reload={async ()=>(getHouseList({ username, page, size }))}
+              />
             </CCardBody>
           </CCard>
         </CCol>
       </CRow>
-      <CModal visible={modalVisible} onClose={handleCloseModal}>
-        <CModalHeader>Update House Status</CModalHeader>
-        <CModalBody>
-          <CRow>
-            <CCol sm={12} md={5} lg={5} className="d-flex flex-column flex-grow-1">
-              <label className="fw-bolder ps-1">Status</label>
-              <CFormSelect
-                value={newStatus}
-                onChange={(e) => setNewStatus(e.target.value)}
-                className="form-control border-1 text-center bring-front"
-              >
-                <option value="AVAILABLE">AVAILABLE</option>
-                <option value="MAINTAINING">MAINTAINING</option>
-              </CFormSelect>
-            </CCol>
-            <CCol sm={12} md={7} lg={7} className="d-flex flex-column flex-grow-1">
-              {newStatus === 'MAINTAINING' &&
-                <div>
-                  <label className="fw-bolder ps-1">Date Range</label>
-                  <DatePicker
-                    selected={startDate}
-                    onChange={(dates) => {
-                      const [start, end] = dates
-                      setStartDate(start)
-                      setEndDate(end)
-                    }}
-                    className="form-control border-1 text-center bring-front"
-                    startDate={startDate}
-                    endDate={endDate}
-                    minDate={minAvailableDate}
-                    maxDate={maxAvailableDate || undefined}
-                    dateFormat="dd/MM/yyyy"
-                    excludeDateIntervals={bookedDates}
-                    selectsRange
-                  />
-                </div>
-              }
-            </CCol>
-          </CRow>
-        </CModalBody>
-        <CModalFooter>
-          <CButton
-            color="primary"
-            onClick={handleSubmitUpdate}
-          >
-            Confirm
-          </CButton>
-        </CModalFooter>
-      </CModal>
+
     </CContainer>
   )
 }
