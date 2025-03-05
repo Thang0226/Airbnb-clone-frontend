@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import {
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CTable,
-  CTableBody,
-  CTableRow,
-} from '@coreui/react'
-import Review from './Review'
 import { useSelector } from 'react-redux'
-import axiosConfig from '../../services/axiosConfig'
+import { REVIEWS_PAGE_SIZE } from '../../../constants/pageSize'
+import axiosConfig from '../../../services/axiosConfig'
+import { toast } from 'react-toastify'
+import { CButton, CCard, CCardBody, CCardHeader, CTable, CTableBody, CTableDataCell, CTableRow } from '@coreui/react'
 import { FaStar } from 'react-icons/fa'
-import { UserPagination} from '../_fragments/CustomerPagination'
-import { REVIEWS_PAGE_SIZE } from '../../constants/pageSize'
+import Review from '../../house/Review'
+import { UserPagination } from '../../_fragments/CustomerPagination'
+import ConfirmHideReview from '../../modals/ConfirmHideReview'
 
-export default function HouseReviews() {
+export default function HostHouseReviews() {
+  const [hideReviewVisible, setHideReviewVisible] = useState(false);
   const [reviews, setReviews] = useState([]);
+  const [selectedReviewId, setSelectedReviewId] = useState(0);
   const [averageRating, setAverageRating] = useState('');
   const house = useSelector((state) => state.houses.house);
   const [totalPages, setTotalPages] = useState(1);
@@ -39,7 +36,7 @@ export default function HouseReviews() {
 
   const getReviews = async () => {
     try {
-      const res = await axiosConfig.get(`/houses/${house.id}/reviews?hidden=1`);
+      const res = await axiosConfig.get(`/houses/${house.id}/reviews?hidden=0`);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -72,6 +69,22 @@ export default function HouseReviews() {
     setPageReviewList(list);
   }
 
+  const confirmHideReview = async (id) => {
+    setSelectedReviewId(id)
+    setHideReviewVisible(true);
+  }
+
+  const handleHideReview = async () => {
+    await axiosConfig.patch(`/reviews/${selectedReviewId}/hide`)
+      .then(res => {
+        toast.info("Hidden review");
+        setHideReviewVisible(false);
+        getReviews().then(reviews => {
+          setReviews(reviews);
+        })
+      }).catch(err => console.log(err));
+  }
+
   return (
     <CCard className="mt-3">
       <CCardHeader className="d-flex justify-content-between align-items-center p-0 pt-2 px-3">
@@ -87,6 +100,12 @@ export default function HouseReviews() {
             {pageReviewList.map((review) => (
               <CTableRow key={review.id} className="align-middle">
                   <Review review={review} />
+                  <CTableDataCell>
+                    <CButton color="warning" disabled={review.hidden} style={{width: '80px'}}
+                             onClick={() => confirmHideReview(review.id)}>
+                      {review.hidden ? "Hidden" : "Hide"}
+                    </CButton>
+                  </CTableDataCell>
               </CTableRow>
             ))}
           </CTableBody>
@@ -94,6 +113,7 @@ export default function HouseReviews() {
         {reviews && reviews.length > 0 &&
           <UserPagination page={page} totalPages={totalPages} setPage={changePage} />}
       </CCardBody>
+      <ConfirmHideReview visible={hideReviewVisible} setVisible={setHideReviewVisible} handleHideReview={handleHideReview} />
     </CCard>
   )
 }

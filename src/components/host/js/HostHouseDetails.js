@@ -23,6 +23,7 @@ import {
 } from '@coreui/icons'
 import { BASE_URL_HOUSE } from '../../../constants/api'
 import HouseReviews from '../../house/HouseReviews'
+import HostHouseReviews from './HostHouseReviews'
 
 export default function HostHouseDetails() {
   const { houseId } = useParams ()
@@ -158,7 +159,7 @@ export default function HostHouseDetails() {
               </CCol>
             </CRow>
             {/*Reviews*/}
-            <HouseReviews canHideReview/>
+            <HostHouseReviews />
           </CCardBody>
         </CCard>
       </CCol>
