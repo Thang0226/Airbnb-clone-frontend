@@ -20,7 +20,6 @@ export default function MessageBadge({ currentUser }) {
     const initializeTalkJS = async () => {
       try {
         await Talk.ready
-        console.log ( 'TalkJS ready for user:' , currentUser.username )
 
         const me = new Talk.User ( {
           id: currentUser.id.toString () ,
