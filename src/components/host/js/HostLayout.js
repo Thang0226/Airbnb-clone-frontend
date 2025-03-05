@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
-import { CContainer, CFooter } from '@coreui/react'
+import { CContainer } from '@coreui/react'
 import { ToastContainer } from 'react-toastify'
 import MenuBar from '../../MenuBar'
+import Footer from '../../Footer'
 
 function HostLayout() {
 
@@ -22,9 +23,7 @@ function HostLayout() {
           <Outlet />
         </CContainer>
 
-        <CFooter className="primary-bg-subtle p-4 mt-auto justify-content-center">
-          © 2025 AirBnb Clone Application. Made by TTLD team. All rights reserved.
-        </CFooter>
+        <Footer />
       </div>
     </div>
 

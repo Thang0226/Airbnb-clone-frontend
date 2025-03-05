@@ -1,8 +1,9 @@
 import { ToastContainer } from 'react-toastify'
-import { CContainer, CFooter } from '@coreui/react'
+import { CContainer } from '@coreui/react'
 import { Outlet } from 'react-router-dom'
 import AdminNavBar from './AdminNavBar'
 import { AdminSideBar } from './AdminSideBar'
+import Footer from '../Footer'
 
 
 const AdminLayout = () => {
@@ -11,11 +12,11 @@ const AdminLayout = () => {
       <ToastContainer position="top-right" pauseOnFocusLoss={false} hideProgressBar={true} />
 
       {/* Sidebar */}
-      <AdminSideBar/>
+      <AdminSideBar />
 
       <div
-       style={{marginLeft: '63.2px'}}
-       className="d-flex flex-column min-h-screen min-vh-100"
+        style={{ marginLeft: '63.2px' }}
+        className="d-flex flex-column min-h-screen min-vh-100"
       >
         {/* Navbar */}
         <AdminNavBar />
@@ -26,9 +27,7 @@ const AdminLayout = () => {
         </CContainer>
 
         {/* Footer */}
-        <CFooter className="primary-bg-subtle p-4 mt-auto justify-content-center">
-          © 2025 AirBnb Clone Application. Made by TTLD team. All rights reserved.
-        </CFooter>
+        <Footer />
       </div>
     </div>
   )

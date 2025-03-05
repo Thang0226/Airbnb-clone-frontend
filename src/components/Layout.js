@@ -1,7 +1,8 @@
-import { CContainer, CFooter } from '@coreui/react'
+import { CContainer } from '@coreui/react'
 import MenuBar from './MenuBar'
 import { ToastContainer } from 'react-toastify'
 import { Outlet } from 'react-router-dom'
+import Footer from './Footer'
 
 export default function Layout() {
   return (
@@ -16,9 +17,7 @@ export default function Layout() {
       </CContainer>
 
       {/* Footer */}
-      <CFooter className="primary-bg-subtle p-4 mt-auto justify-content-center">
-        © 2025 AirBnb Clone Application. Made by TTLD team. All rights reserved.
-      </CFooter>
+      <Footer />
     </div>
   )
 }
