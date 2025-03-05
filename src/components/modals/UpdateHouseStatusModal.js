@@ -25,6 +25,7 @@ const UpdateHouseStatusModal = ({ visible, onClose, selectedHouse, newStatus, se
     if (!selectedHouse?.id) return
 
     const houseId = selectedHouse.id
+    let newMinDate = new Date()
 
     try {
       const bookedResponse = await dispatch(getBookedDates({ houseId })).unwrap()
@@ -41,7 +42,6 @@ const UpdateHouseStatusModal = ({ visible, onClose, selectedHouse, newStatus, se
 
       const allOccupiedDates = [...bookedDatesList, ...maintenanceList]
 
-      let newMinDate = new Date()
       if (allOccupiedDates.length > 0) {
         for (let i = 0; i < allOccupiedDates.length; i++) {
           if (allOccupiedDates[i].start <= newMinDate && newMinDate <= allOccupiedDates[i].end) {
@@ -51,7 +51,7 @@ const UpdateHouseStatusModal = ({ visible, onClose, selectedHouse, newStatus, se
         }
       }
 
-      setMinAvailableDate(newMinDate)
+
       setOccupiedDates(allOccupiedDates)
 
     } catch (error) {
@@ -67,12 +67,16 @@ const UpdateHouseStatusModal = ({ visible, onClose, selectedHouse, newStatus, se
       console.log('Error fetching latest available date:', error)
       toast.error('Failed to fetch latest available date')
     }
+
+    return newMinDate;
   }, [dispatch, selectedHouse?.id])
 
   useEffect(() => {
-    if (visible) {
-      fetchDates().then()
-    }
+    fetchDates().then((newMinDate) => {
+      setMinAvailableDate(newMinDate)
+      setStartDate(newMinDate);
+      setEndDate(newMinDate);
+    })
   }, [visible, fetchDates]) // Chỉ chạy khi modal mở
 
   const handleSubmitUpdate = async () => {
@@ -175,9 +179,9 @@ const UpdateHouseStatusModal = ({ visible, onClose, selectedHouse, newStatus, se
                       }
                     }
                   }}
-                  onCalendarClose={() => {
-                    setMinAvailableDate(today)
-                    fetchDates().then() // Khi đóng DatePicker, fetch lại dữ liệu
+                  onCalendarClose={async () => {
+                    const newMinDate = await fetchDates() // Lấy minAvailableDate mới nhưng không thay đổi startDate, endDate
+                    setMinAvailableDate(newMinDate)
                   }}
                   className="form-control border-1 text-center bring-front"
                   startDate={startDate}

@@ -125,7 +125,7 @@ const HouseListTable = () => {
               <option value="">Choose Status</option>
               <option value="AVAILABLE">AVAILABLE</option>
               <option value="RENTED">RENTED</option>
-              <option value="MAINTAINING">CANCELED</option>
+              <option value="MAINTAINING">MAINTAINING</option>
             </CFormSelect>
           </div>
         </CCol>
