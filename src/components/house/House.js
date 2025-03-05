@@ -190,7 +190,7 @@ export default function House({ currentUser }) {
                   </CButton>
                 )}
                 {chatHost && currentUser.role === 'ROLE_USER' && (
-                  <ChatBox currentUser={currentUser} host={chatHost} houseId={id} />
+                  <ChatBox currentUser={currentUser} host={chatHost} houseId={id} houseName={selectedHouse.houseName} />
                 )}
               </CCol>
             </CRow>
