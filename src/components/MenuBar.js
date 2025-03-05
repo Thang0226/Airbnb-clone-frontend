@@ -1,6 +1,7 @@
 import {
+  CBadge ,
   CCollapse ,
-  CContainer , CDropdown , CDropdownMenu , CDropdownToggle ,
+  CContainer , CDropdown , CDropdownMenu , CDropdownToggle , CLink ,
   CNavbar ,
   CNavbarBrand ,
   CNavbarNav ,
@@ -16,12 +17,21 @@ import UserDropdown from './UserDropdown'
 import { IoNotifications } from 'react-icons/io5'
 import Notifications from './host/js/Notifications'
 import { useNavigate } from 'react-router-dom'
+import CIcon from '@coreui/icons-react'
+import { cibMessenger } from '@coreui/icons'
+import MessageBadge from './MessageBadge'
 
 export default function MenuBar() {
   const [visible , setVisible] = useState ( false )
   const navigate = useNavigate ()
   const role = useSelector ( state => state.account.role )
   const username = useSelector ( state => state.account.username )
+  const [isHovered , setIsHovered] = useState ( false )
+  const currentUser = useSelector ( (state) => ({
+    id: localStorage.getItem ( 'userId' ) ,
+    username: localStorage.getItem ( 'username' ) ,
+    role: localStorage.getItem ( 'role' ) ,
+  }) )
 
   return (
     <CNavbar expand="lg" className="bg-body-tertiary">
@@ -51,9 +61,6 @@ export default function MenuBar() {
                 <CNavItem className="border-end">
                   <CNavLink href="/#/host/earnings">Earnings</CNavLink>
                 </CNavItem>
-                <CNavItem>
-                  <CNavLink href="/#/host/messenger">Chat</CNavLink>
-                </CNavItem>
               </>
             )}
             {(role === ROLE_USER) && (
@@ -61,12 +68,35 @@ export default function MenuBar() {
                 <CNavItem>
                   <CNavLink href="/#/user/bookings">Booking History</CNavLink>
                 </CNavItem>
-                <CNavItem>
-                  <CNavLink href="/#/messenger">Chat</CNavLink>
-                </CNavItem>
               </>
             )}
           </CNavbarNav>
+
+          {/* MESSENGER */}
+          {(role === ROLE_HOST || role === ROLE_USER) && (
+            <MessageBadge currentUser={currentUser} />
+            // <CLink
+            //   href="/#/messenger"
+            //   className={`position-relative rounded-circle d-flex align-items-center justify-content-center me-2 ${
+            //     isHovered ? 'bg-primary' : ''
+            //   }`}
+            //   style={{ width: '48px' , height: '48px' , border: 'solid 1px' }}
+            //   onMouseEnter={() => setIsHovered ( true )}
+            //   onMouseLeave={() => setIsHovered ( false )}
+            // >
+            //   <CIcon icon={cibMessenger} size="xl"
+            //          className={`${isHovered ? 'text-white' : 'text-primary'}`} />
+            //   <CBadge
+            //     className="rounded-circle bg-info d-flex align-items-center justify-content-center position-absolute"
+            //     style={{
+            //       width: '18px' , height: '18px' , bottom: '-4px' , right: '-4px' , fontSize: '12px' ,
+            //     }}
+            //   >
+            //     1
+            //   </CBadge>
+            // </CLink>
+          )}
+
           {(role === ROLE_HOST) && (
             <CDropdown variant="dropdown" popper={true} className="bg-gradient rounded me-2">
               <CDropdownToggle
