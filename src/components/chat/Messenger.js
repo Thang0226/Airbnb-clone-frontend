@@ -21,7 +21,7 @@ export default function Messenger({ currentUser }) {
 
         // Create TalkJS user
         const me = new Talk.User({
-          id: currentUser.id.toString(), // Ensure id is a string
+          id: currentUser.id.toString(),
           name: currentUser.username,
           role: currentUser.role || 'unknown',
         });
@@ -34,7 +34,16 @@ export default function Messenger({ currentUser }) {
         talkSession = session;
 
         // Create inbox
-        const inbox = session.createInbox();
+        const inbox = session.createInbox({
+          // Optional: Filter conversations if needed
+          // This can help ensure only relevant conversations are shown
+          filters: {
+            // Example of how you might filter conversations
+            // custom: {
+            //   houseId: { $exists: true }
+            // }
+          }
+        });
         talkInbox = inbox;
 
         // Mount inbox if ref exists
