@@ -1,4 +1,4 @@
-import { CFormTextarea, CTableDataCell } from '@coreui/react'
+import { CTableDataCell } from '@coreui/react'
 import { BASE_URL } from '../../constants/api'
 import StarRating from '../user/bookings/review/StarRating'
 import dayjs from 'dayjs'
