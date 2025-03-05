@@ -22,7 +22,7 @@ import {
   cilLocationPin ,
 } from '@coreui/icons'
 import { BASE_URL_HOUSE } from '../../../constants/api'
-import HostHouseReviews from './HostHouseReviews'
+import HouseReviews from '../../house/HouseReviews'
 
 export default function HostHouseDetails() {
   const { houseId } = useParams ()
@@ -158,7 +158,7 @@ export default function HostHouseDetails() {
               </CCol>
             </CRow>
             {/*Reviews*/}
-            <HostHouseReviews/>
+            <HouseReviews canHideReview/>
           </CCardBody>
         </CCard>
       </CCol>
