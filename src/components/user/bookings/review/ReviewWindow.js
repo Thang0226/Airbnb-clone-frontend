@@ -37,7 +37,7 @@ export default function ReviewWindow({visible, setVisible, bookingInfo, handleAf
           onError={() => setCustomerImage(`default.jpg`)}
         />
         <span className="ms-2 fs-6 fw-bolder">{bookingInfo.customerName}</span>
-        <StarRating value={rating} onChange={(index) => setRating(index)} />
+        <StarRating value={rating} onChange={(index) => setRating(index)} reviewInline/>
         <CFormTextarea
           name="message"
           placeholder="Give your comment..."
