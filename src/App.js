@@ -30,8 +30,15 @@ import UserBookingList from './components/user/bookings/UserBookingList'
 import HostHouseDetails from './components/host/js/HostHouseDetails'
 import HouseListTable from './components/host/js/HouseListTable'
 import HostEarnings from './components/host/js/HostEarnings'
+import Messenger from './components/chat/Messenger'
 
 export default function App() {
+  const currentUser = {
+    id: localStorage.getItem ( 'userId' ) ,
+    username: localStorage.getItem ( 'username' ) ,
+    role: localStorage.getItem ( 'role' ),
+  }
+
   return (
     <Provider store={store}>
       <HashRouter>
@@ -45,10 +52,11 @@ export default function App() {
 
             <Route element={<RequireAuth allowedRoles={[ROLE_USER]} />}>
               <Route path="/user/bookings" element={<UserBookingList />} />
+              <Route path="/messenger" element={<Messenger currentUser={currentUser}/>} />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[ROLE_USER, ROLE_HOST]} />}>
-              <Route path="/houses/:id" element={<House />} />
+              <Route path="/houses/:id" element={<House currentUser={currentUser}/>} />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[ROLE_USER, ROLE_ADMIN, ROLE_HOST]} />}>
@@ -85,6 +93,7 @@ export default function App() {
               <Route path="/host/earnings" element={<HostEarnings />} />
               <Route path="/host/profile" element={<UserProfile />} />
               <Route path="/host/profile/edit" element={<ProfileUpdateForm />} />
+              <Route path="/host/messenger" element={<Messenger currentUser={currentUser}/>} />
             </Route>
           </Route>
 

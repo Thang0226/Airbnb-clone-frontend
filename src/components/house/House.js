@@ -3,17 +3,17 @@ import { setHouse } from '../../redux/slices/houseSlice'
 import { useParams } from 'react-router-dom'
 import { useEffect , useState } from 'react'
 import axios from 'axios'
-import { BASE_URL_HOUSE } from '../../constants/api'
+import { BASE_URL_HOST , BASE_URL_HOUSE } from '../../constants/api'
 import {
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCol,
-  CRow,
-  CSpinner,
-  CCarousel,
-  CCarouselItem,
-  CImage, CLink,
+  CCard ,
+  CCardBody ,
+  CCardHeader ,
+  CCol ,
+  CRow ,
+  CSpinner ,
+  CCarousel ,
+  CCarouselItem ,
+  CImage , CLink , CButton ,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import {
@@ -25,16 +25,30 @@ import {
 import CurrencyFormat from '../_fragments/format/CurrencyFormat'
 import HouseRent from './HouseRent'
 import HouseReviews from './HouseReviews'
+import { setChatHost } from '../../redux/slices/chatSlice'
+import ChatBox from '../chat/ChatBox'
 
-export default function House() {
+export default function House({ currentUser }) {
   const selectedHouse = useSelector ( state => state.houses.house )
+  const chatHost = useSelector ( state => state.chat.chatHost )
   const { id } = useParams ()
   const dispatch = useDispatch ()
   const [loading , setLoading] = useState ( false )
   const [error , setError] = useState ( null )
+  const [hostId , setHostId] = useState ( null )
 
   useEffect ( () => {
     document.title = 'Airbnb | House Details'
+    axios.get ( `${BASE_URL_HOUSE}/${id}/host` )
+      .then ( response => {
+        const host = response.data
+        setHostId ( host.id )
+
+        console.log ( host )
+      } )
+      .catch ( error => {
+        console.error ( 'Error fetching host data:' , error )
+      } )
   } , [] )
 
   useEffect ( () => {
@@ -51,13 +65,22 @@ export default function House() {
         setLoading ( false )
       }
     }
-    getHouseById()
+    getHouseById ()
 
     return () => {
       dispatch ( setHouse ( null ) )
-    } // cleanup state
+    }
   } , [id , dispatch] )
 
+  const handleChatWithHost = async (hostId) => {
+    try {
+      const response = await axios.get ( `${BASE_URL_HOUSE}/${id}/host` )
+      const host = response.data
+      dispatch ( setChatHost ( host ) )
+    } catch (error) {
+      console.error ( 'Error fetching host:' , error )
+    }
+  }
 
   if (loading) {
     return (
@@ -87,6 +110,7 @@ export default function House() {
     )
   }
 
+
   return (
     <CRow className="justify-content-center">
       <CCol xs={12} md={10}>
@@ -97,7 +121,7 @@ export default function House() {
           <CCardBody>
             {/* Images */}
             {selectedHouse.houseImages && selectedHouse.houseImages.length > 0 && (
-              <CCarousel controls indicators style={{ borderRadius: '16px' , overflow: 'hidden', zIndex: 0 }}>
+              <CCarousel controls indicators style={{ borderRadius: '16px' , overflow: 'hidden' , zIndex: 0 }}>
                 {selectedHouse.houseImages.map ( (image) => (
                   <CCarouselItem key={image.id}>
                     <CImage
@@ -115,49 +139,62 @@ export default function House() {
             <CRow className="mt-5 mb-3">
               {/* Left column */}
               <CCol xs={12} md={6}>
-                  <CRow className="mb-3 align-items-center">
-                    <CCol xs={2} className="text-center">
-                      <CIcon icon={cilBed} size={'xxl'} className="text-warning" />
-                    </CCol>
-                    <CCol xs={8}>
-                      <strong>{selectedHouse.bedrooms} Bedrooms</strong>
-                    </CCol>
-                  </CRow>
+                <CRow className="mb-3 align-items-center">
+                  <CCol xs={2} className="text-center">
+                    <CIcon icon={cilBed} size={'xxl'} className="text-warning" />
+                  </CCol>
+                  <CCol xs={8}>
+                    <strong>{selectedHouse.bedrooms} Bedrooms</strong>
+                  </CCol>
+                </CRow>
 
-                  <CRow className="mb-3 align-items-center">
-                    <CCol xs={2} className="text-center">
-                      <CIcon icon={cilBath} size={'xxl'} className="text-warning" />
-                    </CCol>
-                    <CCol xs={8}>
-                      <strong>{selectedHouse.bathrooms} Bathrooms</strong>
-                    </CCol>
-                  </CRow>
+                <CRow className="mb-3 align-items-center">
+                  <CCol xs={2} className="text-center">
+                    <CIcon icon={cilBath} size={'xxl'} className="text-warning" />
+                  </CCol>
+                  <CCol xs={8}>
+                    <strong>{selectedHouse.bathrooms} Bathrooms</strong>
+                  </CCol>
+                </CRow>
 
-                  <CRow className="mb-3 align-items-center">
-                    <CCol xs={2} className="text-center">
-                      <CIcon icon={cilLocationPin} size={'xxl'} className="text-warning" />
-                    </CCol>
-                    <CCol xs={8}>
-                      <CLink
-                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent ( selectedHouse.address )}`}
-                        className="text-decoration-none text-black" target="_blank">
-                        <strong>{selectedHouse.address} <CIcon icon={cilExternalLink} /></strong>
-                      </CLink>
-                    </CCol>
-                  </CRow>
-                  <div className="p-3">
-                    <h5>About this space</h5>
-                    <span>{selectedHouse.description}</span>
-                  </div>
+                <CRow className="mb-3 align-items-center">
+                  <CCol xs={2} className="text-center">
+                    <CIcon icon={cilLocationPin} size={'xxl'} className="text-warning" />
+                  </CCol>
+                  <CCol xs={8}>
+                    <CLink
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent ( selectedHouse.address )}`}
+                      className="text-decoration-none text-black" target="_blank">
+                      <strong>{selectedHouse.address} <CIcon icon={cilExternalLink} /></strong>
+                    </CLink>
+                  </CCol>
+                </CRow>
+
+                <div className="p-3">
+                  <h5>About this space</h5>
+                  <span>{selectedHouse.description}</span>
+                </div>
               </CCol>
 
               {/* Right column */}
               <CCol xs={12} md={6}>
-                    <h4 className="mb-2 text-center"><CurrencyFormat value={selectedHouse.price} />/night</h4>
-                    <HouseRent houseId={id}/>
+                <h4 className="mb-2 text-center"><CurrencyFormat value={selectedHouse.price} />/night</h4>
+                <HouseRent houseId={id} />
+                {currentUser.role === 'ROLE_USER' && (
+                  <CButton
+                    color="link"
+                    className="mt-3 text-decoration-none fw-bold mx-auto"
+                    onClick={() => handleChatWithHost ( hostId )}
+                  >
+                    Chat with host
+                  </CButton>
+                )}
+                {chatHost && currentUser.role === 'ROLE_USER' && (
+                  <ChatBox currentUser={currentUser} host={chatHost} houseId={id} />
+                )}
               </CCol>
             </CRow>
-            <HouseReviews/>
+            <HouseReviews />
           </CCardBody>
         </CCard>
       </CCol>

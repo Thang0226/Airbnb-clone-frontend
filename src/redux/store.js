@@ -7,6 +7,7 @@ import userDetailsReducer from "./slices/userDetailsSlice"; // Import reducer
 import hostManagementReducer from "./slices/hostManagementSlice";
 import bookingReducer from './slices/bookingSlice'
 import authReducer from './slices/authSlice'
+import chatReducer from './slices/chatSlice'
 
 const store = configureStore({
   reducer: {
@@ -17,7 +18,8 @@ const store = configureStore({
     userProfile: userProfileReducer,
     userManagement: userManagementReducer,
     userDetails: userDetailsReducer,
-    hostManagement: hostManagementReducer
+    hostManagement: hostManagementReducer,
+    chat: chatReducer,
   },
 })
 
