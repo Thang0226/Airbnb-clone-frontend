@@ -71,13 +71,15 @@ const HouseListTable = () => {
 
   }
 
-  const handleCloseModal = async () => {
+  const handleCloseModal = () => {
     setModalVisible(false)
     setNewStatus('')
-    // await dispatch(getHouseList({ username, page, size }))
+
   }
 
-
+  const handleConfirmMadal = async () => {
+    await dispatch(getHouseList({ username, page, size }))
+  }
 
   const { houseList, totalPages, loading, error } = useSelector((state) => state.houses);
 
@@ -215,7 +217,7 @@ const HouseListTable = () => {
                 selectedHouse={selectedHouse}
                 newStatus={newStatus}
                 setNewStatus={setNewStatus}
-                refresh={()=> getHouseList({ username, page, size })}
+                refresh={handleConfirmMadal}
               />
             </CCardBody>
           </CCard>
