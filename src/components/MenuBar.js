@@ -1,33 +1,33 @@
 import {
-  CCollapse,
-  CContainer, CDropdown, CDropdownMenu, CDropdownToggle,
-  CNavbar,
-  CNavbarBrand,
-  CNavbarNav,
-  CNavbarToggler,
-  CNavItem,
-  CNavLink,
+  CCollapse ,
+  CContainer , CDropdown , CDropdownMenu , CDropdownToggle ,
+  CNavbar ,
+  CNavbarBrand ,
+  CNavbarNav ,
+  CNavbarToggler ,
+  CNavItem ,
+  CNavLink ,
 } from '@coreui/react'
 import { TbBrandAirbnb } from 'react-icons/tb'
 import { useState } from 'react'
-import {useSelector} from 'react-redux'
-import { ROLE_HOST, ROLE_USER } from '../constants/roles'
+import { useSelector } from 'react-redux'
+import { ROLE_HOST , ROLE_USER } from '../constants/roles'
 import UserDropdown from './UserDropdown'
 import { IoNotifications } from 'react-icons/io5'
 import Notifications from './host/js/Notifications'
 import { useNavigate } from 'react-router-dom'
 
 export default function MenuBar() {
-  const [visible, setVisible] = useState(false)
-  const navigate = useNavigate()
-  const role = useSelector(state => state.account.role)
-  const username = useSelector(state => state.account.username)
+  const [visible , setVisible] = useState ( false )
+  const navigate = useNavigate ()
+  const role = useSelector ( state => state.account.role )
+  const username = useSelector ( state => state.account.username )
 
-    return (
+  return (
     <CNavbar expand="lg" className="bg-body-tertiary">
       <CContainer fluid>
         <CNavbarBrand href="#"><TbBrandAirbnb color={'#FF385C'} size={40} /></CNavbarBrand>
-        <CNavbarToggler onClick={() => setVisible(!visible)} />
+        <CNavbarToggler onClick={() => setVisible ( !visible )} />
         <CCollapse className="navbar-collapse" visible={visible}>
           <CNavbarNav className="me-auto">
             <CNavItem>
@@ -41,8 +41,8 @@ export default function MenuBar() {
                   <CNavLink href="/#/host">Airbnb Your Home</CNavLink>
                 </CNavItem>
                 <CNavItem className="border-end">
-                  <CNavLink style={{cursor: 'pointer'}}
-                            onClick={() => navigate("/host/houses", {state :{username: username}})}
+                  <CNavLink style={{ cursor: 'pointer' }}
+                            onClick={() => navigate ( '/host/houses' , { state: { username: username } } )}
                   >Houses</CNavLink>
                 </CNavItem>
                 <CNavItem className="border-end">
@@ -51,12 +51,20 @@ export default function MenuBar() {
                 <CNavItem className="border-end">
                   <CNavLink href="/#/host/earnings">Earnings</CNavLink>
                 </CNavItem>
+                <CNavItem>
+                  <CNavLink href="/#/host/messenger">Chat</CNavLink>
+                </CNavItem>
               </>
             )}
             {(role === ROLE_USER) && (
-              <CNavItem>
-                <CNavLink href="/#/user/bookings">Booking History</CNavLink>
-              </CNavItem>
+              <>
+                <CNavItem>
+                  <CNavLink href="/#/user/bookings">Booking History</CNavLink>
+                </CNavItem>
+                <CNavItem>
+                  <CNavLink href="/#/messenger">Chat</CNavLink>
+                </CNavItem>
+              </>
             )}
           </CNavbarNav>
           {(role === ROLE_HOST) && (
@@ -67,18 +75,18 @@ export default function MenuBar() {
                 variant="outline"
                 className="d-flex align-items-center gap-2"
                 style={{
-                  borderRadius: '50px',
-                  height: '48px',
+                  borderRadius: '50px' ,
+                  height: '48px' ,
                 }}
               >
-                <IoNotifications size={25}/>
+                <IoNotifications size={25} />
               </CDropdownToggle>
               <CDropdownMenu className="py-0">
-                <Notifications hostUsername={username}/>
+                <Notifications hostUsername={username} />
               </CDropdownMenu>
             </CDropdown>
           )}
-         <UserDropdown/>
+          <UserDropdown />
         </CCollapse>
       </CContainer>
     </CNavbar>
