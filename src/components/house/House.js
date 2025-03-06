@@ -26,10 +26,10 @@ import CurrencyFormat from '../_fragments/format/CurrencyFormat'
 import HouseRent from './HouseRent'
 import HouseReviews from './HouseReviews'
 import { setChatHost } from '../../redux/slices/chatSlice'
-import ChatBox from '../chat/ChatBox'
 import MessageBadge from '../MessageBadge'
 
-export default function House({ currentUser }) {
+export default function House() {
+  const currentUser = useSelector ( state => state.chat.currentUser )
   const selectedHouse = useSelector ( state => state.houses.house )
   const chatHost = useSelector ( state => state.chat.chatHost )
   const { id } = useParams ()
@@ -58,6 +58,7 @@ export default function House({ currentUser }) {
       try {
         const response = await axios.get ( `${BASE_URL_HOUSE}/${id}` )
         dispatch ( setHouse ( response.data ) )
+        console.log ( 'response.data' , response.data )
       } catch (err) {
         setError ( 'Failed to fetch house details. Please try again.' )
         console.log ( err )

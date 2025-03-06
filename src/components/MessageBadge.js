@@ -1,11 +1,13 @@
 import { useEffect , useState } from 'react'
 import { CBadge , CButton } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cibMessenger , cilX } from '@coreui/icons'
+import { cibMessenger , cilChatBubble , cilX } from '@coreui/icons'
 import Talk from 'talkjs'
 import ChatBox from './chat/ChatBox'
+import { useSelector } from 'react-redux'
 
-export default function MessageBadge({ currentUser , host , houseId , houseName }) {
+export default function MessageBadge() {
+  const currentUser = useSelector ( state => state.chat.currentUser )
   const [unreadCount , setUnreadCount] = useState ( 0 )
   const [isHovered , setIsHovered] = useState ( false )
   const [isChatOpen , setIsChatOpen] = useState ( false ) // toggle
@@ -73,7 +75,7 @@ export default function MessageBadge({ currentUser , host , houseId , houseName 
         onClick={toggleChat}
       >
         <CIcon
-          icon={isChatOpen ? cilX : cibMessenger} // Toggle icon
+          icon={isChatOpen ? cilX : cilChatBubble}
           size="xl"
           className={`${isHovered ? 'text-white' : 'text-primary'}`}
         />
@@ -94,17 +96,12 @@ export default function MessageBadge({ currentUser , host , houseId , houseName 
         <div
           style={{
             position: 'fixed' ,
-            bottom: '70px' ,
+            bottom: '80px' ,
             right: '20px' ,
             zIndex: 1000 ,
           }}
         >
-          <ChatBox
-            currentUser={currentUser}
-            host={host}
-            houseId={houseId}
-            houseName={houseName}
-          />
+          <ChatBox />
         </div>
       )}
     </>
