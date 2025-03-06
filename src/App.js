@@ -33,6 +33,7 @@ import HostEarnings from './components/host/js/HostEarnings'
 import Messenger from './components/chat/Messenger'
 import ScrollToTop from './components/utils/ScrollToTop'
 import AuthVerify from './components/auth/AuthVerify'
+import RedirectIfAuthenticated from './components/auth/RedirectIfAuthenticated'
 
 export default function App() {
 
@@ -46,8 +47,11 @@ export default function App() {
           <Route element={<Layout />}>
             <Route path="/" element={<Homepage />} />
             <Route path="/search" element={<MapSample />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+
+            <Route element={<RedirectIfAuthenticated />}>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Route>
 
             <Route element={<RequireAuth allowedRoles={[ROLE_USER]} />}>
               <Route path="/user/bookings" element={<UserBookingList />} />
