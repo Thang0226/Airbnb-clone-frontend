@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import styles from "../css/CreateHouse.module.css";
 import { useEffect } from 'react'
 import HostHouseList from './HostHouseList'
+import { useDispatch } from 'react-redux'
+import { setCurrentUser } from '../../../redux/slices/chatSlice'
 
 export default function HostMainPage() {
     const navigate = useNavigate();
@@ -17,6 +19,17 @@ export default function HostMainPage() {
     useEffect(() => {
         document.title = 'Airbnb | Host Main Page'
     }, [])
+    const dispatch = useDispatch()
+    useEffect(() => {
+        const updateUser = () => dispatch(setCurrentUser({
+            id: localStorage.getItem('userId'),
+            username: localStorage.getItem('username'),
+            role: localStorage.getItem('role'),
+        }));
+        window.addEventListener('storage', updateUser);
+        updateUser();
+        return () => window.removeEventListener('storage', updateUser);
+    }, [dispatch]);
     return (
         <>
             <CContainer className="py-lg-4 py-3">

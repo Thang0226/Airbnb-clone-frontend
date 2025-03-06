@@ -1,6 +1,7 @@
 import {
+  CBadge ,
   CCollapse ,
-  CContainer , CDropdown , CDropdownMenu , CDropdownToggle ,
+  CContainer , CDropdown , CDropdownMenu , CDropdownToggle , CLink ,
   CNavbar ,
   CNavbarBrand ,
   CNavbarNav ,
@@ -16,12 +17,21 @@ import UserDropdown from './UserDropdown'
 import { IoNotifications } from 'react-icons/io5'
 import Notifications from './host/js/Notifications'
 import { useNavigate } from 'react-router-dom'
+import CIcon from '@coreui/icons-react'
+import { cibMessenger } from '@coreui/icons'
+import MessageBadge from './MessageBadge'
 
 export default function MenuBar() {
   const [visible , setVisible] = useState ( false )
   const navigate = useNavigate ()
   const role = useSelector ( state => state.account.role )
   const username = useSelector ( state => state.account.username )
+  const [isHovered , setIsHovered] = useState ( false )
+  const currentUser = useSelector ( (state) => ({
+    id: localStorage.getItem ( 'userId' ) ,
+    username: localStorage.getItem ( 'username' ) ,
+    role: localStorage.getItem ( 'role' ) ,
+  }) )
 
   return (
     <CNavbar expand="lg" className="bg-body-tertiary">
@@ -51,8 +61,8 @@ export default function MenuBar() {
                 <CNavItem className="border-end">
                   <CNavLink href="/#/host/earnings">Earnings</CNavLink>
                 </CNavItem>
-                <CNavItem>
-                  <CNavLink href="/#/host/messenger">Chat</CNavLink>
+                <CNavItem className="border-end">
+                  <CNavLink href="/#/host/messenger">Messages</CNavLink>
                 </CNavItem>
               </>
             )}
@@ -61,12 +71,10 @@ export default function MenuBar() {
                 <CNavItem>
                   <CNavLink href="/#/user/bookings">Booking History</CNavLink>
                 </CNavItem>
-                <CNavItem>
-                  <CNavLink href="/#/messenger">Chat</CNavLink>
-                </CNavItem>
               </>
             )}
           </CNavbarNav>
+
           {(role === ROLE_HOST) && (
             <CDropdown variant="dropdown" popper={true} className="bg-gradient rounded me-2">
               <CDropdownToggle

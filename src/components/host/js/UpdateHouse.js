@@ -141,7 +141,6 @@ export default function UpdateHouse() {
     }
 
     // 2. New images being uploaded (added with existing images)
-
     if (selectedFiles.length > 0) {
       selectedFiles.forEach ( (file) => {
         formData.append ( 'houseImages' , file )

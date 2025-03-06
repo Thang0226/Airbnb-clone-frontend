@@ -33,7 +33,7 @@ const TopFiveHousesSlider = () => {
 
   return (
     <CContainer className="mt-4">
-      <h2 className="fw-bold text-center">Top 5 Featured Houses</h2>
+      <h3 className="fw-bold text-center text-success fs-3">Top 5 Featured Houses</h3>
       <Swiper
         slidesPerView={3}
         spaceBetween={10}

@@ -35,11 +35,6 @@ import ScrollToTop from './components/utils/ScrollToTop'
 import AuthVerify from './components/auth/AuthVerify'
 
 export default function App() {
-  const currentUser = {
-    id: localStorage.getItem('userId'),
-    username: localStorage.getItem('username'),
-    role: localStorage.getItem('role'),
-  }
 
   return (
     <Provider store={store}>
@@ -56,11 +51,10 @@ export default function App() {
 
             <Route element={<RequireAuth allowedRoles={[ROLE_USER]} />}>
               <Route path="/user/bookings" element={<UserBookingList />} />
-              <Route path="/messenger" element={<Messenger currentUser={currentUser} />} />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[ROLE_USER, ROLE_HOST]} />}>
-              <Route path="/houses/:id" element={<House currentUser={currentUser} />} />
+              <Route path="/houses/:id" element={<House/>} />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[ROLE_USER, ROLE_ADMIN, ROLE_HOST]} />}>
@@ -97,7 +91,7 @@ export default function App() {
               <Route path="/host/earnings" element={<HostEarnings />} />
               <Route path="/host/profile" element={<UserProfile />} />
               <Route path="/host/profile/edit" element={<ProfileUpdateForm />} />
-              <Route path="/host/messenger" element={<Messenger currentUser={currentUser} />} />
+              <Route path="/host/messenger" element={<Messenger/>} />
             </Route>
           </Route>
 

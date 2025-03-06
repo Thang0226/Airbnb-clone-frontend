@@ -30,7 +30,7 @@ export default function Review({ review }) {
       <CTableDataCell className="pt-3">
         <StarRating value={review.rating} disable/>
       </CTableDataCell>
-      <CTableDataCell>
+      <CTableDataCell style={{minWidth: '500px'}}>
         <p className="m-0">{review.comment}</p>
       </CTableDataCell>
     </>

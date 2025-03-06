@@ -3,7 +3,7 @@ import { setHouse } from '../../redux/slices/houseSlice'
 import { useParams } from 'react-router-dom'
 import { useEffect , useState } from 'react'
 import axios from 'axios'
-import { BASE_URL_HOST , BASE_URL_HOUSE } from '../../constants/api'
+import { BASE_URL_HOUSE } from '../../constants/api'
 import {
   CCard ,
   CCardBody ,
@@ -26,23 +26,23 @@ import CurrencyFormat from '../_fragments/format/CurrencyFormat'
 import HouseRent from './HouseRent'
 import HouseReviews from './HouseReviews'
 import { setChatHost } from '../../redux/slices/chatSlice'
-import ChatBox from '../chat/ChatBox'
+import MessageBadge from '../MessageBadge'
 
-export default function House({ currentUser }) {
+export default function House() {
+  const currentUser = useSelector ( state => state.chat.currentUser )
   const selectedHouse = useSelector ( state => state.houses.house )
   const chatHost = useSelector ( state => state.chat.chatHost )
   const { id } = useParams ()
   const dispatch = useDispatch ()
   const [loading , setLoading] = useState ( false )
   const [error , setError] = useState ( null )
-  const [hostId , setHostId] = useState ( null )
 
   useEffect ( () => {
     document.title = 'Airbnb | House Details'
     axios.get ( `${BASE_URL_HOUSE}/${id}/host` )
       .then ( response => {
         const host = response.data
-        setHostId ( host.id )
+        dispatch ( setChatHost ( host ) )
 
         console.log ( host )
       } )
@@ -58,6 +58,7 @@ export default function House({ currentUser }) {
       try {
         const response = await axios.get ( `${BASE_URL_HOUSE}/${id}` )
         dispatch ( setHouse ( response.data ) )
+        console.log ( 'response.data' , response.data )
       } catch (err) {
         setError ( 'Failed to fetch house details. Please try again.' )
         console.log ( err )
@@ -71,16 +72,6 @@ export default function House({ currentUser }) {
       dispatch ( setHouse ( null ) )
     }
   } , [id , dispatch] )
-
-  const handleChatWithHost = async (hostId) => {
-    try {
-      const response = await axios.get ( `${BASE_URL_HOUSE}/${id}/host` )
-      const host = response.data
-      dispatch ( setChatHost ( host ) )
-    } catch (error) {
-      console.error ( 'Error fetching host:' , error )
-    }
-  }
 
   if (loading) {
     return (
@@ -181,16 +172,12 @@ export default function House({ currentUser }) {
                 <h4 className="mb-2 text-center"><CurrencyFormat value={selectedHouse.price} />/night</h4>
                 <HouseRent houseId={id} />
                 {currentUser.role === 'ROLE_USER' && (
-                  <CButton
-                    color="link"
-                    className="mt-3 text-decoration-none fw-bold mx-auto"
-                    onClick={() => handleChatWithHost ( hostId )}
-                  >
-                    Chat with host
-                  </CButton>
-                )}
-                {chatHost && currentUser.role === 'ROLE_USER' && (
-                  <ChatBox currentUser={currentUser} host={chatHost} houseId={id} />
+                  <MessageBadge
+                    currentUser={currentUser}
+                    host={chatHost}
+                    houseId={id}
+                    houseName={selectedHouse.houseName}
+                  />
                 )}
               </CCol>
             </CRow>
