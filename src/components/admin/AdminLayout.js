@@ -16,18 +16,17 @@ const AdminLayout = () => {
 
       <div
         style={{ marginLeft: '63.2px' }}
-        className="d-flex flex-column min-h-screen min-vh-100"
+        className="d-flex flex-column min-vh-100 min-vh-100"
       >
         {/* Navbar */}
         <AdminNavBar />
 
-        {/* Content */}
-        <CContainer className="p-4 overflow-auto flex-1">
+        <CContainer className="p-4 flex-grow-1 overflow-auto">
           <Outlet />
         </CContainer>
 
         {/* Footer */}
-        <Footer />
+        <Footer className="mt-auto" />
       </div>
     </div>
   )

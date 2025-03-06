@@ -1,23 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import {
-  CContainer,
-  CCard,
-  CCardHeader,
-  CCardBody,
-  CRow,
-  CCol,
-  CImage,
-  CBadge,
-  CButton,
-} from '@coreui/react'
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { CBadge, CButton, CCard, CCardBody, CCardHeader, CCol, CContainer, CImage, CRow } from '@coreui/react'
 import { BASE_URL } from '../../../constants/api'
 import TextInfoRow from '../../_fragments/FORMInfoRow'
 import CurrencyFormat from '../../_fragments/format/CurrencyFormat'
 import { DisplayLoading } from '../../DisplayLoading'
 import { DisplayError } from '../../DisplayError'
 import NumberInfoRow from '../../_fragments/FORMNumberInfoRow'
+import api from '../../../services/axiosConfig'
+
 
 const HostDetail = () => {
   const { id } = useParams()
@@ -31,10 +22,7 @@ const HostDetail = () => {
   }, [])
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/api/admin/hosts/${id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      })
+    api.get(`/admin/hosts/${id}`)
       .then((response) => {
         setHost(response.data)
         setLoading(false)

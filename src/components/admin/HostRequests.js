@@ -33,7 +33,7 @@ export default function HostRequests() {
     document.title = 'Admin | Host Requests'
     const getRequests = async () => {
       try {
-        const response = await api.get(`${BASE_URL_USER}/host-requests`)
+        const response = await api.get(`/users/host-requests`)
         setRequests(response.data)
       } catch (error) {
         console.error('Error fetching requests:', error)
@@ -50,14 +50,7 @@ export default function HostRequests() {
 
   const handleAfterConfirmApprove = async () => {
     try {
-      await axios.post(`${BASE_URL_USER}/host-requests/${selectedRequest.id}/approve`,
-        {}, // empty body
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        },
-      )
+      await api.post(`/users/host-requests/${selectedRequest.id}/approve`)
       toast.success('Host request approved')
 
       emailjs
@@ -94,14 +87,7 @@ export default function HostRequests() {
 
   const handleAfterConfirmDecline = async (message) => {
     try {
-      await axios.post(`${BASE_URL_USER}/host-requests/${selectedRequest.id}/decline`,
-        {},
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        },
-      )
+      await api.post(`/users/host-requests/${selectedRequest.id}/decline`)
       toast.success('Host request declined')
 
       emailjs
