@@ -6,11 +6,16 @@ import {
   CButton,
   CCard,
   CCardBody,
-  CCardHeader, CCol, CRow,
+  CCardHeader,
+  CCol,
+  CRow,
   CTable,
   CTableBody,
-  CTableDataCell, CTableHead, CTableHeaderCell,
-  CTableRow, CTooltip,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+  CTooltip,
 } from '@coreui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchHosts } from '../../redux/slices/hostManagementSlice'
@@ -21,7 +26,7 @@ import { useNavigate } from 'react-router-dom'
 import CurrencyFormat from '../_fragments/format/CurrencyFormat'
 import { UserPagination } from '../_fragments/CustomerPagination'
 import HostRequests from './HostRequests'
-import { FiCheckSquare, FiLock, FiUnlock, FiXSquare } from 'react-icons/fi'
+import { FiLock, FiUnlock } from 'react-icons/fi'
 import { PiListMagnifyingGlass } from 'react-icons/pi'
 import { ConfirmModal } from '../modals/StatusChangeConfirm'
 
