@@ -61,13 +61,13 @@ export default function MessageBadge() {
   return (
     <>
       <CButton
-        className={`position-fixed rounded-circle d-flex align-items-center justify-content-center me-2 ${isHovered ? 'bg-primary' : ''}`}
+        className={`position-fixed rounded-circle d-flex align-items-center justify-content-center me-2 ${isHovered ? 'bg-primary' : 'bg-white'}`}
         style={{
-          width: '48px' ,
-          height: '48px' ,
-          border: 'solid 1px' ,
-          bottom: '20px' ,
-          right: '20px' ,
+          width: '60px' ,
+          height: '60px' ,
+          border: 'solid red 1px' ,
+          bottom: '60px' ,
+          right: '80px' ,
           zIndex: 1000 ,
         }}
         onMouseEnter={() => setIsHovered ( true )}
@@ -96,8 +96,8 @@ export default function MessageBadge() {
         <div
           style={{
             position: 'fixed' ,
-            bottom: '80px' ,
-            right: '20px' ,
+            bottom: '140px' ,
+            right: '80px' ,
             zIndex: 1000 ,
           }}
         >

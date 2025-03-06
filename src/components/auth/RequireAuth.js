@@ -1,16 +1,17 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom'
 
 const RequireAuth = ({ allowedRoles }) => {
-  const isLoggedIn = JSON.parse(localStorage.getItem('loggedIn'));
+  const token = localStorage.getItem('token');
   const userRole = localStorage.getItem('role');
 
-  if (!isLoggedIn) {
-    return <Navigate to="/login" replace />
+  // Nếu không có token hoặc đã bị logout, chuyển hướng về login
+  if (!token) {
+    return <Navigate to="/login" replace />;
   }
 
+  // Nếu không có quyền truy cập, chuyển hướng về trang chủ
   if (!allowedRoles.includes(userRole)) {
-    // Nếu không có quyền, có thể chuyển hướng về trang chủ hoặc trang cảnh báo
-    return <Navigate to="/" replace />
+    return <Navigate to="/" replace />;
   }
 
   // Nếu đủ quyền thì hiển thị route con thông qua Outlet

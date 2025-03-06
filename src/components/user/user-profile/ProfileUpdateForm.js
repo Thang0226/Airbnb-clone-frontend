@@ -169,8 +169,8 @@ const ProfileUpdateForm = () => {
       >
         <CCol>
           <CCard className="shadow border-0">
-            <CCardHeader className="text-center p-4">
-              <h3>Update Profile</h3>
+            <CCardHeader className="text-center p-2">
+              <h3 className='m-0'>Update Profile</h3>
             </CCardHeader>
             <CCardBody className="p-4">
               <Formik

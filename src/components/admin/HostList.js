@@ -6,11 +6,16 @@ import {
   CButton,
   CCard,
   CCardBody,
-  CCardHeader, CCol, CRow,
+  CCardHeader,
+  CCol,
+  CRow,
   CTable,
   CTableBody,
-  CTableDataCell, CTableHead, CTableHeaderCell,
-  CTableRow, CTooltip,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+  CTooltip,
 } from '@coreui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchHosts } from '../../redux/slices/hostManagementSlice'
@@ -21,7 +26,7 @@ import { useNavigate } from 'react-router-dom'
 import CurrencyFormat from '../_fragments/format/CurrencyFormat'
 import { UserPagination } from '../_fragments/CustomerPagination'
 import HostRequests from './HostRequests'
-import { FiCheckSquare, FiLock, FiUnlock, FiXSquare } from 'react-icons/fi'
+import { FiLock, FiUnlock } from 'react-icons/fi'
 import { PiListMagnifyingGlass } from 'react-icons/pi'
 import { ConfirmModal } from '../modals/StatusChangeConfirm'
 
@@ -187,27 +192,27 @@ export default function HostList() {
                             </CButton>
                           </CTooltip>
 
-                          <CTooltip content={'Approve'}>
-                            <CButton
-                              size="md"
-                              color="info"
-                              className="text-white d-flex align-items-center justify-content-center"
-                              // onClick={() => handleApprove(request.id)}
-                            >
-                              <FiCheckSquare style={{ width: '20px', height: '20px' }} />
-                            </CButton>
-                          </CTooltip>
+                          {/*<CTooltip content={'Approve'}>*/}
+                          {/*  <CButton*/}
+                          {/*    size="md"*/}
+                          {/*    color="info"*/}
+                          {/*    className="text-white d-flex align-items-center justify-content-center"*/}
+                          {/*    // onClick={() => handleApprove(request.id)}*/}
+                          {/*  >*/}
+                          {/*    <FiCheckSquare style={{ width: '20px', height: '20px' }} />*/}
+                          {/*  </CButton>*/}
+                          {/*</CTooltip>*/}
 
-                          <CTooltip content={'Decline'}>
-                            <CButton
-                              size="md"
-                              color="secondary"
-                              className="text-white d-flex align-items-center justify-content-center"
-                              // onClick={() => handleDecline(request.id)}
-                            >
-                              <FiXSquare style={{ width: '20px', height: '20px' }} />
-                            </CButton>
-                          </CTooltip>
+                          {/*<CTooltip content={'Decline'}>*/}
+                          {/*  <CButton*/}
+                          {/*    size="md"*/}
+                          {/*    color="secondary"*/}
+                          {/*    className="text-white d-flex align-items-center justify-content-center"*/}
+                          {/*    // onClick={() => handleDecline(request.id)}*/}
+                          {/*  >*/}
+                          {/*    <FiXSquare style={{ width: '20px', height: '20px' }} />*/}
+                          {/*  </CButton>*/}
+                          {/*</CTooltip>*/}
                         </CTableDataCell>
                       </CTableRow>
                     ))}
