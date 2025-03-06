@@ -1,78 +1,71 @@
-import React, { useRef, useEffect } from 'react';
-import Talk from 'talkjs';
-import { CContainer } from '@coreui/react';
+import React , { useRef , useEffect } from 'react'
+import Talk from 'talkjs'
+import { CContainer } from '@coreui/react'
 
 export default function Messenger({ currentUser }) {
-  const inboxRef = useRef(null);
+  const inboxRef = useRef ( null )
 
-  useEffect(() => {
+  useEffect ( () => {
     // Check if user has valid information
     if (!currentUser || !currentUser.id || !currentUser.username) {
-      console.error('Invalid user information for TalkJS');
-      return;
+      console.error ( 'Invalid user information for TalkJS' )
+      return
     }
 
-    let talkInbox = null;
-    let talkSession = null;
+    let talkInbox = null
+    let talkSession = null
 
     const initializeTalkJS = async () => {
       try {
-        await Talk.ready;
+        await Talk.ready
 
         // Create TalkJS user
-        const me = new Talk.User({
-          id: currentUser.id.toString(),
-          name: currentUser.username,
-          role: currentUser.role || 'unknown',
-        });
+        const me = new Talk.User ( {
+          id: currentUser.id.toString () ,
+          name: currentUser.username ,
+          role: currentUser.role || 'unknown' ,
+        } )
 
         // Create TalkJS session
-        const session = new Talk.Session({
-          appId: 'ts0p04FE',
-          me: me,
-        });
-        talkSession = session;
+        const session = new Talk.Session ( {
+          appId: 'ts0p04FE' ,
+          me: me ,
+        } )
+        talkSession = session
 
         // Create inbox
-        const inbox = session.createInbox({
-          // Optional: Filter conversations if needed
-          // This can help ensure only relevant conversations are shown
-          filters: {
-            // Example of how you might filter conversations
-            // custom: {
-            //   houseId: { $exists: true }
-            // }
-          }
-        });
-        talkInbox = inbox;
+        const inbox = session.createInbox ( {
+          theme: 'theme',
+        } )
+        talkInbox = inbox
 
         // Mount inbox if ref exists
         if (inboxRef.current) {
-          inbox.mount(inboxRef.current);
+          inbox.mount ( inboxRef.current )
         }
 
       } catch (error) {
-        console.error('Error initializing TalkJS Messenger:', error);
+        console.error ( 'Error initializing TalkJS Messenger:' , error )
       }
 
       // Return cleanup function
       return () => {
         if (talkInbox) {
-          talkInbox.destroy();
+          talkInbox.destroy ()
         }
         if (talkSession) {
-          talkSession.destroy();
+          talkSession.destroy ()
         }
-      };
-    };
+      }
+    }
 
-    const cleanupPromise = initializeTalkJS();
+    const cleanupPromise = initializeTalkJS ()
 
     // Cleanup function
     return () => {
-      cleanupPromise.then(cleanup => cleanup());
-    };
-  }, [currentUser]);
+      cleanupPromise.then ( cleanup => cleanup () )
+    }
+  } , [currentUser] )
 
   // Render only if user exists
   if (!currentUser || !currentUser.id) {
@@ -80,7 +73,7 @@ export default function Messenger({ currentUser }) {
       <CContainer className="my-4">
         <div>Please log in to access messenger</div>
       </CContainer>
-    );
+    )
   }
 
   return (
@@ -88,11 +81,11 @@ export default function Messenger({ currentUser }) {
       <div
         ref={inboxRef}
         style={{
-          height: '500px',
-          width: '100%',
-          minHeight: '300px'
+          height: '500px' ,
+          width: '100%' ,
+          minHeight: '300px',
         }}
       />
     </CContainer>
-  );
+  )
 }
