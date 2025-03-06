@@ -65,7 +65,7 @@ export default function ChatBox() {
         if (chatboxRef.current) {
           chatbox.mount ( chatboxRef.current )
           setTimeout ( () => {
-            const welcomeMessage = `Hello! I'm interested in the house #${houseId}`
+            const welcomeMessage = `Hello! I'm interested in ${houseName}`
             conversation.sendMessage ( welcomeMessage ).catch ( error => {
               console.error ( 'Failed to send welcome message:' , error )
             } )
