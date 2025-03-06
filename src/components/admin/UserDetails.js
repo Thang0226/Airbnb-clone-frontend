@@ -164,7 +164,7 @@ const UserDetails = () => {
                 </CTable>
               ) : (
                 <div className="text-center">
-                  <h1 className="m-0">There are no houses rented by this user.</h1>
+                  <h1 className="m-0">There is no recorded rental history for this customer.</h1>
                 </div>
               )}
             </CCardBody>

@@ -187,27 +187,27 @@ export default function HostList() {
                             </CButton>
                           </CTooltip>
 
-                          <CTooltip content={'Approve'}>
-                            <CButton
-                              size="md"
-                              color="info"
-                              className="text-white d-flex align-items-center justify-content-center"
-                              // onClick={() => handleApprove(request.id)}
-                            >
-                              <FiCheckSquare style={{ width: '20px', height: '20px' }} />
-                            </CButton>
-                          </CTooltip>
+                          {/*<CTooltip content={'Approve'}>*/}
+                          {/*  <CButton*/}
+                          {/*    size="md"*/}
+                          {/*    color="info"*/}
+                          {/*    className="text-white d-flex align-items-center justify-content-center"*/}
+                          {/*    // onClick={() => handleApprove(request.id)}*/}
+                          {/*  >*/}
+                          {/*    <FiCheckSquare style={{ width: '20px', height: '20px' }} />*/}
+                          {/*  </CButton>*/}
+                          {/*</CTooltip>*/}
 
-                          <CTooltip content={'Decline'}>
-                            <CButton
-                              size="md"
-                              color="secondary"
-                              className="text-white d-flex align-items-center justify-content-center"
-                              // onClick={() => handleDecline(request.id)}
-                            >
-                              <FiXSquare style={{ width: '20px', height: '20px' }} />
-                            </CButton>
-                          </CTooltip>
+                          {/*<CTooltip content={'Decline'}>*/}
+                          {/*  <CButton*/}
+                          {/*    size="md"*/}
+                          {/*    color="secondary"*/}
+                          {/*    className="text-white d-flex align-items-center justify-content-center"*/}
+                          {/*    // onClick={() => handleDecline(request.id)}*/}
+                          {/*  >*/}
+                          {/*    <FiXSquare style={{ width: '20px', height: '20px' }} />*/}
+                          {/*  </CButton>*/}
+                          {/*</CTooltip>*/}
                         </CTableDataCell>
                       </CTableRow>
                     ))}

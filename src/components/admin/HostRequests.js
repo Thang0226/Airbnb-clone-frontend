@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import emailjs from '@emailjs/browser'
 import { BASE_URL_USER } from '../../constants/api'
@@ -7,7 +7,7 @@ import {
   CButton,
   CCard,
   CCardBody,
-  CCardHeader,
+  CCardHeader, CContainer,
   CTable,
   CTableBody,
   CTableDataCell, CTableHead, CTableHeaderCell,
@@ -16,6 +16,7 @@ import {
 import ConfirmWindow from '../modals/ConfirmWindow'
 import dayjs from 'dayjs'
 import { useSelector } from 'react-redux'
+import { FiCheckSquare, FiXSquare } from 'react-icons/fi'
 
 export default function HostRequests(){
   const [requests, setRequests] = useState([]);
@@ -132,7 +133,7 @@ export default function HostRequests(){
   };
 
   return (
-    <>
+    <CContainer className="mt-5">
     <CCard>
       <CCardHeader className="text-center p-4">
         <h3>Host Requests</h3>
@@ -161,14 +162,14 @@ export default function HostRequests(){
                     className="fs-5 cursor-pointer text-white me-3"
                     onClick={() => handleApprove(request)}
                   >
-                    Approve
+                    <FiCheckSquare style={{ width: '20px', height: '20px' }} />
                   </CButton>
                   <CButton
                     color="secondary"
                     className="fs-5 cursor-pointer text-white"
                     onClick={() => handleDecline(request)}
                   >
-                    Decline
+                    <FiXSquare style={{ width: '20px', height: '20px' }} />
                   </CButton>
                 </CTableDataCell>
                 </CTableRow>
@@ -191,6 +192,6 @@ export default function HostRequests(){
         setVisible={setDeclineVisible}
         handleAfterConfirm={(message) => handleAfterConfirmDecline(message)}
       />
-    </>
+    </CContainer>
   );
 }

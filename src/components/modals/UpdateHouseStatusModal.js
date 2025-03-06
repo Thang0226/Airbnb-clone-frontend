@@ -99,7 +99,7 @@ const UpdateHouseStatusModal = ({ visible, onClose, selectedHouse, newStatus, se
 
     try {
       // Cập nhật trạng thái nhà trước
-      const response = await dispatch(updateHouseStatus({ houseId: selectedHouse.id, status: newStatus })).unwrap()
+      await dispatch(updateHouseStatus({ houseId: selectedHouse.id, status: newStatus })).unwrap()
       toast.success('House status updated successfully!')
 
       const formattedStartDate = startDate.toISOString().split('T')[0]

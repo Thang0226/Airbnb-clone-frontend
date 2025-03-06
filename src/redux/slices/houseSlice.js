@@ -23,7 +23,6 @@ export const getHouseList = createAsyncThunk(
   async ({ username, page, size }, thunkAPI) => {
     try {
       const response = await api.get(`/houses/host-house-list/${username}?page=${page}&size=${size}`)
-      console.log(response.data.content)
       return {
         houseList: response.data.content,
         totalPages: response.data.totalPages,

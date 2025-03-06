@@ -45,7 +45,6 @@ export const accountSlice = createSlice({
       state.role = ''
       state.userId = ''
       localStorage.clear()
-      window.location.href = '/#/login';
     }
   },
 })
