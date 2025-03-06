@@ -52,7 +52,9 @@ export default function ChatBox({ currentUser , host , houseId , houseName }) {
         } )
 
         // Create and mount chatbox
-        chatbox = talkSession.createChatbox ()
+        chatbox = talkSession.createChatbox ( {
+          theme: 'theme',
+        } )
         chatbox.select ( conversation )
 
         if (chatboxRef.current) {
@@ -60,7 +62,7 @@ export default function ChatBox({ currentUser , host , houseId , houseName }) {
         }
 
         // Optional: Send a first message to ensure chat is active
-        const welcomeMessage = `Hello! I'm interested in the house #${houseId}`
+        const welcomeMessage = `Hello! I'm interested in the house ${houseName}`
         conversation.sendMessage ( welcomeMessage )
 
       } catch (error) {

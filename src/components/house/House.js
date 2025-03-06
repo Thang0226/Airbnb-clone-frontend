@@ -27,6 +27,7 @@ import HouseRent from './HouseRent'
 import HouseReviews from './HouseReviews'
 import { setChatHost } from '../../redux/slices/chatSlice'
 import ChatBox from '../chat/ChatBox'
+import MessageBadge from '../MessageBadge'
 
 export default function House({ currentUser }) {
   const selectedHouse = useSelector ( state => state.houses.house )
@@ -35,14 +36,15 @@ export default function House({ currentUser }) {
   const dispatch = useDispatch ()
   const [loading , setLoading] = useState ( false )
   const [error , setError] = useState ( null )
-  const [hostId , setHostId] = useState ( null )
 
   useEffect ( () => {
     document.title = 'Airbnb | House Details'
     axios.get ( `${BASE_URL_HOUSE}/${id}/host` )
       .then ( response => {
         const host = response.data
-        setHostId ( host.id )
+        dispatch ( setChatHost ( host ) )
+
+        console.log ( host )
       } )
       .catch ( error => {
         console.error ( 'Error fetching host data:' , error )
@@ -69,16 +71,6 @@ export default function House({ currentUser }) {
       dispatch ( setHouse ( null ) )
     }
   } , [id , dispatch] )
-
-  const handleChatWithHost = async (hostId) => {
-    try {
-      const response = await axios.get ( `${BASE_URL_HOUSE}/${id}/host` )
-      const host = response.data
-      dispatch ( setChatHost ( host ) )
-    } catch (error) {
-      console.error ( 'Error fetching host:' , error )
-    }
-  }
 
   if (loading) {
     return (
@@ -179,16 +171,12 @@ export default function House({ currentUser }) {
                 <h4 className="mb-2 text-center"><CurrencyFormat value={selectedHouse.price} />/night</h4>
                 <HouseRent houseId={id} />
                 {currentUser.role === 'ROLE_USER' && (
-                  <CButton
-                    color="link"
-                    className="mt-3 text-decoration-none fw-bold mx-auto"
-                    onClick={() => handleChatWithHost ( hostId )}
-                  >
-                    Chat with host
-                  </CButton>
-                )}
-                {chatHost && currentUser.role === 'ROLE_USER' && (
-                  <ChatBox currentUser={currentUser} host={chatHost} houseId={id} houseName={selectedHouse.houseName} />
+                  <MessageBadge
+                    currentUser={currentUser}
+                    host={chatHost}
+                    houseId={id}
+                    houseName={selectedHouse.houseName}
+                  />
                 )}
               </CCol>
             </CRow>
