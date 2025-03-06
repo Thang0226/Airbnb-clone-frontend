@@ -33,12 +33,8 @@ const HouseList = () => {
 
   return (
     <CContainer>
-      <CRow className="d-flex justify-content-between align-items-center my-4">
-        <div className="d-flex gap-3">
-          <CLink href="#" className="text-decoration-none text-primary">
-            View Full List.
-          </CLink>
-        </div>
+      <CRow className="d-flex justify-content-center align-items-center my-3 text-center text-success fw-bolder fs-3">
+        Available Houses
       </CRow>
       <CRow className="g-4">
         {houseList.map ( (house) => (
