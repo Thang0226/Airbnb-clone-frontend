@@ -10,7 +10,7 @@ import CurrencyFormat from '../_fragments/format/CurrencyFormat'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { BASE_URL_HOUSE } from '../../constants/api'
-import { setHouse } from '../../redux/slices/houseSlice'
+import { getMaintenanceRecords, setHouse } from '../../redux/slices/houseSlice'
 
 export default function HouseRent({houseId}) {
   const dispatch = useDispatch()
@@ -19,7 +19,7 @@ export default function HouseRent({houseId}) {
   const [isLoading, setIsLoading] = useState(true)
   const [totalDays, setTotalDays] = useState(0)
   const [totalCost, setTotalCost] = useState(selectedHouse.price)
-  const [bookedDates, setBookedDates] = useState([])
+  const [occupiedDates, setOccupiedDates] = useState([])
   const [maxAvailableDate, setMaxAvailableDate] = useState(today)
   const [minAvailableDate, setMinAvailableDate] = useState(today)
   const [checkIn, setCheckIn] = useState(today)
@@ -33,29 +33,35 @@ export default function HouseRent({houseId}) {
     setMaxAvailableDate(dayjs(res.data).toDate());
   };
 
-  const getBookedDates = async () => {
-    let res = await axiosInstance.get(`/houses/${houseId}/booked-dates`);
-    return res.data.map(bookingDTO => {
+  const getOccupiedDates = async () => {
+    let bookedResponse = await axiosInstance.get(`/houses/${houseId}/booked-dates`);
+    const bookedList = bookedResponse.data.map(bookingDTO => {
       return {
         start: dayjs(new Date(bookingDTO.startDate)).subtract(1, 'day').toDate(),
         end: new Date(bookingDTO.endDate),
       }
-    })
+    });
+    const maintenanceResponse = await dispatch(getMaintenanceRecords({ houseId })).unwrap();
+    const maintenanceList = maintenanceResponse.length > 0 ? maintenanceResponse.map(record => ({
+      start: dayjs(new Date(record.startDate)).subtract(1, 'day').toDate(),
+      end: new Date(record.endDate),
+    })) : [];
+    return [...bookedList, ...maintenanceList];
   };
 
   const initializeDates = async () => {
-    const bookedDatesList = await getBookedDates();
+    const occupiedDatesList = await getOccupiedDates();
     let newMinDate = today;
-    for (let i = 0; i < bookedDatesList.length; i++) {
-      if (bookedDatesList[i].start <= today && today <= bookedDatesList[i].end) { // Today cannot be booked --> find future available period
-        newMinDate = dayjs(bookedDatesList[i].end).add(1, 'day').toDate();
+    for (let i = 0; i < occupiedDatesList.length; i++) {
+      if (occupiedDatesList[i].start <= today && today <= occupiedDatesList[i].end) { // Today cannot be booked --> find future available period
+        newMinDate = dayjs(occupiedDatesList[i].end).add(1, 'day').toDate();
         break;
       }
     }
     setMinAvailableDate(newMinDate);
     setCheckIn(newMinDate);
     setCheckOut(newMinDate);
-    setBookedDates(bookedDatesList);
+    setOccupiedDates(occupiedDatesList);
 
     setIsLoading(false);
   }
@@ -116,7 +122,7 @@ export default function HouseRent({houseId}) {
                       className="form-control border-0 text-center bring-front"
                       minDate={minAvailableDate}
                       dateFormat="dd/MM/yyyy"
-                      excludeDateIntervals={bookedDates}
+                      excludeDateIntervals={occupiedDates}
                       selectsStart
                       startDate={checkIn}
                       endDate={checkOut}
@@ -134,7 +140,7 @@ export default function HouseRent({houseId}) {
                       minDate={checkIn ? checkIn : null}
                       maxDate={checkIn ? maxAvailableDate : null}
                       dateFormat="dd/MM/yyyy"
-                      excludeDateIntervals={bookedDates}
+                      excludeDateIntervals={occupiedDates}
                       selectsEnd
                       startDate={checkIn}
                       endDate={checkOut}

@@ -68,11 +68,15 @@ const SearchBar = () => {
       })
   }
 
+  const handleClearSearch = () => {
+
+  }
+
   return (
     <>
       <CContainer fluid className="bg-light px-4 pb-1 rounded-4 shadow-sm">
         <CRow className="g-3 align-items-center mb-1">
-          {/* Search Input */}
+          {/* Search Address */}
           <CCol sm={6} md>
             <div className="position-relative">
               <CInputGroup className="border-0">
@@ -183,7 +187,7 @@ const SearchBar = () => {
           </CCol>
 
           {/* Price Range */}
-          <CCol sm={8} md={5}>
+          <CCol sm={8} md={4}>
             <div className="px-3 py-2 border-start">
               <label className="form-label mb-1 fw-semibold">Price Range (VND)</label>
               <div className="d-flex gap-2">
@@ -221,6 +225,17 @@ const SearchBar = () => {
               onClick={handleSearchButtonClick}
             >
               Search
+            </CButton>
+          </CCol>
+
+          {/*Clear button*/}
+          <CCol sm={4} md={1} className="pt-4 justify-content-center">
+            <CButton
+              color="secondary"
+              className="w-100"
+              onClick={handleClearSearch}
+            >
+              Clear
             </CButton>
           </CCol>
         </CRow>
