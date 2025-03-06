@@ -18,7 +18,7 @@ export const fetchUsers = createAsyncThunk(
         totalPages: response.data.totalPages,
       }
     } catch (error) {
-      return thunkAPI.rejectWithValue(error || 'Error retrieving profile data!')
+      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving profile data!')
     }
   },
 )
@@ -31,7 +31,7 @@ export const updateUserStatus = createAsyncThunk(
         null)
       return response.data
     } catch (error) {
-      return thunkAPI.rejectWithValue(error || 'Error retrieving profile data!')
+      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving profile data!')
     }
   },
 )

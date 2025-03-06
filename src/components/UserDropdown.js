@@ -26,6 +26,8 @@ export default function UserDropdown() {
   useEffect(() => {
     if (token && userProfile?.avatar) {
       setAvatarUrl(`${BASE_URL}/images/${userProfile.avatar}`)
+    } else {
+      setAvatarUrl(`${BASE_URL}/images/default.jpg`)
     }
   }, [userProfile, token])
 

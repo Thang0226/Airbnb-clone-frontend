@@ -100,7 +100,6 @@ const UpdateHouseStatusModal = ({ visible, onClose, selectedHouse, newStatus, se
     try {
       // Cập nhật trạng thái nhà trước
       const response = await dispatch(updateHouseStatus({ houseId: selectedHouse.id, status: newStatus })).unwrap()
-      console.log(response)
       toast.success('House status updated successfully!')
 
       const formattedStartDate = startDate.toISOString().split('T')[0]
@@ -180,7 +179,7 @@ const UpdateHouseStatusModal = ({ visible, onClose, selectedHouse, newStatus, se
                     }
                   }}
                   onCalendarClose={async () => {
-                    const newMinDate = await fetchDates() // Lấy minAvailableDate mới nhưng không thay đổi startDate, endDate
+                    const newMinDate = await fetchDates()
                     setMinAvailableDate(newMinDate)
                   }}
                   className="form-control border-1 text-center bring-front"

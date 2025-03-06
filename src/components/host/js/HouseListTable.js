@@ -77,7 +77,7 @@ const HouseListTable = () => {
 
   }
 
-  const handleConfirmMadal = async () => {
+  const handleConfirmModal = async () => {
     await dispatch(getHouseList({ username, page, size }))
   }
 
@@ -100,7 +100,7 @@ const HouseListTable = () => {
     <DisplayLoading message={"Loading Houses..."} />
   )
   if (error.houseList) return (
-    <DisplayError error={error} />
+    <DisplayError error={error.houseList} />
   )
 
   return (
@@ -217,7 +217,7 @@ const HouseListTable = () => {
                 selectedHouse={selectedHouse}
                 newStatus={newStatus}
                 setNewStatus={setNewStatus}
-                refresh={handleConfirmMadal}
+                refresh={handleConfirmModal}
               />
             </CCardBody>
           </CCard>

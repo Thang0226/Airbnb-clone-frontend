@@ -28,7 +28,7 @@ const TopFiveHousesSlider = () => {
     <DisplayLoading message={'Loading Top Five Houses...'} />
   )
   if (error.topFiveHouses) return (
-    <DisplayError error={error} />
+    <DisplayError error={error.topFiveHouses} />
   )
 
   return (

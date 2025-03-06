@@ -7,7 +7,7 @@ import Footer from './Footer'
 export default function Layout() {
   return (
     <div className="d-flex flex-column min-h-screen min-vh-100">
-      <ToastContainer position="top-right" pauseOnFocusLoss={false} />
+      <ToastContainer position="top-right" pauseOnFocusLoss={false} hideProgressBar={true} />
       {/* Navbar */}
       <MenuBar />
 

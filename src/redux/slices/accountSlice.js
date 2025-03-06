@@ -38,8 +38,17 @@ export const accountSlice = createSlice({
       state.role = ''
       state.userId = ''
     },
+    logout: (state) => {
+      state.token = ''
+      state.password = ''
+      state.username = ''
+      state.role = ''
+      state.userId = ''
+      localStorage.clear()
+      window.location.href = '/#/login';
+    }
   },
 })
 
 // Export slice actions
-export const { setUsername, setUserId, setPassword, setToken, setRole, deleteToken, deletePassword, resetAccount } = accountSlice.actions
+export const { setUsername, setUserId, setPassword, setToken, setRole, deleteToken, deletePassword, resetAccount, logout } = accountSlice.actions
