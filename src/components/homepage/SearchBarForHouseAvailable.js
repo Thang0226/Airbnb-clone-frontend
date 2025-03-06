@@ -69,7 +69,13 @@ const SearchBar = () => {
   }
 
   const handleClearSearch = () => {
-
+    setAddress('');
+    setMinPrice('');
+    setMaxPrice('');
+    setMinBedrooms('');
+    setMinBathrooms('');
+    setCheckIn(today.toISOString().split('T')[0]);
+    setCheckOut(tomorrow.toISOString().split('T')[0]);
   }
 
   return (
