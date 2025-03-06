@@ -153,7 +153,7 @@ const HouseListTable = () => {
             <CCardBody>
               {!houseList || houseList.length === 0 ? (
                 <div className="text-center py-4">
-                  <h2>No bookings found.</h2>
+                  <h2>No house for rent</h2>
                 </div>
               ) : (
                 <CTable hover responsive>

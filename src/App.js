@@ -32,6 +32,7 @@ import HouseListTable from './components/host/js/HouseListTable'
 import HostEarnings from './components/host/js/HostEarnings'
 import Messenger from './components/chat/Messenger'
 import ScrollToTop from './components/utils/ScrollToTop'
+import AuthVerify from './components/auth/AuthVerify'
 
 export default function App() {
   const currentUser = {
@@ -44,6 +45,7 @@ export default function App() {
     <Provider store={store}>
       <HashRouter>
         <ScrollToTop />
+        <AuthVerify>
         <Routes>
           {/* Route cho User */}
           <Route element={<Layout />}>
@@ -101,6 +103,7 @@ export default function App() {
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        </AuthVerify>
       </HashRouter>
     </Provider>
   )
