@@ -3,7 +3,7 @@ import { setHouse } from '../../redux/slices/houseSlice'
 import { useParams } from 'react-router-dom'
 import { useEffect , useState } from 'react'
 import axios from 'axios'
-import { BASE_URL_HOST , BASE_URL_HOUSE } from '../../constants/api'
+import { BASE_URL_HOUSE } from '../../constants/api'
 import {
   CCard ,
   CCardBody ,
