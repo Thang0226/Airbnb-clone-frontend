@@ -1,1 +1,1 @@
-export const REVIEWS_PAGE_SIZE = 2;
+export const REVIEWS_PAGE_SIZE = 3;
