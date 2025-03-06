@@ -14,8 +14,8 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch , useSelector } from 'react-redux'
 import { TbEdit } from 'react-icons/tb'
 import styles from '../css/HouseList.module.css'
-import api from '../../../services/axiosConfig'
 import HouseCard from '../../homepage/house-list/HouseCard'
+import axios from 'axios'
 
 export default function HostHouseList() {
   const houseList = useSelector ( state => state.houses.list )
@@ -31,7 +31,7 @@ export default function HostHouseList() {
       setLoading ( true )
       setError ( null )
       try {
-        const response = await api.get ( `${BASE_URL_HOUSE}/host/${hostId}` ) // da co token
+        const response = await axios.get ( `${BASE_URL_HOUSE}/host/${hostId}` ) // da co token
         dispatch ( setHouses ( response.data ) )
       } catch (err) {
         setError ( 'Failed to fetch house details. Please try again.' )
@@ -40,7 +40,7 @@ export default function HostHouseList() {
         setLoading ( false )
       }
     }
-    getHousesByHostId ()
+    getHousesByHostId()
   } , [dispatch, hostId] )
 
   if (loading) {

@@ -1,28 +1,24 @@
-import { useDispatch , useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setHouse } from '../../../redux/slices/houseSlice'
-import { useNavigate , useParams } from 'react-router-dom'
-import { useEffect , useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 import {
-  CCard ,
-  CCardBody ,
-  CCardHeader ,
-  CCol ,
-  CRow ,
-  CSpinner ,
-  CCarousel ,
-  CCarouselItem ,
-  CImage , CLink , CButton ,
+  CButton,
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCarousel,
+  CCarouselItem,
+  CCol,
+  CImage,
+  CLink,
+  CRow,
+  CSpinner,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import {
-  cilBath ,
-  cilBed ,
-  cilExternalLink ,
-  cilLocationPin ,
-} from '@coreui/icons'
+import { cilBath, cilBed, cilExternalLink, cilLocationPin } from '@coreui/icons'
 import { BASE_URL_HOUSE } from '../../../constants/api'
-import HouseReviews from '../../house/HouseReviews'
 import HostHouseReviews from './HostHouseReviews'
 
 export default function HostHouseDetails() {

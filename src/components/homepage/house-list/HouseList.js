@@ -1,12 +1,8 @@
-import React , { useState , useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import HouseCard from './HouseCard'
-import { useDispatch , useSelector } from 'react-redux'
-import {
-  CRow ,
-  CCol ,
-  CContainer , CCard , CLink ,
-} from '@coreui/react'
+import { useDispatch, useSelector } from 'react-redux'
+import { CCard, CCol, CContainer, CRow } from '@coreui/react'
 import { BASE_URL_HOUSE } from '../../../constants/api'
 import { setHouses } from '../../../redux/slices/houseSlice'
 
