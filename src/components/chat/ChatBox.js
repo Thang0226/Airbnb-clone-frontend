@@ -1,7 +1,12 @@
 import React , { useRef , useEffect , useState } from 'react'
 import Talk from 'talkjs'
+import { useSelector } from 'react-redux'
 
-export default function ChatBox({ currentUser , host , houseId , houseName }) {
+export default function ChatBox() {
+  const currentUser = useSelector ( state => state.chat.currentUser )
+  const host = useSelector ( state => state.chat.chatHost )
+  const houseId = useSelector ( state => state.houses.house.id )
+  const houseName = useSelector ( state => state.houses.house.houseName )
   const chatboxRef = useRef ( null )
 
   useEffect ( () => {
@@ -46,45 +51,42 @@ export default function ChatBox({ currentUser , host , houseId , houseName }) {
         conversation.setAttributes ( {
           subject: `Chat about ${houseName}` ,
           custom: {
-            houseId: houseId ,
+            houseId: houseId.toString () ,
             userIds: `${currentUser.id.toString ()},${host.id.toString ()}` ,
           } ,
         } )
 
         // Create and mount chatbox
         chatbox = talkSession.createChatbox ( {
-          theme: 'theme',
+          theme: 'theme' ,
         } )
         chatbox.select ( conversation )
 
         if (chatboxRef.current) {
           chatbox.mount ( chatboxRef.current )
+          setTimeout ( () => {
+            const welcomeMessage = `Hello! I'm interested in ${houseName}`
+            conversation.sendMessage ( welcomeMessage ).catch ( error => {
+              console.error ( 'Failed to send welcome message:' , error )
+            } )
+          } , 1000 )
         }
-
-        // Optional: Send a first message to ensure chat is active
-        const welcomeMessage = `Hello! I'm interested in the house ${houseName}`
-        conversation.sendMessage ( welcomeMessage )
-
       } catch (error) {
         console.error ( 'Error initializing TalkJS:' , error )
       }
 
       // Cleanup function
       return () => {
-        if (chatbox) {
-          chatbox.destroy ()
-        }
-        if (talkSession) {
-          talkSession.destroy ()
-        }
+        if (chatbox) chatbox.destroy ()
+        if (talkSession) talkSession.destroy ()
       }
     }
-
-    const cleanupPromise = initializeTalkJS ()
+    initializeTalkJS ().catch ( error => console.error ( 'Initialization failed:' , error ) )
 
     // Cleanup function for useEffect
     return () => {
-      cleanupPromise.then ( cleanup => cleanup () )
+      if (chatbox) chatbox.destroy ()
+      if (talkSession) talkSession.destroy ()
     }
   } , [currentUser , host , houseId] )
 

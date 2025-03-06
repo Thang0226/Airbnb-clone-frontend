@@ -1,9 +1,12 @@
 import React , { useRef , useEffect } from 'react'
 import Talk from 'talkjs'
 import { CContainer } from '@coreui/react'
+import { useSelector } from 'react-redux'
 
-export default function Messenger({ currentUser }) {
+export default function Messenger() {
+  const currentUser = useSelector(state => state.chat.currentUser);
   const inboxRef = useRef ( null )
+  console.log ( currentUser )
 
   useEffect ( () => {
     // Check if user has valid information
@@ -21,9 +24,9 @@ export default function Messenger({ currentUser }) {
 
         // Create TalkJS user
         const me = new Talk.User ( {
-          id: currentUser.id.toString () ,
-          name: currentUser.username ,
-          role: currentUser.role || 'unknown' ,
+          id: localStorage.getItem("userId").toString () ,
+          name: localStorage.getItem("username") ,
+          role: localStorage.getItem("role") || 'unknown' ,
         } )
 
         // Create TalkJS session
@@ -35,7 +38,7 @@ export default function Messenger({ currentUser }) {
 
         // Create inbox
         const inbox = session.createInbox ( {
-          theme: 'theme',
+          theme: 'theme' ,
         } )
         talkInbox = inbox
 
@@ -83,7 +86,7 @@ export default function Messenger({ currentUser }) {
         style={{
           height: '500px' ,
           width: '100%' ,
-          minHeight: '300px',
+          minHeight: '300px' ,
         }}
       />
     </CContainer>
