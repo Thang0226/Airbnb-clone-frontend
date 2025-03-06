@@ -28,7 +28,7 @@ export const getHouseList = createAsyncThunk(
         totalPages: response.data.totalPages,
       }
     } catch (error) {
-      return thunkAPI.rejectWithValue(error || 'Error retrieving House List data!')
+      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving House List data!')
     }
   },
 )
@@ -45,7 +45,7 @@ export const searchHouses = createAsyncThunk(
         totalPages: response.data.totalPages,
       }
     } catch (error) {
-      return thunkAPI.rejectWithValue(error || 'Error retrieving search data!')
+      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving search data!')
     }
   },
 )
@@ -57,7 +57,7 @@ export const getBookedDates = createAsyncThunk(
       const response = await api.get(`/houses/${houseId}/booked-dates`)
       return response.data
     } catch (error) {
-      return thunkAPI.rejectWithValue(error || 'Error retrieving Booked Dates data!')
+      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving Booked Dates data!')
     }
   },
 )
@@ -72,7 +72,7 @@ export const getLatestAvailableDate = createAsyncThunk(
       })
       return response.data
     } catch (error) {
-      return thunkAPI.rejectWithValue(error || 'Error retrieving Latest Available Date data!')
+      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving Latest Available Date data!')
     }
   },
 )
@@ -84,7 +84,7 @@ export const updateHouseStatus = createAsyncThunk(
       const response = await api.put(`/houses/${houseId}/update-status?status=${status}`)
       return response.data
     } catch (error) {
-      return thunkAPI.rejectWithValue(error || 'Error updating house status!')
+      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error updating house status!')
     }
   },
 )
@@ -97,7 +97,7 @@ export const createMaintenanceRecord = createAsyncThunk(
         { houseId: houseId, startDate: startDate, endDate: endDate })
       return response.data
     } catch (error) {
-      return thunkAPI.rejectWithValue(error || 'Error creating new Maintenance Record!')
+      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error creating new Maintenance Record!')
     }
   },
 )
@@ -109,7 +109,7 @@ export const getMaintenanceRecords = createAsyncThunk(
       const response = await api.get(`/houses/${houseId}/maintenance-records`)
       return response.data
     } catch (error) {
-      return thunkAPI.rejectWithValue(error || 'Error retrieving maintenance records!')
+      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving maintenance records!')
     }
   },
 )
@@ -121,7 +121,7 @@ export const getTopFiveHouse = createAsyncThunk(
       const response = await api.get(`/houses/top-five-houses`)
       return response.data.content
     } catch (error) {
-      return thunkAPI.rejectWithValue(error || 'Error retrieving Top five house data!')
+      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving Top five house data!')
     }
   },
 )

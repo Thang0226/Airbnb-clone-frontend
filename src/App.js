@@ -1,5 +1,5 @@
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { Provider , useDispatch } from 'react-redux'
+import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { Provider } from 'react-redux'
 import store from './redux/store'
 import './style/scss/custom.scss'
 import 'bootstrap-icons/font/bootstrap-icons.css'
@@ -31,13 +31,16 @@ import HostHouseDetails from './components/host/js/HostHouseDetails'
 import HouseListTable from './components/host/js/HouseListTable'
 import HostEarnings from './components/host/js/HostEarnings'
 import Messenger from './components/chat/Messenger'
+import ScrollToTop from './components/utils/ScrollToTop'
+import AuthVerify from './components/auth/AuthVerify'
 
 export default function App() {
-
 
   return (
     <Provider store={store}>
       <HashRouter>
+        <ScrollToTop />
+        <AuthVerify>
         <Routes>
           {/* Route cho User */}
           <Route element={<Layout />}>
@@ -94,6 +97,7 @@ export default function App() {
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        </AuthVerify>
       </HashRouter>
     </Provider>
   )
