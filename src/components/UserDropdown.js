@@ -15,6 +15,7 @@ export default function UserDropdown() {
   const username = localStorage.getItem('username')
 
   const { userProfile } = useSelector((state) => state.userProfile)
+  const {role} = useSelector((state) => state.account)
   const [avatarUrl, setAvatarUrl] = useState(`${BASE_URL}/images/default.jpg`)
 
   useEffect(() => {
@@ -75,7 +76,7 @@ export default function UserDropdown() {
       <CDropdownMenu>
         {token ? (
           <>
-            <CDropdownItem href="/#/profile">
+            <CDropdownItem  href={role === "ROLE_ADMIN"?("/#/admin/profile") : ("/#/profile")}>
               {username}
             </CDropdownItem>
             <CDropdownDivider />

@@ -179,7 +179,7 @@ const BookingList = () => {
                                 <CButton
                                   size="md"
                                   color="primary"
-                                  className="text-white d-flex align-items-center justify-content-center"
+                                  className="text-white d-flex align-items-center justify-content-center highlight-btn"
                                   style={{ width: '40px', height: '40px', flexShrink: 0 }}
                                   onClick={() => handleBooking(booking, "check-in")}
                                 >
@@ -193,7 +193,7 @@ const BookingList = () => {
                                 <CButton
                                   size="md"
                                   color="secondary"
-                                  className="text-white d-flex align-items-center justify-content-center"
+                                  className="text-white d-flex align-items-center justify-content-center highlight-btn"
                                   style={{ width: '40px', height: '40px', flexShrink: 0 }}
                                   onClick={() => handleBooking(booking, "check-out")}
 
