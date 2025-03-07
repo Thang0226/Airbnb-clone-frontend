@@ -118,7 +118,7 @@ export default function Login() {
                       <CRow className="mb-1 mt-3">
                         <CCol className="d-flex justify-content-center fs-6">
                           Don't have an account?
-                          <Link to="/register" style={{ textDecoration: 'none' }}> Register</Link>
+                          <Link to="/register" style={{ textDecoration: 'none' }}>Register</Link>
                         </CCol>
                       </CRow>
                       <div className="d-flex align-items-center">

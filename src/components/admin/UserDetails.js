@@ -113,7 +113,7 @@ const UserDetails = () => {
               <h2>User's Statistic</h2>
             </CCardHeader>
             <CCardBody className="p-4 row">
-              <NumberInfoRow label="House Rented" value={userRentalHistory?.length || '0'} />
+              <NumberInfoRow label="No. Bookings" value={userRentalHistory?.length || '0'} />
               <NumberInfoRow label="Total Rental Paid" value={<CurrencyFormat value={userTotalPayment} />} />
             </CCardBody>
           </CCard>
