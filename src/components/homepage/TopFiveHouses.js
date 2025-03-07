@@ -68,7 +68,7 @@ const TopFiveHousesSlider = () => {
                   <div className="house-info">
                     <h5 className="fw-bold text-truncate">{house.houseName}</h5>
                     <h6>
-                      <CurrencyFormat value={house.price} displayType={'text'} thousandSeparator={true} /> VNĐ/day
+                      <CurrencyFormat value={house.price} displayType={'text'} thousandSeparator={true} />/day
                     </h6>
                     <h6 className="mb-2 text-truncate">{house.address}</h6>
                   </div>
