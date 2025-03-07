@@ -65,6 +65,7 @@ const UserProfile = () => {
               <TextInfoRow label="Full Name" value={userProfile.fullName} />
               <TextInfoRow label="Address" value={userProfile.address} />
               <TextInfoRow label="Phone" value={userProfile.phone} />
+              <TextInfoRow label="Email" value={userProfile.email} />
               <div className="text-center mt-3">
                 <CButton color="primary" onClick={goToProfileEdit}>
                   Edit Profile

@@ -4,6 +4,7 @@ import {ErrorMessage, Field} from "formik";
 const FORMTextInput = ({
                          label = "",
                          name = "",
+                         type = "text",
                          required = false,
                          readOnly = false,
                          disabled = false,
@@ -15,7 +16,7 @@ const FORMTextInput = ({
                 <Field
                     name={name}
                     as={CFormInput}
-                    type="text"
+                    type={type}
                     id={name}
                     placeholder={placeholder}
                     className="form-control"
