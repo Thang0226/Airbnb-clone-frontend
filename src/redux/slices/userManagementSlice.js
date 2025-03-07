@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import api from '../../services/axiosConfig';
+import api from '../../services/axiosConfig'
 
 export const initialState = {
   users: [],
@@ -16,7 +16,7 @@ export const fetchUsers = createAsyncThunk(
       return {
         users: response.data.content,
         totalPages: response.data.totalPages,
-      };
+      }
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving profile data!')
     }
@@ -28,9 +28,7 @@ export const updateUserStatus = createAsyncThunk(
   async (userId, thunkAPI) => {
     try {
       const response = await api.post(`/admin/update-status/${userId}`,
-        null,)
-      console.log(response.data)
-
+        null)
       return response.data
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving profile data!')
@@ -49,24 +47,16 @@ const UserManagementSlice = createSlice({
         state.error = null
       })
       .addCase(fetchUsers.fulfilled, (state, action) => {
-        state.users = action.payload.users;
-        state.totalPages = action.payload.totalPages;
+        state.users = action.payload.users
+        state.totalPages = action.payload.totalPages
         state.loading = false
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.error = action.payload
         state.loading = false
       })
-      .addCase(updateUserStatus.pending, (state) => {
-      state.loading = true
-      state.error = null
-    })
-      .addCase(updateUserStatus.fulfilled, (state) => {
-        state.loading = false
-      })
       .addCase(updateUserStatus.rejected, (state, action) => {
         state.error = action.payload
-        state.loading = false
       })
   },
 })

@@ -5,10 +5,12 @@ import { FcGoogle } from "react-icons/fc";
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { BASE_URL_USER } from '../../constants/api'
-import { deletePassword, setToken, setUsername } from '../../redux/slices/accountSlice'
+import { deletePassword, setRole, setToken, setUserId, setUsername } from '../../redux/slices/accountSlice'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { ROLE_ADMIN } from '../../constants/roles'
+import "./login_styles.css"
+import { loginSetup, logoutAPI } from '../../services/authService'
 
 const SocialLoginComponent = () => {
 
@@ -24,19 +26,22 @@ const SocialLoginComponent = () => {
       fullName: data.name
     }
     await axios.post(`${BASE_URL_USER}/login-gg`, ggData)
-      .then(res => {
+      .then(async (res) => {
         // console.log(res);
-        toast.success("Login successful", {hideProgressBar: true});
         const user = res.data;
+        localStorage.setItem("token", user.token);
+        if (user.userStatus === 'LOCKED') {
+          await logoutAPI()
+          toast.warning("Your account has been LOCKED, please contact Admin.", { hideProgressBar: true })
+          navigate('/login')
+        }
         const role = user.authorities[0].authority;
+        dispatch(setRole(role))
+        dispatch(deletePassword())
         dispatch(setToken(user.token))
         dispatch(setUsername(user.username))
-        dispatch(deletePassword())
-        localStorage.setItem('userId', user.id)
-        localStorage.setItem('username', user.username)
-        localStorage.setItem('role', role)
-        localStorage.setItem('token', user.token)
-        localStorage.setItem('loggedIn', JSON.stringify(true))
+        dispatch(setUserId(user.id))
+        await loginSetup(user, role)
         if (role === ROLE_ADMIN) {
           return navigate('/admin');
         }
@@ -63,8 +68,8 @@ const SocialLoginComponent = () => {
                 className="d-flex justify-content-center"
               >
                 <CButton
-                  color="secondary"
-                  className="d-flex align-items-center justify-content-center"
+                  color="danger"
+                  className="d-flex align-items-center justify-content-center gg-button w-100"
                 >
                   <FcGoogle size={25} className="me-2"/>
                   Login with Google

@@ -13,11 +13,12 @@ import {
   CTableRow,
 } from '@coreui/react'
 import { BASE_URL } from '../../constants/api'
-import UserInfoRow from '../_fragments/FORMInfoRow'
+import TextInfoRow from '../_fragments/FORMInfoRow'
 import { getUserDetails, getUserRentalHistory, getUserTotalPayment } from '../../redux/slices/userDetailsSlice'
 import { DisplayLoading } from '../DisplayLoading'
 import { DisplayError } from '../DisplayError'
 import CurrencyFormat from '../_fragments/format/CurrencyFormat'
+import NumberInfoRow from '../_fragments/FORMNumberInfoRow'
 
 const UserDetails = () => {
   const dispatch = useDispatch()
@@ -46,7 +47,7 @@ const UserDetails = () => {
 
 
   if (loading || !userDetails) return (
-    <DisplayLoading />
+    <DisplayLoading message={"Loading User Details..."}/>
   )
   if (error) return (
     <DisplayError error={error} />
@@ -101,8 +102,8 @@ const UserDetails = () => {
               </CBadge>
             </CCardHeader>
             <CCardBody className="p-4 row">
-              <UserInfoRow label="Full Name" value={userDetails.fullName} />
-              <UserInfoRow label="Phone" value={userDetails.phone} />
+              <TextInfoRow label="Full Name" value={userDetails.fullName} />
+              <TextInfoRow label="Phone" value={userDetails.phone} />
             </CCardBody>
           </CCard>
         </CCol>
@@ -112,8 +113,8 @@ const UserDetails = () => {
               <h2>User's Statistic</h2>
             </CCardHeader>
             <CCardBody className="p-4 row">
-              <UserInfoRow label="House Rented" value={userRentalHistory?.length || '0'} />
-              <UserInfoRow label="Total Rental Paid" value={<CurrencyFormat value={userTotalPayment} />} />
+              <NumberInfoRow label="No. Bookings" value={userRentalHistory?.length || '0'} />
+              <NumberInfoRow label="Total Rental Paid" value={<CurrencyFormat value={userTotalPayment} />} />
             </CCardBody>
           </CCard>
         </CCol>
@@ -163,7 +164,7 @@ const UserDetails = () => {
                 </CTable>
               ) : (
                 <div className="text-center">
-                  <h1 className="m-0">There are no houses rented by this user.</h1>
+                  <h1 className="m-0">There is no recorded rental history for this customer.</h1>
                 </div>
               )}
             </CCardBody>

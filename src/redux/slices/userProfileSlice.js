@@ -13,6 +13,7 @@ export const fetchUserProfile = createAsyncThunk(
   async (username, thunkAPI) => {
     try {
       const response = await api.get(`/users/profile/${username}`)
+      console.log(response.data)
       return response.data
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || 'Error retrieving profile data!')
@@ -51,17 +52,8 @@ const userProfileSlice = createSlice({
         state.error = action.payload
         state.loading = false
       })
-      .addCase(updateUserProfile.pending, (state) => {
-        state.loading = true
-        state.error = null
-      })
-      .addCase(updateUserProfile.fulfilled, (state, action) => {
-        state.userProfile = action.payload
-        state.loading = false
-      })
       .addCase(updateUserProfile.rejected, (state, action) => {
         state.error = action.payload
-        state.loading = false
       })
   },
 })

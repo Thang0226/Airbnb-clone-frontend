@@ -29,6 +29,9 @@ const validationSchema = Yup.object({
   phone: Yup.string()
     .matches(/^0[0-9]{9}$/, 'Phone number must start with 0 and have at least 10 digits')
     .required('Phone number is required'),
+  email: Yup.string()
+    .matches(/^[a-z0-9._%+]+@[a-z0-9_]+\.[a-z]{2,5}$/, 'Invalid email address')
+    .required('Email is required'),
   avatar: Yup.mixed()
     .nullable()
     .notRequired()
@@ -54,6 +57,7 @@ const getInitialValues = (userProfile) => ({
   fullName: userProfile.fullName || '',
   address: userProfile.address || '',
   phone: userProfile.phone || '',
+  email: userProfile.email || '',
   avatar: '',
 })
 
@@ -63,7 +67,7 @@ const ProfileUpdateForm = () => {
   const location = useLocation()
   const dispatch = useDispatch()
 
-  const { username } = location.state || {}
+  const { username, role } = location.state || {}
 
   useEffect(() => {
     document.title = 'Airbnb | Update Profile'
@@ -100,6 +104,7 @@ const ProfileUpdateForm = () => {
     if (values.fullName !== originalValues.fullName) isChanged = true
     if (values.address !== originalValues.address) isChanged = true
     if (values.phone !== originalValues.phone) isChanged = true
+    if (values.email !== originalValues.email) isChanged = true
     if (values.avatar instanceof File) isChanged = true
 
     if (!isChanged) {
@@ -156,16 +161,21 @@ const ProfileUpdateForm = () => {
     }
   }
 
+  const handleCancel = () => {
+    const path = role !== 'user' ? `/${role}/profile` : '/profile'
+    navigate(path)
+  }
+
   return (
     <div className="container mt-4">
       <CRow
-        xs={{cols: 1}} md={{cols: 1}} lg={{cols: 2}}
+        xs={{ cols: 1 }} md={{ cols: 1 }} lg={{ cols: 2 }}
         className="justify-content-center mt-4"
       >
         <CCol>
           <CCard className="shadow border-0">
-            <CCardHeader className="text-center p-4">
-              <h3>Update Profile</h3>
+            <CCardHeader className="text-center p-2">
+              <h3 className="m-0">Update Profile</h3>
             </CCardHeader>
             <CCardBody className="p-4">
               <Formik
@@ -204,6 +214,14 @@ const ProfileUpdateForm = () => {
                       required
                     />
 
+                    <FORMTextInput
+                      label="Email"
+                      name="email"
+                      type="email"
+                      placeholder="Enter your email"
+                      required
+                    />
+
                     <div className="text-center">
                       <CButton type="submit" color="primary" disabled={isSubmitting}>
                         Update Profile
@@ -212,7 +230,7 @@ const ProfileUpdateForm = () => {
                         type="button"
                         color="secondary"
                         className="ms-2"
-                        onClick={() => navigate(-1)}
+                        onClick={handleCancel}
                       >
                         Cancel
                       </CButton>

@@ -1,0 +1,70 @@
+.swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    opacity: 0.4;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+/* Đổi màu bullet được chọn */
+.swiper-pagination-bullet-active {
+    background: #fff; /* Màu vàng nổi bật */
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+/* Mũi tên Swiper */
+.swiper-button-prev,
+.swiper-button-next {
+    width: 35px;
+    height: 35px;
+    color: #fff;
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+    font-size: 35px ;
+}
+
+/* Khi hover vào mũi tên */
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+    opacity: 0.8; /* Giảm độ mờ để tạo hiệu ứng */
+}
+
+.swiper-button-disabled {
+    display: none;
+}
+
+.swiper-pagination {
+    bottom: 0 !important; /* Điều chỉnh khoảng cách xuống dưới */
+}
+
+.house-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.house-card:hover {
+    transform: scale(1.01);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.house-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 10px;
+    border-radius: 0 0 8px 8px;
+    transition: background 0.3s ease;
+}
+
+.house-card:hover .house-info {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.transition-transform {
+    transition: transform 0.3s ease;
+}

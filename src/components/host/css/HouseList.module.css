@@ -5,3 +5,12 @@
     text-overflow: ellipsis;
 }
 
+.update-house-btn {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.update-house-btn:hover {
+    background-color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+

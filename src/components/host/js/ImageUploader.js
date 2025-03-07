@@ -18,11 +18,7 @@ export default function ImageUploader({ houseId , previews , setPreviews , selec
     // Only fetch images if we have a houseId (editing an existing house)
     if (houseId) {
       setIsLoading ( true )
-      axios.get ( `${BASE_URL_HOUSE}/${houseId}/images` , {
-        headers: {
-          Authorization: `Bearer ${token}` ,
-        } ,
-      } )
+      axios.get ( `${BASE_URL_HOUSE}/${houseId}/images`)
         .then ( (res) => {
           // Filter out default images from preview display
           const nonDefaultImages = res.data.filter ( image => image.fileName !== 'default.png' )

@@ -1,0 +1,15 @@
+.star-rating {
+    justify-content: center;
+    gap: 5px;
+    margin: 0 10px 10px;
+}
+
+.star {
+    cursor: pointer;
+    color: #ddd;
+    transition: color 0.2s ease-in-out;
+}
+
+.star.selected {
+    color: #ffa500;
+}

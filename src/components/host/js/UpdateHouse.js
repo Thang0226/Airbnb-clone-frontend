@@ -1,5 +1,5 @@
 import { useState , useEffect , useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate , useParams } from 'react-router-dom'
 import axios from 'axios'
 import {
@@ -10,9 +10,6 @@ import {
   CFormInput ,
   CFormTextarea ,
   CFormLabel ,
-  CRow ,
-  CImage ,
-  CCloseButton ,
   CButton ,
 } from '@coreui/react'
 import { toast } from 'react-toastify'
@@ -27,8 +24,8 @@ export default function UpdateHouse() {
   const navigate = useNavigate ()
   const { houseId } = useParams ()
   const dispatch = useDispatch ()
-  const token = localStorage.getItem ( 'token' )
-  const username = localStorage.getItem ( 'username' )
+  const token = useSelector(state => state.account.token)
+  const username = useSelector(state => state.account.username)
 
   const [isLoading , setIsLoading] = useState ( true )
 
@@ -144,7 +141,6 @@ export default function UpdateHouse() {
     }
 
     // 2. New images being uploaded (added with existing images)
-
     if (selectedFiles.length > 0) {
       selectedFiles.forEach ( (file) => {
         formData.append ( 'houseImages' , file )

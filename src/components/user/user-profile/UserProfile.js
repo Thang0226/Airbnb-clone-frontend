@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { BASE_URL } from '../../../constants/api'
 import { DisplayLoading } from '../../DisplayLoading'
 import { DisplayError } from '../../DisplayError'
-import UserInfoRow from '../../_fragments/FORMInfoRow'
+import TextInfoRow from '../../_fragments/FORMInfoRow'
 
 const UserProfile = () => {
   const dispatch = useDispatch()
@@ -25,20 +25,17 @@ const UserProfile = () => {
   const { userProfile, error, loading } = useSelector((state) => state.userProfile)
 
   if (loading || !userProfile) return (
-    <DisplayLoading/>
+    <DisplayLoading message={"Loading User Profile..."}/>
   )
   if (error) return (
     <DisplayError error={error} />
   )
 
   const goToProfileEdit = () => {
-    if (role === "ROLE_ADMIN") {
-      return navigate('/admin/profile/edit', { state: { username: userProfile.username } })
-    }
-    if (role === "ROLE_HOST") {
-      return navigate('/host/profile/edit', { state: { username: userProfile.username } })
-    }
-    navigate('/profile/edit', { state: { username: userProfile.username } })
+    const formattedRole = role.replace(/^ROLE_+/, '').toLowerCase();
+    const path = formattedRole !== "user" ? `/${formattedRole}/profile/edit` : "/profile/edit";
+
+    navigate(path, { state: { username: userProfile.username, role: formattedRole} });
   }
 
   return (
@@ -65,9 +62,10 @@ const UserProfile = () => {
               <h3 className="mt-3">{userProfile.username}</h3>
             </CCardHeader>
             <CCardBody className="p-4 row">
-              <UserInfoRow label="Full Name" value={userProfile.fullName} />
-              <UserInfoRow label="Address" value={userProfile.address} />
-              <UserInfoRow label="Phone" value={userProfile.phone} />
+              <TextInfoRow label="Full Name" value={userProfile.fullName} />
+              <TextInfoRow label="Address" value={userProfile.address} />
+              <TextInfoRow label="Phone" value={userProfile.phone} />
+              <TextInfoRow label="Email" value={userProfile.email} />
               <div className="text-center mt-3">
                 <CButton color="primary" onClick={goToProfileEdit}>
                   Edit Profile

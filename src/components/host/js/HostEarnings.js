@@ -55,18 +55,25 @@ export default function HostEarnings() {
     const [options, setOptions] = useState(optionsInit);
 
     const getLast12Months = () => {
-        return Array.from({ length: 12 }, (_, i) => {
-            const date = new Date();
-            date.setMonth(date.getMonth() - i);
-            const month = String(date.getMonth() + 1).padStart(2, "0"); // Ensure two-digit format
-            const year = date.getFullYear();
-            return `${month}/${year}`;
-        });
+        const months = [];
+        const today = new Date();
+        for (let i = 0; i < 12; i++) {
+            const d = new Date(today);
+            d.setMonth(today.getMonth() - i);
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = d.getFullYear();
+            months.unshift(`${month}/${year}`); // use unshift to have months from past to present
+        }
+        return months;
     };
 
     const getLast5Years = () => {
         const currentYear = new Date().getFullYear();
-        return Array.from({ length: 5 }, (_, i) => currentYear - i);
+        const years = [];
+        for (let i = 0; i < 5; i++) {
+            years.unshift(currentYear - i);
+        }
+        return years;
     };
 
     useEffect(() => {
