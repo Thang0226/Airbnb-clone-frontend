@@ -113,7 +113,7 @@ export default function House() {
                   <CCarouselItem key={image.id}>
                     <CImage
                       className="d-block w-100"
-                      src={`/images/${image.fileName}`}
+                      src={`${process.env.REACT_APP_BASE_API_URL}/images/${image.fileName}`}
                       alt={image.fileName}
                       style={{ height: '400px' , objectFit: 'cover' }}
                     />
