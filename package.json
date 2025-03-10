@@ -2,7 +2,7 @@
   "name": "airbnb-clone-frontend",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8080",
+  "proxy": "${process.env.BASE_API_URL}",
   "dependencies": {
     "@coreui/coreui": "^5.2.0",
     "@coreui/icons": "^3.0.1",
